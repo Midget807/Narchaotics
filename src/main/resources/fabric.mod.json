@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "narchaotics",
+	"version": "${version}",
+	"name": "Narchaotics",
+	"description": "Narcotics",
+	"authors": [
+		"Midget807"
+	],
+	"contact": {
+	},
+	"license": "MIT",
+	"icon": "assets/narchaotics/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.midget807.narchaotics.NarchaoticsMain"
+		],
+        "client": [
+            "net.midget807.narchaotics.NarchaoticsClient"
+        ],
+		"fabric-datagen": [
+			"net.midget807.narchaotics.NarchaoticsDataGenerator"
+		]
+	},
+	"mixins": [
+		"narchaotics.mixins.json"
+	],
+    "accessWidener": "narchaotics.classtweaker",
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

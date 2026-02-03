@@ -1,0 +1,252 @@
+package net.midget807.narchaotics.block.entity;
+
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.midget807.narchaotics.datagen.ModItemTagProvider;
+import net.midget807.narchaotics.item.FlaskItem;
+import net.midget807.narchaotics.registry.ModBlockEntities;
+import net.midget807.narchaotics.registry.ModItems;
+import net.midget807.narchaotics.screen.DistillationScreenHandler;
+import net.midget807.narchaotics.util.ImplementedInventory;
+import net.midget807.narchaotics.util.ModFluidUtil;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.*;
+import static net.midget807.narchaotics.util.ModBlockUtil.*;
+
+public class DistillationWorkbenchBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
+    public static final int PROGRESS_TIME_DELEGATE_INDEX = 0;
+    public static final int MAX_PROGRESS_DELEGATE_INDEX = 1;
+    public static final int ANIMATION_TIME_DELEGATE_INDEX = 2;
+    public static final int REACTANT_FLUID_1_DELEGATE_INDEX = 3;
+    public static final int REACTANT_FLUID_2_DELEGATE_INDEX = 4;
+    public static final int PRODUCT_FLUID_1_DELEGATE_INDEX = 5;
+    public static final int PRODUCT_FLUID_2_DELEGATE_INDEX = 6;
+    public static final int[] INPUT_INDICES = {0, 1, 2, 3, 4, 5, 6};
+    public static final int[] OUTPUT_INDICES = {7, 8, 9, 10, 11, 12};
+    public static final int[] ITEM_INPUT_INDICES = {0, 1};
+    public static final int[] FLUID_INPUT_INDICES = {2, 3, 4, 5};
+    public static final int FUEL_INPUT_INDEX = 6;
+    public static final int[] ITEM_OUTPUT_INDICES = {7, 8};
+    public static final int[] FLUID_OUTPUT_INDICES = {9, 10, 11, 12};
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(13, ItemStack.EMPTY);
+    private SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
+    private SingleVariantStorage<FluidVariant> reactantFluidStorage2 = ModFluidUtil.createTank(this);
+    private SingleVariantStorage<FluidVariant> productFluidStorage1 = ModFluidUtil.createTank(this);
+    private SingleVariantStorage<FluidVariant> productFluidStorage2 = ModFluidUtil.createTank(this);
+    private Item reactantItem1;
+    private Item reactantItem2;
+    private Item productItem1;
+    private Item productItem2;
+    private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+        @Override
+        public int get(int index) {
+            return (int) switch (index) {
+                case 0 -> DistillationWorkbenchBlockEntity.this.progressTime;
+                case 1 -> DistillationWorkbenchBlockEntity.this.maxProgress;
+                case 2 -> DistillationWorkbenchBlockEntity.this.animationTime;
+                case 3 -> DistillationWorkbenchBlockEntity.this.reactantFluidStorage1.amount;
+                case 4 -> DistillationWorkbenchBlockEntity.this.reactantFluidStorage2.amount;
+                case 5 -> DistillationWorkbenchBlockEntity.this.productFluidStorage1.amount;
+                case 6 -> DistillationWorkbenchBlockEntity.this.productFluidStorage2.amount;
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value) {
+            switch (index) {
+                case 0: DistillationWorkbenchBlockEntity.this.progressTime = value;
+                case 1: DistillationWorkbenchBlockEntity.this.maxProgress = value;
+                case 2: DistillationWorkbenchBlockEntity.this.animationTime = value;
+                case 3: DistillationWorkbenchBlockEntity.this.reactantFluidStorage1.amount = value;
+                case 4: DistillationWorkbenchBlockEntity.this.reactantFluidStorage2.amount = value;
+                case 5: DistillationWorkbenchBlockEntity.this.productFluidStorage1.amount = value;
+                case 6: DistillationWorkbenchBlockEntity.this.productFluidStorage2.amount = value;
+            }
+        }
+
+        @Override
+        public int size() {
+            return 7;
+        }
+    };
+    private int progressTime;
+    private int maxProgress;
+    private int animationTime;
+
+
+    public DistillationWorkbenchBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.DISTILLATION_WORKBENCH, pos, state);
+    }
+
+    @Override
+    public BlockPos getScreenOpeningData(ServerPlayerEntity player) {
+        return this.pos;
+    }
+
+    @Override
+    public DefaultedList<ItemStack> getItems() {
+        return this.inventory;
+    }
+
+    @Override
+    public int size() {
+        return this.inventory.size();
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        this.inventory.set(slot, stack);
+    }
+
+    public void insertStack(int slot, ItemStack stack) {
+        ItemStack stackInSlot = this.inventory.get(slot);
+        if (stackInSlot.isEmpty()) {
+            this.setStack(slot, stack);
+        } else if (stackInSlot == stack) {
+            stackInSlot.increment(stack.getCount());
+        }
+    }
+
+    @Override
+    public Text getDisplayName() {
+        return Text.translatable("container.narchaotics.chemistry_workbench.distillation_tooltip");
+    }
+
+    @Override
+    public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+        return new DistillationScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
+    }
+
+    @Override
+    public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        return createNbt(registryLookup);
+    }
+
+    @Override
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
+        Inventories.writeNbt(nbt, this.inventory, registryLookup);
+        nbt.putInt(PROGRESS_TIME_KEY, this.progressTime);
+        nbt.putInt(MAX_PROGRESS_KEY, this.maxProgress);
+        nbt.putInt(ANIMATION_TIME_KEY, this.animationTime);
+        if (!reactantFluidStorage1.isResourceBlank()) {
+            FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, reactantFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(REACTANT_FLUID_VARIANT_1_KEY, nbtElement));
+            nbt.putLong(REACTANT_FLUID_AMOUNT_1_KEY, reactantFluidStorage1.amount);
+        }
+        if (!reactantFluidStorage1.isResourceBlank()) {
+            FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, reactantFluidStorage2.variant).result().ifPresent(nbtElement -> nbt.put(REACTANT_FLUID_VARIANT_2_KEY, nbtElement));
+            nbt.putLong(REACTANT_FLUID_AMOUNT_2_KEY, reactantFluidStorage2.amount);
+        }
+        if (!reactantFluidStorage1.isResourceBlank()) {
+            FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_1_KEY, nbtElement));
+            nbt.putLong(PRODUCT_FLUID_AMOUNT_1_KEY, productFluidStorage1.amount);
+        }
+        if (!reactantFluidStorage1.isResourceBlank()) {
+            FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage2.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_2_KEY, nbtElement));
+            nbt.putLong(PRODUCT_FLUID_AMOUNT_2_KEY, productFluidStorage2.amount);
+        }
+    }
+
+    @Override
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
+        Inventories.readNbt(nbt, this.inventory, registryLookup);
+        this.progressTime = nbt.getInt(PROGRESS_TIME_KEY);
+        this.maxProgress = nbt.getInt(MAX_PROGRESS_KEY);
+        this.animationTime = nbt.getInt(ANIMATION_TIME_KEY);
+        this.reactantFluidStorage1.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(REACTANT_FLUID_VARIANT_1_KEY)).result().orElse(FluidVariant.blank());
+        this.reactantFluidStorage1.amount = nbt.getLong(REACTANT_FLUID_AMOUNT_1_KEY);
+        this.reactantFluidStorage2.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(REACTANT_FLUID_VARIANT_2_KEY)).result().orElse(FluidVariant.blank());
+        this.reactantFluidStorage2.amount = nbt.getLong(REACTANT_FLUID_AMOUNT_2_KEY);
+        this.productFluidStorage1.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(PRODUCT_FLUID_VARIANT_1_KEY)).result().orElse(FluidVariant.blank());
+        this.productFluidStorage1.amount = nbt.getLong(PRODUCT_FLUID_AMOUNT_1_KEY);
+        this.productFluidStorage2.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(PRODUCT_FLUID_VARIANT_2_KEY)).result().orElse(FluidVariant.blank());
+        this.productFluidStorage2.amount = nbt.getLong(PRODUCT_FLUID_AMOUNT_2_KEY);
+
+        if (progressTime > 0) {
+            this.reactantItem1 = this.inventory.get(ITEM_INPUT_INDICES[0]).getItem();
+            this.reactantItem2 = this.inventory.get(ITEM_INPUT_INDICES[1]).getItem();
+        }
+    }
+
+    public void tick(World world, BlockPos pos, BlockState state) {
+        fillUpOnFluid();
+    }
+
+    private void fillUpOnFluid() {
+        for (int slot : FLUID_INPUT_INDICES) {
+            if (hasFluidSourceItemInFluidInputSlots(slot)) {
+                transferItemFluidTank(slot);
+            }
+        }
+    }
+
+    private void transferItemFluidTank(int slot) {
+        try (Transaction transaction = Transaction.openOuter()) {
+            Fluid fluid = null;
+            ItemStack stack = this.getStack(slot);
+            if (fluid == null && stack.getItem() instanceof BucketItem bucketItem) fluid = bucketItem.fluid;
+            if (fluid == null && stack.getItem() instanceof FlaskItem flaskItem) fluid = flaskItem.fluid;
+            if (fluid == null) return;
+            switch (slot) {
+                case 2: {
+                    if (this.getStack(FLUID_OUTPUT_INDICES[0]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[0]).getMaxCount()) return;
+                    if (stack.getItem() instanceof BucketItem) {
+                        if (this.reactantFluidStorage1.amount > 0) return;
+                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        transaction.commit();
+                        this.insertStack(FLUID_OUTPUT_INDICES[0], new ItemStack(Items.BUCKET));
+                    } else if (stack.getItem() instanceof FlaskItem flaskItem) {
+                        if (this.reactantFluidStorage1.amount > 750) return;
+                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), 250, transaction);
+                        transaction.commit();
+                        this.insertStack(FLUID_OUTPUT_INDICES[0], flaskItem.getRemainderStack());
+                    }
+                    stack.decrement(1);
+                    this.setStack(slot, stack);
+                    break;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + slot);
+            }
+        }
+    }
+
+    private boolean hasFluidSourceItemInFluidInputSlots(int slot) {
+        return this.getStack(slot).isIn(ModItemTagProvider.FLUID_INPUT_ITEMS);
+    }
+
+}

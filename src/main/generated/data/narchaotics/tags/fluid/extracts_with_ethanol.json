@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "brewinandchewin:vodka",
+      "required": false
+    },
+    {
+      "id": "#c:ethanol",
+      "required": false
+    }
+  ]
+}
