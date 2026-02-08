@@ -1,7 +1,6 @@
 package net.midget807.narchaotics.block.entity;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -31,6 +30,8 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -56,10 +57,10 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
     public static final int[] ITEM_OUTPUT_INDICES = {7, 8};
     public static final int[] FLUID_OUTPUT_INDICES = {9, 10, 11, 12};
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(13, ItemStack.EMPTY);
-    private SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
-    private SingleVariantStorage<FluidVariant> reactantFluidStorage2 = ModFluidUtil.createTank(this);
-    private SingleVariantStorage<FluidVariant> productFluidStorage1 = ModFluidUtil.createTank(this);
-    private SingleVariantStorage<FluidVariant> productFluidStorage2 = ModFluidUtil.createTank(this);
+    public SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
+    public SingleVariantStorage<FluidVariant> reactantFluidStorage2 = ModFluidUtil.createTank(this);
+    public SingleVariantStorage<FluidVariant> productFluidStorage1 = ModFluidUtil.createTank(this);
+    public SingleVariantStorage<FluidVariant> productFluidStorage2 = ModFluidUtil.createTank(this);
     private Item reactantItem1;
     private Item reactantItem2;
     private Item productItem1;
@@ -137,7 +138,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("container.narchaotics.chemistry_workbench.distillation_tooltip");
+        return Text.translatable("container.narchaotics.distillation_workbench");
     }
 
     @Override
@@ -204,6 +205,37 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
 
     public void tick(World world, BlockPos pos, BlockState state) {
         fillUpOnFluid();
+        removeFluid();
+    }
+
+    private void removeFluid() {
+        for (int slot : FLUID_INPUT_INDICES) {
+            if (inventory.get(slot).isIn(ModItemTagProvider.FLUID_REMOVE_ITEMS)) {
+                transferFluidTankItem(slot);
+            }
+        }
+    }
+
+    private void transferFluidTankItem(int slot) {
+        try (Transaction transaction = Transaction.openOuter()) {
+            ItemStack stack = this.getStack(slot);
+            switch (slot) {
+                case 2: {
+                    if (this.reactantFluidStorage1.amount <= 0 || this.reactantFluidStorage1.variant.isBlank()) return;
+                    this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, BUCKET / 81, transaction);
+                    transaction.commit();
+                    this.insertStack(FLUID_OUTPUT_INDICES[0], new ItemStack(ModItems.ETHANOL_BUCKET));
+                    stack.decrement(1);
+                    this.setStack(slot, stack);
+                    break;
+                }
+                case 3: {
+                    return;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + slot);
+            }
+        }
     }
 
     private void fillUpOnFluid() {
@@ -227,6 +259,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                     if (stack.getItem() instanceof BucketItem) {
                         if (this.reactantFluidStorage1.amount > 0) return;
                         this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        playerFluidInsertSound(this.getWorld());
                         transaction.commit();
                         this.insertStack(FLUID_OUTPUT_INDICES[0], new ItemStack(Items.BUCKET));
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
@@ -234,6 +267,23 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                         this.reactantFluidStorage1.insert(FluidVariant.of(fluid), 250, transaction);
                         transaction.commit();
                         this.insertStack(FLUID_OUTPUT_INDICES[0], flaskItem.getRemainderStack());
+                    }
+                    stack.decrement(1);
+                    this.setStack(slot, stack);
+                    break;
+                }
+                case 3: {
+                    if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getMaxCount()) return;
+                    if (stack.getItem() instanceof BucketItem) {
+                        if (this.reactantFluidStorage2.amount > 0) return;
+                        this.reactantFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        transaction.commit();
+                        this.insertStack(FLUID_OUTPUT_INDICES[1], new ItemStack(Items.BUCKET));
+                    } else if (stack.getItem() instanceof FlaskItem flaskItem) {
+                        if (this.reactantFluidStorage2.amount > 750) return;
+                        this.reactantFluidStorage2.insert(FluidVariant.of(fluid), 250, transaction);
+                        transaction.commit();
+                        this.insertStack(FLUID_OUTPUT_INDICES[1], flaskItem.getRemainderStack());
                     }
                     stack.decrement(1);
                     this.setStack(slot, stack);
@@ -247,6 +297,17 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
 
     private boolean hasFluidSourceItemInFluidInputSlots(int slot) {
         return this.getStack(slot).isIn(ModItemTagProvider.FLUID_INPUT_ITEMS);
+    }
+
+    private void playerFluidInsertSound(World world) {
+        if (world == null) return;
+        if (world.isClient) return;
+        world.playSound(null, this.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0f, 1.0f);
+    }
+    private void playerFluidExtractSound(World world) {
+        if (world == null) return;
+        if (world.isClient) return;
+        world.playSound(null, this.getPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
 }

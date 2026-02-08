@@ -102,7 +102,7 @@ public class FilterWorkbenchBlockEntity extends BlockEntity implements ExtendedS
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("container.narchaotics.chemistry_workbench.filter_tooltip");
+        return Text.translatable("container.narchaotics.filter_workbench");
     }
 
     @Override

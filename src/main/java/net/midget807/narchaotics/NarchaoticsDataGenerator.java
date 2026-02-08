@@ -15,5 +15,6 @@ public class NarchaoticsDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModFluidTagProvider::new);
         pack.addProvider(ModModelProvider::new);
         pack.addProvider(ModRecipeProvider::new);
+        pack.addProvider(ModEnUSLangProvider::new);
 	}
 }

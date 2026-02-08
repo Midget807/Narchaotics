@@ -102,7 +102,7 @@ public class DissolveWorkbenchBlockEntity extends BlockEntity implements Extende
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("container.narchaotics.chemistry_workbench.dissolve_tooltip");
+        return Text.translatable("container.narchaotics.dissolve_workbench");
     }
 
     @Override

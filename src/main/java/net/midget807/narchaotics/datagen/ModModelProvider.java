@@ -21,7 +21,7 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        blockStateModelGenerator.registerCrop(ModBlocks.EPHEDRA_CROP, Properties.AGE_7, 0, 1, 2, 3, 4, 5, 6, 7);
+        blockStateModelGenerator.registerTintableCrossBlockStateWithStages(ModBlocks.EPHEDRA_CROP, BlockStateModelGenerator.TintType.NOT_TINTED, Properties.AGE_7, 0, 1, 2, 3, 4, 5, 6, 7);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.DISTILLATION_WORKBENCH);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.FILTER_WORKBENCH);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.EVAPORATE_WORKBENCH);

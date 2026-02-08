@@ -21,6 +21,11 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
     public static final TagKey<Item> FLUID_INPUT_ITEMS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fluid_input_items"));
     public static final TagKey<Item> FLUID_BUCKETS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fluid_buckets"));
     public static final TagKey<Item> FLUID_BOTTLES = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fluid_bottles"));
+    public static final TagKey<Item> FLUID_REMOVE_ITEMS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fluid_remove_items"));
+    public static final TagKey<Item> CONICAL_FLASK_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("conical_flask_fluids"));
+    public static final TagKey<Item> ROUND_FLASK_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("round_flask_fluids"));
+    public static final TagKey<Item> BEAKER_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("beaker_fluids"));
+    public static final TagKey<Item> TEST_TUBE_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("test_tube_fluids"));
 
     public ModItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
@@ -45,8 +50,17 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .add(
                         ModItems.ETHANOL_BUCKET
                 );
+        this.getOrCreateTagBuilder(CONICAL_FLASK_FLUIDS);
+        this.getOrCreateTagBuilder(ROUND_FLASK_FLUIDS);
+        this.getOrCreateTagBuilder(BEAKER_FLUIDS);
+        this.getOrCreateTagBuilder(TEST_TUBE_FLUIDS);
         this.getOrCreateTagBuilder(FLUID_INPUT_ITEMS)
                 .addTag(FLUID_BOTTLES)
                 .addTag(FLUID_BUCKETS);
+        this.getOrCreateTagBuilder(FLUID_REMOVE_ITEMS)
+                .add(
+                        Items.BUCKET
+                )
+                .addTag(FLUID_BOTTLES);
     }
 }

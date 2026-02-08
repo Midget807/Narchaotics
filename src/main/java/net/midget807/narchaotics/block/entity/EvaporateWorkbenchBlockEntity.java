@@ -102,7 +102,7 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("container.narchaotics.chemistry_workbench.evaporate_tooltip");
+        return Text.translatable("container.narchaotics.evaporate_workbench");
     }
 
     @Override

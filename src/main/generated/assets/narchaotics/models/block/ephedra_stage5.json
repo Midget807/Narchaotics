@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/crop",
+  "parent": "minecraft:block/cross",
   "textures": {
-    "crop": "narchaotics:block/ephedra_stage5"
+    "cross": "narchaotics:block/ephedra_stage5"
   }
 }
