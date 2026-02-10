@@ -16,7 +16,7 @@ public class ModBlocks {
 
     public static final Block ETHANOL_CAULDRON = registerBlockWithoutItem("ethanol_cauldron", new EthanolCauldronBlock(AbstractBlock.Settings.copyShallow(Blocks.CAULDRON)));
 
-    public static final Block ETHANOL = registerBlockWithoutItem("ethanol", new FluidBlock(ModFluids.ETHANOL_STILL, AbstractBlock.Settings.copy(Blocks.WATER)));
+    public static final Block ETHANOL = registerBlockWithoutItem("ethanol", new FluidBlock(ModFluids.ETHANOL, AbstractBlock.Settings.copy(Blocks.WATER)));
 
     public static final Block EPHEDRA_CROP = registerBlockWithoutItem("ephedra", new EphedraCropBlock(AbstractBlock.Settings.create().nonOpaque().noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.CROP)));
 

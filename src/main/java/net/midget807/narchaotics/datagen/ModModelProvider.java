@@ -39,8 +39,6 @@ public class ModModelProvider extends FabricModelProvider {
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         itemModelGenerator.register(ModItems.ICON, Models.GENERATED);
 
-        itemModelGenerator.register(ModItems.ETHANOL_BUCKET, Models.GENERATED);
-
         itemModelGenerator.register(ModItems.BURNER, Models.GENERATED);
         itemModelGenerator.register(ModItems.CONICAL_FLASK, Models.GENERATED);
         itemModelGenerator.register(ModItems.BEAKER, Models.GENERATED);
@@ -59,5 +57,20 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.EPHEDRA_DUST, Models.GENERATED);
 
         itemModelGenerator.register(ModItems.METHAMPHETAMINE, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.ETHANOL_BUCKET, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.WATER_CONICAL_FLASK, Models.GENERATED);
+        itemModelGenerator.register(ModItems.ETHANOL_CONICAL_FLASK, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.WATER_ROUND_FLASK, Models.GENERATED);
+        itemModelGenerator.register(ModItems.ETHANOL_ROUND_FLASK, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.WATER_BEAKER, Models.GENERATED);
+        itemModelGenerator.register(ModItems.ETHANOL_BEAKER, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.WATER_TEST_TUBE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.ETHANOL_TEST_TUBE, Models.GENERATED);
+
     }
 }

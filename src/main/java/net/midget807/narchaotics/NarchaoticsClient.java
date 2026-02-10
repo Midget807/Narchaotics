@@ -18,7 +18,7 @@ public class NarchaoticsClient implements ClientModInitializer {
     public void onInitializeClient() {
         ModFluids.registerFluidRenders();
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
-                ModFluids.ETHANOL_STILL,
+                ModFluids.ETHANOL,
                 ModFluids.ETHANOL_FLOWING
         );
 

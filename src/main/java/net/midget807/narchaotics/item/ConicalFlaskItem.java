@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class ConicalFlaskItem extends FlaskItem {
     public ConicalFlaskItem(Fluid fluid, Item remainder, Settings settings) {
-        super(fluid, remainder, settings);
+        super(fluid, remainder, 250, settings);
     }
 }

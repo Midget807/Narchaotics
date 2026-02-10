@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class TestTubeItem extends FlaskItem {
     public TestTubeItem(Fluid fluid, Item remainder, Settings settings) {
-        super(fluid, remainder, settings);
+        super(fluid, remainder, 50, settings);
     }
 }

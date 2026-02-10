@@ -13,7 +13,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModFluids {
-    public static final FlowableFluid ETHANOL_STILL = registerFluid("ethanol", new EthanolFluid.Still());
+    public static final FlowableFluid ETHANOL = registerFluid("ethanol", new EthanolFluid.Still());
     public static final FlowableFluid ETHANOL_FLOWING = registerFluid("ethanol_flowing", new EthanolFluid.Flowing());
 
     private static <T extends Fluid> T registerFluid(String name, T fluid) {
@@ -26,7 +26,7 @@ public class ModFluids {
 
     @Environment(EnvType.CLIENT)
     public static void registerFluidRenders() {
-        FluidRenderHandlerRegistry.INSTANCE.register(ETHANOL_STILL, ETHANOL_FLOWING, registerWaterTexturedFluid(0xF7F0CA));
+        FluidRenderHandlerRegistry.INSTANCE.register(ETHANOL, ETHANOL_FLOWING, registerWaterTexturedFluid(0xF7F0CA));
     }
     @Environment(EnvType.CLIENT)
     public static SimpleFluidRenderHandler registerWaterTexturedFluid(int color) {

@@ -54,9 +54,14 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.getOrCreateTagBuilder(ROUND_FLASK_FLUIDS);
         this.getOrCreateTagBuilder(BEAKER_FLUIDS);
         this.getOrCreateTagBuilder(TEST_TUBE_FLUIDS);
+
         this.getOrCreateTagBuilder(FLUID_INPUT_ITEMS)
+                .add(
+                        Items.WATER_BUCKET
+                )
                 .addTag(FLUID_BOTTLES)
                 .addTag(FLUID_BUCKETS);
+
         this.getOrCreateTagBuilder(FLUID_REMOVE_ITEMS)
                 .add(
                         Items.BUCKET

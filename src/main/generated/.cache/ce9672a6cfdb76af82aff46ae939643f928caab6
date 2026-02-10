@@ -1,5 +1,7 @@
-// 1.21.1	2026-02-08T22:48:06.5181853	Narchaotics/Model Definitions
+// 1.21.1	2026-02-10T19:38:39.4734247	Narchaotics/Model Definitions
 243be2c299b5f0acd46575870fc8446a59575fc9 assets\narchaotics\blockstates\filter_workbench.json
+633a8fd82d31540230291a1bd5e54d6af5cb252d assets\narchaotics\models\item\test_tube\ethanol.json
+158c26ffafdac090af40c1dfb6b0ac78621de399 assets\narchaotics\models\item\conical_flask\ethanol.json
 e7614b994bbbecf26bed039f634d6e4e3aaa1b73 assets\narchaotics\models\item\stand.json
 20487c0acbcfc489570fc20901c1907d249f7ec8 assets\narchaotics\models\item\ephedra_dust.json
 b54bd28f79f2c043942bd16f17d1c79e11a0538a assets\narchaotics\models\block\ephedra_stage5.json
@@ -8,6 +10,7 @@ b54bd28f79f2c043942bd16f17d1c79e11a0538a assets\narchaotics\models\block\ephedra
 e8b5d013708336b258015a3895b34a54b35b7b5b assets\narchaotics\blockstates\dissolve_workbench.json
 f06d89b2735c0ffdcc53cc122cc7624c02475fa4 assets\narchaotics\models\block\ephedra_stage2.json
 9690ea31df66751d34eff28906f98dd27ffb0c21 assets\narchaotics\models\item\funnel.json
+80c1f8c1f70781edc21fb79a2df40b158198dd94 assets\narchaotics\models\item\round_flask.json
 2d5e73cbb60c4ad5aa27a76812c6395b77644183 assets\narchaotics\blockstates\ephedra.json
 d300610c3d3a4b4bcc58cef4d322ced16660cc95 assets\narchaotics\models\block\ephedra_stage1.json
 acc938900287c477de765db10a2585739027208f assets\narchaotics\models\item\condenser_column.json
@@ -19,17 +22,18 @@ de69f2b9b5faa5329ddc6566e4f955984d8cbce4 assets\narchaotics\blockstates\distilla
 c3f6ca9519c03377d3888d9bbbbc5d3dc016dd11 assets\narchaotics\models\block\ephedra_stage4.json
 bfdc3d25e6d0296bd45e7855b6bd35d264797e9f assets\narchaotics\models\item\bucket\ethanol.json
 94b3efaa3c66b68f0493ee14c4f7956cb58f2340 assets\narchaotics\models\item\beaker.json
-1f24a530c5d9500ca56af884a71570a7d9e076b6 assets\narchaotics\models\item\round_bottom_flask.json
 e68f056f6b57d089d55e70e71a03f1c0183cc16a assets\narchaotics\models\block\ethanol_cauldron.json
 1072df9acd7778af7e272d228659c868c68477d2 assets\narchaotics\models\item\ephedra.json
 293be60526f8d0dcaa5a51b3e4f356f6adc1e51b assets\narchaotics\models\item\conical_flask.json
 3efe6c2bcdf836ddea8f5b6376cac4af79dd4114 assets\narchaotics\models\block\ephedra_stage0.json
 5d7538cbf0d5f71ec97088f9867e4a2570df87b0 assets\narchaotics\models\item\stand_and_clamp.json
 95bfee41d4196aab923fb96346e2aff93119b685 assets\narchaotics\models\item\clamp.json
+fc7a4be65469ef9baa5ac6d380b00d6867aa7dec assets\narchaotics\models\item\round_flask\ethanol.json
 9b65fa40e119cf4d0fc1b667000830ca8ef5d74e assets\narchaotics\models\item\dried_ephedra.json
 f1352132503eef35d84e8cf1bebe7618be4698f6 assets\narchaotics\models\item\filter_workbench.json
 61c205c6321db909de08d89f9c678dfea9ebee9e assets\narchaotics\models\item\burner.json
 4918ef583451aa710879e8a18d7aeaf99e504094 assets\narchaotics\models\item\evaporate_workbench.json
+502e1a71b089f5bcf87b38dd62e24d817a5c3933 assets\narchaotics\models\item\beaker\ethanol.json
 5c81ff2d1304537f0f8a94add9e6b802a56642fe assets\narchaotics\blockstates\ethanol_cauldron.json
 0a0be0a83bc41bafe9d3727edbf96ce6a77e5994 assets\narchaotics\blockstates\evaporate_workbench.json
 a27cd3be04f1c28c89e2fe59f0a60e18008b80b2 assets\narchaotics\models\item\distillation_workbench.json

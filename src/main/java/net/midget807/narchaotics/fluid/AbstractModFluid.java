@@ -1,5 +1,6 @@
 package net.midget807.narchaotics.fluid;
 
+import net.midget807.narchaotics.util.inject.FlaskStorable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
-public abstract class AbstractModFluid extends FlowableFluid {
+public abstract class AbstractModFluid extends FlowableFluid implements FlaskStorable {
 
     @Override
     public boolean matchesType(Fluid fluid) {

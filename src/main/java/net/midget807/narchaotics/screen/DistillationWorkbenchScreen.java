@@ -62,15 +62,15 @@ public class DistillationWorkbenchScreen extends HandledScreen<DistillationScree
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        drawFluid(context, handler.blockEntity.reactantFluidStorage1.variant, 35, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage1, 22));
-        drawFluid(context, handler.blockEntity.reactantFluidStorage2.variant, 35, 81, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage2, 22));
-        drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 135, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22));
-        drawFluid(context, handler.blockEntity.productFluidStorage2.variant, 135, 81, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage2, 22));
+        drawFluid(context, handler.blockEntity.reactantFluidStorage1.variant, 35, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage1, 22), 22);
+        drawFluid(context, handler.blockEntity.reactantFluidStorage2.variant, 35, 81, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage2, 22), 22);
+        drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 135, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22), 22);
+        drawFluid(context, handler.blockEntity.productFluidStorage2.variant, 135, 81, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage2, 22), 22);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     @SuppressWarnings("deprecation")
-    public void drawFluid(DrawContext context, FluidVariant fluidVariant, int dx, int dy, int width, int height) {
+    public void drawFluid(DrawContext context, FluidVariant fluidVariant, int dx, int dy, int width, int height, int maxHeight) {
         FluidRenderHandler fluidRenderHandler = FluidRenderHandlerRegistry.INSTANCE.get(fluidVariant.getFluid());
         if (fluidRenderHandler == null) return;
         int color = fluidRenderHandler.getFluidColor(null, null, fluidVariant.getFluid().getDefaultState());
@@ -83,7 +83,8 @@ public class DistillationWorkbenchScreen extends HandledScreen<DistillationScree
 
         int x = (this.width - BACKGROUND_WIDTH) / 2;
         int y = (this.height - BACKGROUND_HEIGHT) / 2;
+        int yOffset = maxHeight - height;
 
-        context.drawSprite(x + dx , y + dy, 1, width, height, sprite, r, g, b, 0.9f);
+        context.drawSprite(x + dx , y + dy + yOffset, 1, width, height, sprite, r, g, b, 0.9f);
     }
 }

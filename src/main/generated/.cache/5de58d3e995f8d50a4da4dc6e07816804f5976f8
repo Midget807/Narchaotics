@@ -1,10 +1,10 @@
-// 1.21.1	2026-02-08T22:48:06.5201848	Narchaotics/Tags for minecraft:item
-bb292453de80ed18691dbabf4df6ba0cfa790065 data\narchaotics\tags\item\fluid_bottles.json
-148d511d56446d3cf5b51069081b6bc1ee9eea02 data\narchaotics\tags\item\distillation_output.json
+// 1.21.1	2026-02-10T19:38:39.4744226	Narchaotics/Tags for minecraft:item
+dfc08920f72bc12fe80f8a1935039db3afca6328 data\narchaotics\tags\item\fluid_bottles.json
+c97b3f3f4998d26b45c2fa519701acda87a7054c data\narchaotics\tags\item\distillation_output.json
 8b7148b9359a3aeafa23da8ba41294eeee066ec8 data\narchaotics\tags\item\fluid_buckets.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\narchaotics\tags\item\conical_flask_fluids.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\narchaotics\tags\item\test_tube_fluids.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\narchaotics\tags\item\conical_flask_fluids.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\narchaotics\tags\item\round_flask_fluids.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\narchaotics\tags\item\beaker_fluids.json
 744537aae9e7e7bfc2bc1c2f8b3fb2df577565f1 data\narchaotics\tags\item\fluid_remove_items.json
-524fecb5026f0647b6536aa8d1cc79c015c44d41 data\narchaotics\tags\item\fluid_input_items.json
+80e40106bb8a780b11f5a090db9db1e14b8c090d data\narchaotics\tags\item\fluid_input_items.json

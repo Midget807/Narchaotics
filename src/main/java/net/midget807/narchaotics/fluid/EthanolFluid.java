@@ -13,7 +13,7 @@ import net.minecraft.state.property.Properties;
 public abstract class EthanolFluid extends AbstractModFluid {
     @Override
     public Fluid getStill() {
-        return ModFluids.ETHANOL_STILL;
+        return ModFluids.ETHANOL;
     }
 
     @Override
@@ -24,6 +24,26 @@ public abstract class EthanolFluid extends AbstractModFluid {
     @Override
     public Item getBucketItem() {
         return ModItems.ETHANOL_BUCKET;
+    }
+
+    @Override
+    public Item narchaotics$getConicalFlaskItem() {
+        return ModItems.ETHANOL_CONICAL_FLASK;
+    }
+
+    @Override
+    public Item narchaotics$getRoundFlaskItem() {
+        return ModItems.ETHANOL_ROUND_FLASK;
+    }
+
+    @Override
+    public Item narchaotics$getBeakerItem() {
+        return ModItems.ETHANOL_BEAKER;
+    }
+
+    @Override
+    public Item narchaotics$getTestTubeItem() {
+        return ModItems.ETHANOL_TEST_TUBE;
     }
 
     @Override

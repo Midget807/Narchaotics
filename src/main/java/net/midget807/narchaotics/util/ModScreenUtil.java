@@ -9,7 +9,7 @@ import net.minecraft.screen.slot.Slot;
 
 public class ModScreenUtil {
     public static int getHeightForVolume(SingleVariantStorage<FluidVariant> tank, int maxHeight) {
-        return (int) (Math.floor((double) tank.amount / tank.getCapacity()) * maxHeight);
+        return (int) (Math.floor((double) tank.amount / tank.getCapacity() * maxHeight));
     }
 
     public static class FluidInputSlot extends Slot {

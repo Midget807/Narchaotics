@@ -11,11 +11,13 @@ import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.screen.DistillationScreenHandler;
 import net.midget807.narchaotics.util.ImplementedInventory;
 import net.midget807.narchaotics.util.ModFluidUtil;
+import net.midget807.narchaotics.util.inject.FlaskStorable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
@@ -127,13 +129,13 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
         this.inventory.set(slot, stack);
     }
 
-    public void insertStack(int slot, ItemStack stack) {
+    public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (stackInSlot.isEmpty()) {
-            this.setStack(slot, stack);
-        } else if (stackInSlot == stack) {
-            stackInSlot.increment(stack.getCount());
+        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
+            stack.increment(stackInSlot.getCount());
         }
+        this.setStack(slot, stack);
+        return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
     }
 
     @Override
@@ -211,22 +213,36 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
     private void removeFluid() {
         for (int slot : FLUID_INPUT_INDICES) {
             if (inventory.get(slot).isIn(ModItemTagProvider.FLUID_REMOVE_ITEMS)) {
-                transferFluidTankItem(slot);
+                transferFluidTankToItem(slot);
             }
         }
     }
 
-    private void transferFluidTankItem(int slot) {
+    private void transferFluidTankToItem(int slot) {
         try (Transaction transaction = Transaction.openOuter()) {
             ItemStack stack = this.getStack(slot);
             switch (slot) {
                 case 2: {
+                    Item outputFluidItem = null;
                     if (this.reactantFluidStorage1.amount <= 0 || this.reactantFluidStorage1.variant.isBlank()) return;
-                    this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, BUCKET / 81, transaction);
-                    transaction.commit();
-                    this.insertStack(FLUID_OUTPUT_INDICES[0], new ItemStack(ModItems.ETHANOL_BUCKET));
-                    stack.decrement(1);
-                    this.setStack(slot, stack);
+                    if (stack.isOf(Items.BUCKET)) {
+                        if (this.reactantFluidStorage1.amount < 1000) return;
+                        outputFluidItem = this.reactantFluidStorage1.variant.getFluid().getBucketItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, BUCKET / 81, transaction);
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
+                        if (this.reactantFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage1.variant.getFluid()).narchaotics$getConicalFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 250, transaction);
+                        transaction.commit();
+                    }
+                    if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[0], outputFluidItem.getDefaultStack())) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
                     break;
                 }
                 case 3: {
@@ -241,18 +257,19 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
     private void fillUpOnFluid() {
         for (int slot : FLUID_INPUT_INDICES) {
             if (hasFluidSourceItemInFluidInputSlots(slot)) {
-                transferItemFluidTank(slot);
+                transferItemToFluidTank(slot);
             }
         }
     }
 
-    private void transferItemFluidTank(int slot) {
+    private void transferItemToFluidTank(int slot) {
         try (Transaction transaction = Transaction.openOuter()) {
             Fluid fluid = null;
             ItemStack stack = this.getStack(slot);
             if (fluid == null && stack.getItem() instanceof BucketItem bucketItem) fluid = bucketItem.fluid;
             if (fluid == null && stack.getItem() instanceof FlaskItem flaskItem) fluid = flaskItem.fluid;
             if (fluid == null) return;
+            if (fluid == Fluids.EMPTY) return;
             switch (slot) {
                 case 2: {
                     if (this.getStack(FLUID_OUTPUT_INDICES[0]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[0]).getMaxCount()) return;
@@ -263,13 +280,14 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                         transaction.commit();
                         this.insertStack(FLUID_OUTPUT_INDICES[0], new ItemStack(Items.BUCKET));
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.reactantFluidStorage1.amount > 750) return;
-                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), 250, transaction);
+                        if (this.reactantFluidStorage1.amount > 1000 - flaskItem.capacity) return;
+                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
                         transaction.commit();
                         this.insertStack(FLUID_OUTPUT_INDICES[0], flaskItem.getRemainderStack());
                     }
                     stack.decrement(1);
                     this.setStack(slot, stack);
+                    this.markDirty();
                     break;
                 }
                 case 3: {
@@ -287,6 +305,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                     }
                     stack.decrement(1);
                     this.setStack(slot, stack);
+                    this.markDirty();
                     break;
                 }
                 default:

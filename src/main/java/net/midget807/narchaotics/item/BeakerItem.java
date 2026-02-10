@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class BeakerItem extends FlaskItem {
     public BeakerItem(Fluid fluid, Item remainder, Settings settings) {
-        super(fluid, remainder, settings);
+        super(fluid, remainder, 250, settings);
     }
 }
