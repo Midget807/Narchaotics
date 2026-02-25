@@ -1,18 +1,25 @@
 package net.midget807.narchaotics.block.entity;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.midget807.narchaotics.datagen.ModItemTagProvider;
 import net.midget807.narchaotics.item.FlaskItem;
+import net.midget807.narchaotics.recipe.DistillationRecipe;
+import net.midget807.narchaotics.recipe.DistillationRecipeInput;
+import net.midget807.narchaotics.recipe.FluidStack;
 import net.midget807.narchaotics.registry.ModBlockEntities;
 import net.midget807.narchaotics.registry.ModItems;
+import net.midget807.narchaotics.registry.ModRecipes;
 import net.midget807.narchaotics.screen.DistillationScreenHandler;
 import net.midget807.narchaotics.util.ImplementedInventory;
 import net.midget807.narchaotics.util.ModFluidUtil;
 import net.midget807.narchaotics.util.inject.FlaskStorable;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,6 +35,12 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.RecipeInputProvider;
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.recipe.RecipeMatcher;
+import net.minecraft.recipe.RecipeUnlocker;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -35,15 +48,20 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.*;
+import java.util.List;
+
+import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET;
 import static net.midget807.narchaotics.util.ModBlockUtil.*;
 
-public class DistillationWorkbenchBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
+public class DistillationWorkbenchBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory, RecipeUnlocker, RecipeInputProvider {
     public static final int PROGRESS_TIME_DELEGATE_INDEX = 0;
     public static final int MAX_PROGRESS_DELEGATE_INDEX = 1;
     public static final int ANIMATION_TIME_DELEGATE_INDEX = 2;
@@ -103,7 +121,8 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
     private int progressTime;
     private int maxProgress;
     private int animationTime;
-
+    private final Object2IntOpenHashMap<Identifier> recipeUsed = new Object2IntOpenHashMap<>();
+    private final RecipeManager.MatchGetter<DistillationRecipeInput, DistillationRecipe> matchGetter = RecipeManager.createCachedMatchGetter(ModRecipes.DISTILLATION_TYPE);
 
     public DistillationWorkbenchBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DISTILLATION_WORKBENCH, pos, state);
@@ -126,7 +145,23 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
 
     @Override
     public void setStack(int slot, ItemStack stack) {
+        ItemStack itemStack = this.inventory.get(slot);
+        boolean inputSameAsSlot = !stack.isEmpty() && ItemStack.areItemsAndComponentsEqual(itemStack, stack);
         this.inventory.set(slot, stack);
+        for (int i : FLUID_INPUT_INDICES) {
+            if (slot == i && !inputSameAsSlot) {
+                this.maxProgress = getCookTime(this.world, this);
+                this.progressTime = 0;
+                this.markDirty();
+            }
+        }
+        for (int i : ITEM_INPUT_INDICES) {
+            if (slot == i && !inputSameAsSlot) {
+                this.maxProgress = getCookTime(this.world, this);
+                this.progressTime = 0;
+                this.markDirty();
+            }
+        }
     }
 
     public boolean insertStack(int slot, ItemStack stack) {
@@ -169,18 +204,21 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, reactantFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(REACTANT_FLUID_VARIANT_1_KEY, nbtElement));
             nbt.putLong(REACTANT_FLUID_AMOUNT_1_KEY, reactantFluidStorage1.amount);
         }
-        if (!reactantFluidStorage1.isResourceBlank()) {
+        if (!reactantFluidStorage2.isResourceBlank()) {
             FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, reactantFluidStorage2.variant).result().ifPresent(nbtElement -> nbt.put(REACTANT_FLUID_VARIANT_2_KEY, nbtElement));
             nbt.putLong(REACTANT_FLUID_AMOUNT_2_KEY, reactantFluidStorage2.amount);
         }
-        if (!reactantFluidStorage1.isResourceBlank()) {
+        if (!productFluidStorage1.isResourceBlank()) {
             FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_1_KEY, nbtElement));
             nbt.putLong(PRODUCT_FLUID_AMOUNT_1_KEY, productFluidStorage1.amount);
         }
-        if (!reactantFluidStorage1.isResourceBlank()) {
+        if (!productFluidStorage2.isResourceBlank()) {
             FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage2.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_2_KEY, nbtElement));
             nbt.putLong(PRODUCT_FLUID_AMOUNT_2_KEY, productFluidStorage2.amount);
         }
+        NbtCompound nbtCompound = new NbtCompound();
+        this.recipeUsed.forEach((identifier, count) -> nbtCompound.putInt(identifier.toString(), count));
+        nbt.put(RECIPES_USED_KEY, nbtCompound);
     }
 
     @Override
@@ -203,11 +241,178 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             this.reactantItem1 = this.inventory.get(ITEM_INPUT_INDICES[0]).getItem();
             this.reactantItem2 = this.inventory.get(ITEM_INPUT_INDICES[1]).getItem();
         }
+
+        NbtCompound nbtCompound = nbt.getCompound(RECIPES_USED_KEY);
+        for (String string : nbtCompound.getKeys()) {
+            this.recipeUsed.put(Identifier.of(string), nbtCompound.getInt(string));
+        }
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
         fillUpOnFluid();
         removeFluid();
+        boolean shouldMarkDirty = false;
+        if (!inputsEmpty()) {
+            RecipeEntry<DistillationRecipe> recipeEntry = this.matchGetter.getFirstMatch(
+                    new DistillationRecipeInput(
+                            this.getStack(ITEM_INPUT_INDICES[0]),
+                            this.getStack(ITEM_INPUT_INDICES[1]),
+                            new FluidStack(this.reactantFluidStorage1.variant, this.reactantFluidStorage1.amount),
+                            new FluidStack(this.reactantFluidStorage2.variant, this.reactantFluidStorage2.amount),
+                            this.getStack(FUEL_INPUT_INDEX)
+                    ),
+                    world
+            ).orElse(null);
+
+            if (canAcceptRecipeOutput(recipeEntry)) {
+                if (this.progressTime == this.maxProgress) {
+                    this.progressTime = 0;
+                    this.maxProgress = getCookTime(world, this);
+                    if (craftRecipe(recipeEntry, this.inventory)) {
+                        this.setLastRecipe(recipeEntry);
+                    }
+                    shouldMarkDirty = true;
+                }
+                this.progressTime++;
+            } else {
+                this.progressTime = 0;
+            }
+            System.out.println("reactant1: " + this.reactantFluidStorage1.amount);
+        } else if (this.progressTime > 0) {
+            this.progressTime = MathHelper.clamp(this.progressTime - 2, 0, this.maxProgress);
+        }
+
+        if (shouldMarkDirty) {
+            markDirty(world, pos, state);
+        }
+
+    }
+
+    private boolean craftRecipe(RecipeEntry<DistillationRecipe> recipe, DefaultedList<ItemStack> inventory) {
+        if (recipe != null && canAcceptRecipeOutput(recipe)) {
+            ItemStack inputSlotItem1 = inventory.get(ITEM_INPUT_INDICES[0]);
+            ItemStack inputSlotItem2 = inventory.get(ITEM_INPUT_INDICES[1]);
+            ItemStack recipeResult1 = recipe.value().result1;
+            ItemStack recipeResult2 = recipe.value().result2;
+            ItemStack outputSlotItem1 = inventory.get(ITEM_OUTPUT_INDICES[0]);
+            ItemStack outputSlotItem2 = inventory.get(ITEM_OUTPUT_INDICES[1]);
+            ItemStack fuelSlotItem = inventory.get(FUEL_INPUT_INDEX);
+            Ingredient recipeFuel = recipe.value().fuelType;
+            if (!recipeResult1.isEmpty()) {
+                if (outputSlotItem1.isEmpty()) {
+                    inventory.set(ITEM_OUTPUT_INDICES[0], recipeResult1.copy());
+                } else if (ItemStack.areItemsAndComponentsEqual(outputSlotItem1, recipeResult1)) {
+                    outputSlotItem1.increment(recipeResult1.getCount());
+                }
+
+                if (!inputSlotItem1.isEmpty()) {
+                    inputSlotItem1.decrement(1);
+                }
+            }
+
+            if (!recipeResult2.isEmpty()) {
+                if (outputSlotItem2.isEmpty()) {
+                    inventory.set(ITEM_OUTPUT_INDICES[1], recipeResult2.copy());
+                } else if (ItemStack.areItemsAndComponentsEqual(outputSlotItem2, recipeResult2)) {
+                    outputSlotItem2.increment(recipeResult2.getCount());
+                }
+
+                if (!inputSlotItem2.isEmpty()) {
+                    inputSlotItem2.decrement(1);
+                }
+            }
+
+
+            SingleVariantStorage<FluidVariant> inputSlotFluid1 = this.reactantFluidStorage1;
+            SingleVariantStorage<FluidVariant> inputSlotFluid2 = this.reactantFluidStorage2;
+            FluidStack recipeProduct1 = recipe.value().product1;
+            FluidStack recipeProduct2 = recipe.value().product2;
+            SingleVariantStorage<FluidVariant> outputSlotFluid1 = this.productFluidStorage1;
+            SingleVariantStorage<FluidVariant> outputSlotFluid2 = this.productFluidStorage2;
+            if (!recipeProduct1.isEmpty()) {
+                if (outputSlotFluid1.isResourceBlank()) {
+                    outputSlotFluid1.variant = recipeProduct1.variant();
+                    outputSlotFluid1.amount = recipeProduct1.amount();
+                } else if (outputSlotFluid1.variant.equals(recipeProduct1.variant())) {
+                    outputSlotFluid1.amount += recipeProduct1.amount();
+                }
+
+                inputSlotFluid1.amount -= recipeProduct1.amount();
+            }
+
+            if (!recipeProduct2.isEmpty()) {
+                if (outputSlotFluid2.isResourceBlank()) {
+                    outputSlotFluid2.variant = recipeProduct2.variant();
+                    outputSlotFluid2.amount = recipeProduct2.amount();
+                } else if (outputSlotFluid2.variant.equals(recipeProduct2.variant())) {
+                    outputSlotFluid2.amount += recipeProduct2.amount();
+                }
+
+                inputSlotFluid2.amount -= recipeProduct2.amount();
+            }
+
+            if (!recipeFuel.isEmpty()) {
+                if (!fuelSlotItem.isEmpty()) {
+                    fuelSlotItem.decrement(1);
+                }
+            }
+
+            markDirty();
+            if (this.getWorld() != null) this.getWorld().updateListeners(pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_LISTENERS);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canAcceptRecipeOutput(RecipeEntry<DistillationRecipe> recipeEntry) {
+        if (recipeEntry == null) return false;
+        DistillationRecipe recipe = recipeEntry.value();
+        boolean canOutputItem1 = canOutputItem(recipe.result1, this.inventory.get(ITEM_OUTPUT_INDICES[0]),recipe.result1.getMaxCount());
+        boolean canOutputItem2 = canOutputItem(recipe.result2, this.inventory.get(ITEM_OUTPUT_INDICES[1]),recipe.result2.getMaxCount());
+        boolean canOutputFluid1 = canOutputFluid(recipe.product1, this.productFluidStorage1, recipe.fluid1, this.reactantFluidStorage1);
+        boolean canOutputFluid2 = canOutputFluid(recipe.product2, this.productFluidStorage2, recipe.fluid2, this.reactantFluidStorage2);
+
+        return canOutputItem1 && canOutputItem2 && canOutputFluid1 && canOutputFluid2;
+    }
+
+    private static boolean canOutputItem(ItemStack recipeOutput, ItemStack slotStack, int maxCount) {
+        if (recipeOutput.isEmpty()) return true;
+
+        if (slotStack.isEmpty()) return true;
+
+        if (!ItemStack.areItemsAndComponentsEqual(slotStack, recipeOutput)) return false;
+
+        return slotStack.getCount() + recipeOutput.getCount() <= Math.min(maxCount, slotStack.getMaxCount());
+    }
+
+    private static boolean canOutputFluid(FluidStack recipeOutput, SingleVariantStorage<FluidVariant> outputTank, FluidStack recipeInput, SingleVariantStorage<FluidVariant> inputTank) {
+        if (!recipeInput.isEmpty()) {
+            if (!inputTank.getResource().equals(recipeInput.variant())) {
+                return false;
+            }
+
+            if (inputTank.getAmount() < recipeInput.amount()) {
+                return false;
+            }
+        }
+
+        if (recipeOutput.isEmpty()) return true;
+
+        if (!outputTank.getResource().equals(recipeOutput.variant()) && outputTank.getAmount() > 0) {
+            return false;
+        }
+
+        long space = outputTank.getCapacity() - outputTank.getAmount();
+        return space >= recipeOutput.amount();
+    }
+
+
+    private boolean inputsEmpty() {
+        return this.inventory.get(ITEM_INPUT_INDICES[0]).isEmpty()
+                && this.inventory.get(ITEM_INPUT_INDICES[1]).isEmpty()
+                && this.reactantFluidStorage1.isResourceBlank()
+                && this.reactantFluidStorage2.isResourceBlank();
     }
 
     private void removeFluid() {
@@ -225,17 +430,41 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                 case 2: {
                     Item outputFluidItem = null;
                     if (this.reactantFluidStorage1.amount <= 0 || this.reactantFluidStorage1.variant.isBlank()) return;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[0]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[0]).getItem().getMaxCount()) return;
                     if (stack.isOf(Items.BUCKET)) {
                         if (this.reactantFluidStorage1.amount < 1000) return;
                         outputFluidItem = this.reactantFluidStorage1.variant.getFluid().getBucketItem();
                         if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
                         this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, BUCKET / 81, transaction);
+                        this.playFluidExtractSound(this.getWorld());
                         transaction.commit();
                     } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
                         if (this.reactantFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
                         outputFluidItem = ((FlaskStorable) this.reactantFluidStorage1.variant.getFluid()).narchaotics$getConicalFlaskItem();
                         if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
                         this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.ROUND_FLASK)) {
+                        if (this.reactantFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage1.variant.getFluid()).narchaotics$getRoundFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.BEAKER)) {
+                        if (this.reactantFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage1.variant.getFluid()).narchaotics$getBeakerItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.TEST_TUBE)) {
+                        if (this.reactantFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage1.variant.getFluid()).narchaotics$getTestTubeItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[0]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[0]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 50, transaction);
+                        this.playFluidExtractSound(this.getWorld());
                         transaction.commit();
                     }
                     if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[0], outputFluidItem.getDefaultStack())) {
@@ -246,7 +475,145 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                     break;
                 }
                 case 3: {
-                    return;
+                    Item outputFluidItem = null;
+                    if (this.reactantFluidStorage2.amount <= 0 || this.reactantFluidStorage2.variant.isBlank()) return;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getItem().getMaxCount()) return;
+                    if (stack.isOf(Items.BUCKET)) {
+                        if (this.reactantFluidStorage2.amount < 1000) return;
+                        outputFluidItem = this.reactantFluidStorage2.variant.getFluid().getBucketItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, BUCKET / 81, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
+                        if (this.reactantFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage2.variant.getFluid()).narchaotics$getConicalFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.ROUND_FLASK)) {
+                        if (this.reactantFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage2.variant.getFluid()).narchaotics$getRoundFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.BEAKER)) {
+                        if (this.reactantFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage2.variant.getFluid()).narchaotics$getBeakerItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.TEST_TUBE)) {
+                        if (this.reactantFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.reactantFluidStorage2.variant.getFluid()).narchaotics$getTestTubeItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, 50, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    }
+                    if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[1], outputFluidItem.getDefaultStack())) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
+                case 4: {
+                    Item outputFluidItem = null;
+                    if (this.productFluidStorage1.amount <= 0 || this.productFluidStorage1.variant.isBlank()) return;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[2]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[2]).getItem().getMaxCount()) return;
+                    if (stack.isOf(Items.BUCKET)) {
+                        if (this.productFluidStorage1.amount < 1000) return;
+                        outputFluidItem = this.productFluidStorage1.variant.getFluid().getBucketItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, BUCKET / 81, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getConicalFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.ROUND_FLASK)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getRoundFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.BEAKER)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getBeakerItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.TEST_TUBE)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getTestTubeItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 50, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    }
+                    if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[2], outputFluidItem.getDefaultStack())) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
+                case 5: {
+                    Item outputFluidItem = null;
+                    if (this.productFluidStorage2.amount <= 0 || this.productFluidStorage2.variant.isBlank()) return;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[3]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[3]).getItem().getMaxCount()) return;
+                    if (stack.isOf(Items.BUCKET)) {
+                        if (this.productFluidStorage2.amount < 1000) return;
+                        outputFluidItem = this.productFluidStorage2.variant.getFluid().getBucketItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[3]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[3]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, BUCKET / 81, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getConicalFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[3]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[3]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.ROUND_FLASK)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getRoundFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[3]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[3]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.BEAKER)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getBeakerItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[3]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[3]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.TEST_TUBE)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getTestTubeItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[3]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[3]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 50, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    }
+                    if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[3], outputFluidItem.getDefaultStack())) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
                 }
                 default:
                     throw new IllegalStateException("Unexpected value: " + slot);
@@ -272,40 +639,95 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             if (fluid == Fluids.EMPTY) return;
             switch (slot) {
                 case 2: {
+                    ItemStack remainderStack = null;
                     if (this.getStack(FLUID_OUTPUT_INDICES[0]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[0]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
                         if (this.reactantFluidStorage1.amount > 0) return;
                         this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
-                        playerFluidInsertSound(this.getWorld());
+                        playFluidInsertSound(this.getWorld());
                         transaction.commit();
-                        this.insertStack(FLUID_OUTPUT_INDICES[0], new ItemStack(Items.BUCKET));
+                        remainderStack = new ItemStack(Items.BUCKET);
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
                         if (this.reactantFluidStorage1.amount > 1000 - flaskItem.capacity) return;
                         this.reactantFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                        playFluidInsertSound(this.getWorld());
                         transaction.commit();
-                        this.insertStack(FLUID_OUTPUT_INDICES[0], flaskItem.getRemainderStack());
+                        remainderStack = flaskItem.getRemainderStack();
                     }
-                    stack.decrement(1);
-                    this.setStack(slot, stack);
-                    this.markDirty();
+                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack)) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
                     break;
                 }
                 case 3: {
+                    ItemStack remainderStack = null;
                     if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
                         if (this.reactantFluidStorage2.amount > 0) return;
                         this.reactantFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        playFluidInsertSound(this.getWorld());
                         transaction.commit();
-                        this.insertStack(FLUID_OUTPUT_INDICES[1], new ItemStack(Items.BUCKET));
+                        remainderStack = new ItemStack(Items.BUCKET);
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.reactantFluidStorage2.amount > 750) return;
-                        this.reactantFluidStorage2.insert(FluidVariant.of(fluid), 250, transaction);
+                        if (this.reactantFluidStorage2.amount > 1000 - flaskItem.capacity) return;
+                        this.reactantFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                        playFluidInsertSound(this.getWorld());
                         transaction.commit();
-                        this.insertStack(FLUID_OUTPUT_INDICES[1], flaskItem.getRemainderStack());
+                        remainderStack = flaskItem.getRemainderStack();
                     }
-                    stack.decrement(1);
-                    this.setStack(slot, stack);
-                    this.markDirty();
+                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[1], remainderStack)) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
+                case 4: {
+                    ItemStack remainderStack = null;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[2]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[2]).getMaxCount()) return;
+                    if (stack.getItem() instanceof BucketItem) {
+                        if (this.productFluidStorage1.amount > 0) return;
+                        this.productFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = new ItemStack(Items.BUCKET);
+                    } else if (stack.getItem() instanceof FlaskItem flaskItem) {
+                        if (this.productFluidStorage1.amount > 1000 - flaskItem.capacity) return;
+                        this.productFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = flaskItem.getRemainderStack();
+                    }
+                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[2], remainderStack)) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
+                case 5: {
+                    ItemStack remainderStack = null;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[3]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[3]).getMaxCount()) return;
+                    if (stack.getItem() instanceof BucketItem) {
+                        if (this.productFluidStorage2.amount > 0) return;
+                        this.productFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = new ItemStack(Items.BUCKET);
+                    } else if (stack.getItem() instanceof FlaskItem flaskItem) {
+                        if (this.productFluidStorage2.amount > 1000 - flaskItem.capacity) return;
+                        this.productFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = flaskItem.getRemainderStack();
+                    }
+                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[3], remainderStack)) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
                     break;
                 }
                 default:
@@ -318,15 +740,76 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
         return this.getStack(slot).isIn(ModItemTagProvider.FLUID_INPUT_ITEMS);
     }
 
-    private void playerFluidInsertSound(World world) {
+    private void playFluidInsertSound(World world) {
         if (world == null) return;
         if (world.isClient) return;
         world.playSound(null, this.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
-    private void playerFluidExtractSound(World world) {
+    private void playFluidExtractSound(World world) {
         if (world == null) return;
         if (world.isClient) return;
         world.playSound(null, this.getPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
+    private static int getCookTime(World world, DistillationWorkbenchBlockEntity blockEntity) {
+        DistillationRecipeInput distillationRecipeInput = new DistillationRecipeInput(
+                blockEntity.getStack(ITEM_INPUT_INDICES[0]),
+                blockEntity.getStack(ITEM_INPUT_INDICES[1]),
+                new FluidStack(blockEntity.reactantFluidStorage1.variant, blockEntity.reactantFluidStorage1.amount),
+                new FluidStack(blockEntity.reactantFluidStorage2.variant, blockEntity.reactantFluidStorage2.amount),
+                blockEntity.getStack(FUEL_INPUT_INDEX)
+        );
+        return (Integer) blockEntity.matchGetter
+                .getFirstMatch(distillationRecipeInput, world)
+                .map(recipe -> recipe.value().getCookingTime())
+                .orElse(120);
+    }
+
+    @Override
+    public void provideRecipeInputs(RecipeMatcher finder) {
+        for (ItemStack itemStack : this.inventory) {
+            finder.addInput(itemStack);
+        }
+    }
+
+    @Override
+    public void setLastRecipe(@Nullable RecipeEntry<?> recipe) {
+        if (recipe != null) {
+            Identifier identifier = recipe.id();
+            this.recipeUsed.addTo(identifier, 1);
+        }
+    }
+
+    @Override
+    public @Nullable RecipeEntry<?> getLastRecipe() {
+        return null;
+    }
+
+    @Override
+    public void unlockLastRecipe(PlayerEntity player, List<ItemStack> ingredients) {
+    }
+
+    @Override
+    public boolean isValid(int slot, ItemStack stack) {
+        return slot == ITEM_INPUT_INDICES[0] || slot == ITEM_INPUT_INDICES[1] || slot == FUEL_INPUT_INDEX;
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction side) {
+        return side == Direction.DOWN && (slot == ITEM_OUTPUT_INDICES[0] || slot == ITEM_OUTPUT_INDICES[1]);
+    }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
+        return this.isValid(slot, stack);
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        if (side == Direction.DOWN) {
+            return ITEM_OUTPUT_INDICES;
+        } else {
+            return side == Direction.UP ? ITEM_INPUT_INDICES : new int[FUEL_INPUT_INDEX];
+        }
+    }
 }

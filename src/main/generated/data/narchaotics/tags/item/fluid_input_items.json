@@ -1,7 +1,10 @@
 {
   "values": [
     "minecraft:water_bucket",
-    "#narchaotics:fluid_bottles",
-    "#narchaotics:fluid_buckets"
+    "#narchaotics:fluid_buckets",
+    "#narchaotics:conical_flask_fluids",
+    "#narchaotics:round_flask_fluids",
+    "#narchaotics:beaker_fluids",
+    "#narchaotics:test_tube_fluids"
   ]
 }

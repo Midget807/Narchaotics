@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "narchaotics:item/beaker/ethanol"
+    "layer0": "narchaotics:item/beaker/fluid_beaker",
+    "layer1": "narchaotics:item/beaker/fluid_beaker_overlay"
   }
 }

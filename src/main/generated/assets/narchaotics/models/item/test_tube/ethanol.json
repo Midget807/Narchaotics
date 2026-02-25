@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "narchaotics:item/test_tube/ethanol"
+    "layer0": "narchaotics:item/test_tube/fluid_test_tube",
+    "layer1": "narchaotics:item/test_tube/fluid_test_tube_overlay"
   }
 }

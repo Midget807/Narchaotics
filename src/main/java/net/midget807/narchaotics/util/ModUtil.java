@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.MathHelper;
 
@@ -34,6 +35,37 @@ public class ModUtil {
             return Text.empty();
         }
     }
+
+    public static String fluidItemDisplayName(Identifier id) {
+        String path = id.getPath();
+
+        if (path.startsWith("bucket/")) {
+            path = path.substring("bucket/".length());
+        }
+        if (path.startsWith("conical_flask/")) {
+            path = path.substring("conical_flask/".length());
+        }
+        if (path.startsWith("beaker/")) {
+            path = path.substring("beaker/".length());
+        }
+        if (path.startsWith("round_flask/")) {
+            path = path.substring("round_flask/".length());
+        }
+        if (path.startsWith("test_tube/")) {
+            path = path.substring("test_tube/".length());
+        }
+
+        String[] parts = path.split("_");
+        StringBuilder result = new StringBuilder();
+        for (String part : parts) {
+            result.append(Character.toUpperCase(part.charAt(0)))
+                    .append(part.substring(1))
+                    .append(" ");
+        }
+
+        return result.toString().trim();
+    }
+
     public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack, boolean creativeOverride) {
         boolean bl = player.isInCreativeMode();
         int count = inputStack.getCount();

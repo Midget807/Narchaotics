@@ -13,10 +13,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
+    public static final TagKey<Item> SOUL_BURNER = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("soul_burner"));
     public static final TagKey<Item> DISTILLATION_OUTPUT = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("distillation_output"));
     public static final TagKey<Item> FLUID_INPUT_ITEMS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fluid_input_items"));
     public static final TagKey<Item> FLUID_BUCKETS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fluid_buckets"));
@@ -26,6 +29,7 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
     public static final TagKey<Item> ROUND_FLASK_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("round_flask_fluids"));
     public static final TagKey<Item> BEAKER_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("beaker_fluids"));
     public static final TagKey<Item> TEST_TUBE_FLUIDS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("test_tube_fluids"));
+    public static final TagKey<Item> AMMONIA_SOIL = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("ammonia_soil"));
 
     public ModItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
@@ -33,12 +37,18 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        this.getOrCreateTagBuilder(SOUL_BURNER)
+                .add(
+                        Items.SOUL_SAND,
+                        Items.SOUL_SOIL
+                );
         this.getOrCreateTagBuilder(DISTILLATION_OUTPUT)
                 .add(
                         ModItems.CONICAL_FLASK,
                         ModItems.BEAKER,
                         ModItems.ROUND_FLASK
                 );
+
         this.getOrCreateTagBuilder(FLUID_BOTTLES)
                 .add(
                         ModItems.CONICAL_FLASK,
@@ -46,26 +56,35 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                         ModItems.ROUND_FLASK,
                         ModItems.TEST_TUBE
                 );
-        this.getOrCreateTagBuilder(FLUID_BUCKETS)
-                .add(
-                        ModItems.ETHANOL_BUCKET
-                );
-        this.getOrCreateTagBuilder(CONICAL_FLASK_FLUIDS);
-        this.getOrCreateTagBuilder(ROUND_FLASK_FLUIDS);
-        this.getOrCreateTagBuilder(BEAKER_FLUIDS);
-        this.getOrCreateTagBuilder(TEST_TUBE_FLUIDS);
+
+        ModItems.BUCKETS.forEach((item, identifier) -> this.getOrCreateTagBuilder(FLUID_BUCKETS).add(item));
+
+        ModItems.CONICAL_FLASKS.forEach((item, identifier) -> this.getOrCreateTagBuilder(CONICAL_FLASK_FLUIDS).add(item));
+
+        ModItems.ROUND_FLASKS.forEach((item, identifier) -> this.getOrCreateTagBuilder(ROUND_FLASK_FLUIDS).add(item));
+
+        ModItems.BEAKERS.forEach((item, identifier) -> this.getOrCreateTagBuilder(BEAKER_FLUIDS).add(item));
+
+        ModItems.TEST_TUBES.forEach((item, identifier) -> this.getOrCreateTagBuilder(TEST_TUBE_FLUIDS).add(item));
 
         this.getOrCreateTagBuilder(FLUID_INPUT_ITEMS)
                 .add(
                         Items.WATER_BUCKET
                 )
-                .addTag(FLUID_BOTTLES)
-                .addTag(FLUID_BUCKETS);
+                .addTag(FLUID_BUCKETS)
+                .addTag(CONICAL_FLASK_FLUIDS)
+                .addTag(ROUND_FLASK_FLUIDS)
+                .addTag(BEAKER_FLUIDS)
+                .addTag(TEST_TUBE_FLUIDS);
 
         this.getOrCreateTagBuilder(FLUID_REMOVE_ITEMS)
                 .add(
                         Items.BUCKET
                 )
                 .addTag(FLUID_BOTTLES);
+
+        this.getOrCreateTagBuilder(AMMONIA_SOIL)
+                .add(Items.PODZOL)
+                .addOptional(Identifier.of("farmersdelight", "rich_soil"));
     }
 }

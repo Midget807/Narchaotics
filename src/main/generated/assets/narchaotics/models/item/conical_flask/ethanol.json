@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "narchaotics:item/conical_flask/ethanol"
+    "layer0": "narchaotics:item/conical_flask/fluid_conical_flask",
+    "layer1": "narchaotics:item/conical_flask/fluid_conical_flask_overlay"
   }
 }

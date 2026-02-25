@@ -28,6 +28,29 @@ public class ModItemGroups {
                         entries.add(ModItems.STAND);
                         entries.add(ModItems.CLAMP);
                         entries.add(ModItems.STAND_AND_CLAMP);
+                        ModItems.BUCKETS.forEach((item, identifier) -> {
+                            entries.add(item);
+                        });
+                        ModItems.CONICAL_FLASKS.forEach((item, identifier) -> {
+                            if (item != ModItems.CONICAL_FLASK) {
+                                entries.add(item);
+                            }
+                        });
+                        ModItems.ROUND_FLASKS.forEach((item, identifier) -> {
+                            if (item != ModItems.ROUND_FLASK) {
+                                entries.add(item);
+                            }
+                        });
+                        ModItems.BEAKERS.forEach((item, identifier) -> {
+                            if (item != ModItems.BEAKER) {
+                                entries.add(item);
+                            }
+                        });
+                        ModItems.TEST_TUBES.forEach((item, identifier) -> {
+                            if (item != ModItems.TEST_TUBE) {
+                                entries.add(item);
+                            }
+                        });
                     })
                     .build()
     );

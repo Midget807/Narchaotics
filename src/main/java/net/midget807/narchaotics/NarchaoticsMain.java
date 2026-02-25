@@ -10,6 +10,7 @@ import net.midget807.narchaotics.registry.ModCustomCauldronBehaviours;
 import net.midget807.narchaotics.registry.ModFluids;
 import net.midget807.narchaotics.registry.ModItemGroups;
 import net.midget807.narchaotics.registry.ModItems;
+import net.midget807.narchaotics.registry.ModRecipes;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -36,5 +37,7 @@ public class NarchaoticsMain implements ModInitializer {
         ModCauldronBehaviors.registerModCauldronBehaviors();
         ModScreenHandlers.registerModScreenHandlers();
         ModColorProviderRegistry.registerBlockColors();
+        ModColorProviderRegistry.registerItemColors();
+        ModRecipes.registerModRecipes();
 	}
 }

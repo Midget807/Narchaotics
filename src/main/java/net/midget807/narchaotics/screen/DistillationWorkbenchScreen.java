@@ -34,6 +34,12 @@ public class DistillationWorkbenchScreen extends HandledScreen<DistillationScree
     public static final Identifier DISSOLVE_TAB_UNAVAILABLE_TEXTURE = NarchaoticsMain.id("textures/gui/container/dissolve_tab_unavailable.png");
     public static final Identifier DISSOLVE_TAB_AVAILABLE_TEXTURE = NarchaoticsMain.id("textures/gui/container/dissolve_tab_available.png");
     public static final Identifier DISSOLVE_TAB_SELECTED_TEXTURE = NarchaoticsMain.id("textures/gui/container/dissolve_tab_selected.png");
+    public static final Identifier DISTILLATION_ARROW = NarchaoticsMain.id("textures/gui/container/distillation_progress_arrow.png");
+    public static final Identifier FILTER_ARROW = NarchaoticsMain.id("textures/gui/container/filter_progress_arrow.png");
+    public static final Identifier EVAPORATE_ARROW = NarchaoticsMain.id("textures/gui/container/evaporate_progress_arrow.png");
+    public static final Identifier DISSOLVE_ARROW = NarchaoticsMain.id("textures/gui/container/dissolve_progress_arrow.png");
+    public static final Identifier FLAME = NarchaoticsMain.id("textures/gui/container/burner_level.png");
+    public static final Identifier FLAME_SOUL = NarchaoticsMain.id("textures/gui/container/burner_level_soul.png");
 
     public static final int BACKGROUND_WIDTH = 212;
     public static final int BACKGROUND_HEIGHT = 222;
@@ -57,20 +63,34 @@ public class DistillationWorkbenchScreen extends HandledScreen<DistillationScree
         int y = (height - BACKGROUND_HEIGHT) / 2;
 
         context.drawTexture(DISTILLATION_TEXTURE, x, y, 0, BACKGROUND_X_OFFSET, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT, 256, 256);
+
+        renderProgressArrow(context, x, y);
+        renderFlame(context, x, y);
+    }
+
+    private void renderProgressArrow(DrawContext context, int x, int y) {
+        if (this.handler.isCooking()) {
+            context.drawTexture(DISTILLATION_ARROW, x + 72, y + 56, 0, 0, 0, this.handler.getScaledArrowProgress(), 16, 32, 16);
+        }
+    }
+
+    private void renderFlame(DrawContext context, int x, int y) {
+        context.drawTexture(this.handler.isSoulBurner() ? FLAME_SOUL : FLAME, x + 99, y + 84, 0, 0, 0, 14, 14, 14, 14);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         drawFluid(context, handler.blockEntity.reactantFluidStorage1.variant, 35, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage1, 22), 22);
-        drawFluid(context, handler.blockEntity.reactantFluidStorage2.variant, 35, 81, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage2, 22), 22);
-        drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 135, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22), 22);
-        drawFluid(context, handler.blockEntity.productFluidStorage2.variant, 135, 81, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage2, 22), 22);
+        drawFluid(context, handler.blockEntity.reactantFluidStorage2.variant, 35, 89, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage2, 22), 22);
+        drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 155, 31, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22), 22);
+        drawFluid(context, handler.blockEntity.productFluidStorage2.variant, 155, 89, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage2, 22), 22);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     @SuppressWarnings("deprecation")
     public void drawFluid(DrawContext context, FluidVariant fluidVariant, int dx, int dy, int width, int height, int maxHeight) {
+        if (fluidVariant.isBlank()) return;
         FluidRenderHandler fluidRenderHandler = FluidRenderHandlerRegistry.INSTANCE.get(fluidVariant.getFluid());
         if (fluidRenderHandler == null) return;
         int color = fluidRenderHandler.getFluidColor(null, null, fluidVariant.getFluid().getDefaultState());

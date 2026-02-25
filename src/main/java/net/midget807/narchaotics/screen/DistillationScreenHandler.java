@@ -1,10 +1,8 @@
 package net.midget807.narchaotics.screen;
 
-import net.midget807.narchaotics.block.entity.DissolveWorkbenchBlockEntity;
 import net.midget807.narchaotics.block.entity.DistillationWorkbenchBlockEntity;
 import net.midget807.narchaotics.datagen.ModItemTagProvider;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
-import net.midget807.narchaotics.util.ModScreenUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -43,8 +41,10 @@ public class DistillationScreenHandler extends ScreenHandler {
         this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[2], 183, 23));
         this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[3], 183, 81));
 
+        this.addSlot(new Slot(inventory, FUEL_INPUT_INDEX, 98, 100));
+
         this.addSlot(new OutputSlot(inventory, OUTPUT_INDICES[0], 129, 49));
-        this.addSlot(new OutputSlot(inventory, OUTPUT_INDICES[0], 129, 79));
+        this.addSlot(new OutputSlot(inventory, OUTPUT_INDICES[1], 129, 79));
 
         this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 13, 45));
         this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 13, 103));
@@ -95,9 +95,24 @@ public class DistillationScreenHandler extends ScreenHandler {
         return newStack;
     }
 
-
     @Override
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
+    }
+
+    public int getScaledArrowProgress() {
+        int progress = this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX);
+        int maxProgress = this.propertyDelegate.get(MAX_PROGRESS_DELEGATE_INDEX);
+        int arrowPixelSize = 32;
+
+        return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
+    }
+
+    public boolean isCooking() {
+        return this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX) > 0;
+    }
+
+    public boolean isSoulBurner() {
+        return this.blockEntity.getStack(FUEL_INPUT_INDEX).isIn(ModItemTagProvider.SOUL_BURNER);
     }
 }
