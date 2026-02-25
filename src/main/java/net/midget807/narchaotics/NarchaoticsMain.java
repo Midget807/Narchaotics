@@ -7,6 +7,7 @@ import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModCauldronBehaviors;
 import net.midget807.narchaotics.registry.ModColorProviderRegistry;
 import net.midget807.narchaotics.registry.ModCustomCauldronBehaviours;
+import net.midget807.narchaotics.registry.ModEffects;
 import net.midget807.narchaotics.registry.ModFluids;
 import net.midget807.narchaotics.registry.ModItemGroups;
 import net.midget807.narchaotics.registry.ModItems;
@@ -39,5 +40,6 @@ public class NarchaoticsMain implements ModInitializer {
         ModColorProviderRegistry.registerBlockColors();
         ModColorProviderRegistry.registerItemColors();
         ModRecipes.registerModRecipes();
+        ModEffects.registerModEffects();
 	}
 }
