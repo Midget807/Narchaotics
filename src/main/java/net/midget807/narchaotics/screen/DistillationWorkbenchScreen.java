@@ -70,7 +70,7 @@ public class DistillationWorkbenchScreen extends HandledScreen<DistillationScree
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
         if (this.handler.isCooking()) {
-            context.drawTexture(DISTILLATION_ARROW, x + 72, y + 56, 0, 0, 0, this.handler.getScaledArrowProgress(), 16, 32, 16);
+            context.drawTexture(DISTILLATION_ARROW, x + 91, y + 63, 0, 0, 0, this.handler.getScaledArrowProgress(), 16, 32, 16);
         }
     }
 
