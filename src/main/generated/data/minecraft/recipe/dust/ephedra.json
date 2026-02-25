@@ -1,0 +1,26 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 250,
+    "fluid_id": {
+      "fluid": "narchaotics:sulphuric_acid"
+    }
+  },
+  "fuel_type": {
+    "item": "minecraft:soul_sand"
+  },
+  "item1": {
+    "item": "minecraft:iron_ingot"
+  },
+  "product1": {
+    "amount": 250,
+    "fluid_id": {
+      "fluid": "narchaotics:ammonia"
+    }
+  },
+  "result1": {
+    "count": 1,
+    "id": "narchaotics:dust/ephedra"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:podzol",
+    {
+      "id": "farmersdelight:rich_soil",
+      "required": false
+    }
+  ]
+}

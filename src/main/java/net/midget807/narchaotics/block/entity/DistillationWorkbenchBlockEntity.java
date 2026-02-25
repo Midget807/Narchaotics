@@ -277,7 +277,6 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             } else {
                 this.progressTime = 0;
             }
-            System.out.println("reactant1: " + this.reactantFluidStorage1.amount);
         } else if (this.progressTime > 0) {
             this.progressTime = MathHelper.clamp(this.progressTime - 2, 0, this.maxProgress);
         }
