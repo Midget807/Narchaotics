@@ -142,7 +142,7 @@ public class ModBlocks {
     public static final Block FILTER_WORKBENCH = registerBlock("filter_workbench", new FilterWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block EVAPORATE_WORKBENCH = registerBlock("evaporate_workbench", new EvaporateWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block DISSOLVE_WORKBENCH = registerBlock("dissolve_workbench", new DissolveWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-
+    public static final Block PHOTOELECTRIC_EXTRACTOR = registerBlock("photoelectric_extractor", new PhotoelectricExtractorBlock(AbstractBlock.Settings.create().mapColor(MapColor.GOLD).strength(0.6f).sounds(BlockSoundGroup.METAL).nonOpaque()));
 
     private static Block registerBlockWithoutItem(String blockName, Block block) {
         Identifier id = NarchaoticsMain.id(blockName);

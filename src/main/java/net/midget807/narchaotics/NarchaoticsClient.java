@@ -60,7 +60,14 @@ public class NarchaoticsClient implements ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
                 ModBlocks.EPHEDRA_CROP,
-                ModBlocks.DISTILLATION_WORKBENCH
+                ModBlocks.DISTILLATION_WORKBENCH,
+                ModBlocks.FILTER_WORKBENCH,
+                ModBlocks.EVAPORATE_WORKBENCH,
+                ModBlocks.DISSOLVE_WORKBENCH,
+                ModBlocks.PHOTOELECTRIC_EXTRACTOR
+        );
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),
+                ModBlocks.FILTER_WORKBENCH
         );
 
         HandledScreens.register(ModScreenHandlers.CHEMISTRY_WORKBENCH, ChemistryWorkbenchScreen::new);

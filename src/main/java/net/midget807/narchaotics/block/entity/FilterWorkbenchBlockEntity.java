@@ -87,7 +87,7 @@ public class FilterWorkbenchBlockEntity extends BlockEntity implements ExtendedS
 
 
     public FilterWorkbenchBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.DISTILLATION_WORKBENCH, pos, state);
+        super(ModBlockEntities.FILTER_WORKBENCH, pos, state);
     }
 
     @Override

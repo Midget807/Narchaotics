@@ -1,4 +1,9 @@
 package net.midget807.narchaotics.block;
 
-public class PhotoelectricExtractorBlock {
+import net.minecraft.block.Block;
+
+public class PhotoelectricExtractorBlock extends Block {
+    public PhotoelectricExtractorBlock(Settings settings) {
+        super(settings);
+    }
 }

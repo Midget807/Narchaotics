@@ -38,6 +38,11 @@ public class FilterWorkbenchBlock extends BlockWithEntity implements BlockEntity
     }
 
     @Override
+    protected BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new FilterWorkbenchBlockEntity(pos, state);
     }
