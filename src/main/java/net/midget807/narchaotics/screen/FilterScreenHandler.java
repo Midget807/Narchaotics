@@ -2,6 +2,7 @@ package net.midget807.narchaotics.screen;
 
 import net.midget807.narchaotics.block.entity.FilterWorkbenchBlockEntity;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
+import net.midget807.narchaotics.util.ModScreenUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,6 +13,11 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
+
+import static net.midget807.narchaotics.block.entity.DistillationWorkbenchBlockEntity.MAX_PROGRESS_DELEGATE_INDEX;
+import static net.midget807.narchaotics.block.entity.DistillationWorkbenchBlockEntity.PROGRESS_TIME_DELEGATE_INDEX;
+import static net.midget807.narchaotics.block.entity.FilterWorkbenchBlockEntity.*;
+import static net.midget807.narchaotics.util.ModScreenUtil.*;
 
 public class FilterScreenHandler extends ScreenHandler {
     public Inventory inventory;
@@ -24,13 +30,18 @@ public class FilterScreenHandler extends ScreenHandler {
 
     public FilterScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.FILTER_WORKBENCH, syncId);
-        checkDataCount(propertyDelegate, 7);
+        checkDataCount(propertyDelegate, 5);
         this.inventory = (Inventory) blockEntity;
         this.blockEntity = (FilterWorkbenchBlockEntity) blockEntity;
         this.propertyDelegate = propertyDelegate;
 
-        this.addSlot(new Slot(inventory, 0, 10, 12));
-        this.addSlot(new Slot(inventory, 1, 10, 34));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[0], 35, 53));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[1], 161, 53));
+
+        this.addSlot(new Slot(inventory, ITEM_OUTPUT_INDICES[0], 98, 100));
+
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 35, 75));
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 161, 75));
 
         this.addPlayerInventory(playerInventory);
         this.addPlayerHotbar(playerInventory);
@@ -80,5 +91,17 @@ public class FilterScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
+    }
+
+    public int getScaledArrowProgress() {
+        int progress = this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX);
+        int maxProgress = this.propertyDelegate.get(MAX_PROGRESS_DELEGATE_INDEX);
+        int arrowPixelSize = 32;
+
+        return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
+    }
+
+    public boolean isCooking() {
+        return this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX) > 0;
     }
 }

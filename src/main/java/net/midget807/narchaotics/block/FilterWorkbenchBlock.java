@@ -56,7 +56,7 @@ public class FilterWorkbenchBlock extends BlockWithEntity implements BlockEntity
     @Override
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            NamedScreenHandlerFactory namedScreenHandlerFactory = (DistillationWorkbenchBlockEntity) world.getBlockEntity(pos);
+            NamedScreenHandlerFactory namedScreenHandlerFactory = (FilterWorkbenchBlockEntity) world.getBlockEntity(pos);
             if (namedScreenHandlerFactory != null) {
                 player.openHandledScreen(namedScreenHandlerFactory);
             }

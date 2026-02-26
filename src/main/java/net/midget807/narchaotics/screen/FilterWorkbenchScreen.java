@@ -1,8 +1,15 @@
 package net.midget807.narchaotics.screen;
 
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.midget807.narchaotics.NarchaoticsMain;
+import net.midget807.narchaotics.util.ModScreenUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -55,6 +62,27 @@ public class FilterWorkbenchScreen extends HandledScreen<FilterScreenHandler> {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
+        drawFluid(context, handler.blockEntity.reactantFluidStorage1.variant, 57, 61, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage1, 22), 22);
+        drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 133, 61, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22), 22);
         drawMouseoverTooltip(context, mouseX, mouseY);
+    }
+    @SuppressWarnings("deprecation")
+    public void drawFluid(DrawContext context, FluidVariant fluidVariant, int dx, int dy, int width, int height, int maxHeight) {
+        if (fluidVariant.isBlank()) return;
+        FluidRenderHandler fluidRenderHandler = FluidRenderHandlerRegistry.INSTANCE.get(fluidVariant.getFluid());
+        if (fluidRenderHandler == null) return;
+        int color = fluidRenderHandler.getFluidColor(null, null, fluidVariant.getFluid().getDefaultState());
+
+        float r = (color >> 16 & 0xFF) / 255f;
+        float g = (color >> 8 & 0xFF) / 255f;
+        float b = (color & 0xFF) / 255f;
+
+        Sprite sprite = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).apply(Identifier.ofVanilla("block/water_still"));
+
+        int x = (this.width - BACKGROUND_WIDTH) / 2;
+        int y = (this.height - BACKGROUND_HEIGHT) / 2;
+        int yOffset = maxHeight - height;
+
+        context.drawSprite(x + dx , y + dy + yOffset, 1, width, height, sprite, r, g, b, 0.9f);
     }
 }

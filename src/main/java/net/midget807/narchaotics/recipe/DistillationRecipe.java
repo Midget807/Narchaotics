@@ -105,14 +105,14 @@ public class DistillationRecipe implements Recipe<DistillationRecipeInput>, Mixe
                 instance -> instance.group(
                         Ingredient.ALLOW_EMPTY_CODEC.optionalFieldOf("item1", Ingredient.EMPTY).forGetter(recipe -> recipe.item1),
                         Ingredient.ALLOW_EMPTY_CODEC.optionalFieldOf("item2", Ingredient.EMPTY).forGetter(recipe -> recipe.item2),
-                        FluidStack.CODEC.optionalFieldOf("fluid1", new FluidStack(FluidVariant.blank(), 0)).forGetter(recipe -> recipe.fluid1),
-                        FluidStack.CODEC.optionalFieldOf("fluid2", new FluidStack(FluidVariant.blank(), 0)).forGetter(recipe -> recipe.fluid2),
+                        FluidStack.CODEC.optionalFieldOf("fluid1", FluidStack.EMPTY).forGetter(recipe -> recipe.fluid1),
+                        FluidStack.CODEC.optionalFieldOf("fluid2", FluidStack.EMPTY).forGetter(recipe -> recipe.fluid2),
                         Ingredient.ALLOW_EMPTY_CODEC.optionalFieldOf("fuel_type", Ingredient.EMPTY).forGetter(recipe -> recipe.fuelType),
                         Codecs.NONNEGATIVE_INT.fieldOf("cooking_time").forGetter(recipe -> recipe.cookingTime),
                         ItemStack.CODEC.optionalFieldOf("result1", ItemStack.EMPTY).forGetter(recipe -> recipe.result1),
                         ItemStack.CODEC.optionalFieldOf("result2", ItemStack.EMPTY).forGetter(recipe -> recipe.result2),
-                        FluidStack.CODEC.optionalFieldOf("product1", new FluidStack(FluidVariant.blank(), 0)).forGetter(recipe -> recipe.product1),
-                        FluidStack.CODEC.optionalFieldOf("product2", new FluidStack(FluidVariant.blank(), 0)).forGetter(recipe -> recipe.product2)
+                        FluidStack.CODEC.optionalFieldOf("product1", FluidStack.EMPTY).forGetter(recipe -> recipe.product1),
+                        FluidStack.CODEC.optionalFieldOf("product2", FluidStack.EMPTY).forGetter(recipe -> recipe.product2)
                 ).apply(instance, DistillationRecipe::new)
         );
         public static final PacketCodec<RegistryByteBuf, DistillationRecipe> PACKET_CODEC = PacketCodec.ofStatic(

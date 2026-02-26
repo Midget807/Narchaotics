@@ -46,7 +46,7 @@ public class ModItems {
     public static final Item ROUND_FLASK = registerItem("round_flask", new AbstractRoundFlaskItem(Fluids.EMPTY, null, new Item.Settings()));
     public static final Item TEST_TUBE = registerItem("test_tube", new AbstractTestTubeItem(Fluids.EMPTY, null, new Item.Settings()));
 
-    public static final Item RESIDUE = registerItem("residue", new Item(new Item.Settings()));
+    public static final Item RESIDUE = registerItem("remainder", new Item(new Item.Settings()));
 
     public static final Item NETHERRACK_DUST = registerItem("dust/netherrack", new Item(new Item.Settings()));
     public static final Item NETHERRACK_RESIDUE = registerItem("nether_residue", new Item(new Item.Settings()));
