@@ -26,6 +26,7 @@ public class ModItems {
     public static final Map<Item, Identifier> ROUND_FLASKS = new LinkedHashMap<>();
     public static final Map<Item, Identifier> BEAKERS = new LinkedHashMap<>();
     public static final Map<Item, Identifier> TEST_TUBES = new LinkedHashMap<>();
+    public static final Map<Item, Identifier> DUSTS = new LinkedHashMap<>();
 
     public static final Identifier ENTITY_INTERACTION_RANGE_MODIFIER_ID = NarchaoticsMain.id("entity_interaction_range");
     public static final Identifier BLOCK_INTERACTION_RANGE_MODIFIER_ID = NarchaoticsMain.id("block_interaction_range");
@@ -297,6 +298,8 @@ public class ModItems {
             BEAKERS.put(registeredItem, id);
         } else if (registeredItem instanceof AbstractTestTubeItem) {
             TEST_TUBES.put(registeredItem, id);
+        } else if (id.getPath().startsWith("dust")) {
+            DUSTS.put(registeredItem, id);
         }
         return registeredItem;
     }

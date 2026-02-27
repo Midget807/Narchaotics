@@ -37,7 +37,7 @@ public class FilterScreenHandler extends ScreenHandler {
         this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[0], 35, 53));
         this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[1], 161, 53));
 
-        this.addSlot(new Slot(inventory, ITEM_OUTPUT_INDICES[0], 98, 100));
+        this.addSlot(new OutputSlot(inventory, ITEM_OUTPUT_INDICES[0], 98, 100));
 
         this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 35, 75));
         this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 161, 75));

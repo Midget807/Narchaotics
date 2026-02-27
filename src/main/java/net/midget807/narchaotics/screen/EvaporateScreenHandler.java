@@ -2,6 +2,7 @@ package net.midget807.narchaotics.screen;
 
 import net.midget807.narchaotics.block.entity.EvaporateWorkbenchBlockEntity;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
+import net.midget807.narchaotics.util.ModScreenUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,6 +13,10 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
+
+import static net.midget807.narchaotics.block.entity.EvaporateWorkbenchBlockEntity.*;
+import static net.midget807.narchaotics.block.entity.FilterWorkbenchBlockEntity.FLUID_OUTPUT_INDICES;
+import static net.midget807.narchaotics.util.ModScreenUtil.*;
 
 public class EvaporateScreenHandler extends ScreenHandler {
     public Inventory inventory;
@@ -24,13 +29,15 @@ public class EvaporateScreenHandler extends ScreenHandler {
 
     public EvaporateScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.EVAPORATE_WORKBENCH, syncId);
-        checkDataCount(propertyDelegate, 7);
+        checkDataCount(propertyDelegate, 4);
         this.inventory = (Inventory) blockEntity;
         this.blockEntity = (EvaporateWorkbenchBlockEntity) blockEntity;
         this.propertyDelegate = propertyDelegate;
 
-        this.addSlot(new Slot(inventory, 0, 10, 12));
-        this.addSlot(new Slot(inventory, 1, 10, 34));
+        this.addSlot(new Slot(inventory, FLUID_INPUT_INDICES[0], 35, 53));
+        this.addSlot(new Slot(inventory, FUEL_INPUT_INDEX, 98, 100));
+
+        this.addSlot(new OutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 139, 91));
 
         this.addPlayerInventory(playerInventory);
         this.addPlayerHotbar(playerInventory);
