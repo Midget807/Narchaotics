@@ -14,6 +14,7 @@ public class ModBlockEntities {
     public static final BlockEntityType<FilterWorkbenchBlockEntity> FILTER_WORKBENCH = register("filter_workbench", FilterWorkbenchBlockEntity::new, ModBlocks.FILTER_WORKBENCH);
     public static final BlockEntityType<EvaporateWorkbenchBlockEntity> EVAPORATE_WORKBENCH = register("evaporate_workbench", EvaporateWorkbenchBlockEntity::new, ModBlocks.EVAPORATE_WORKBENCH);
     public static final BlockEntityType<DissolveWorkbenchBlockEntity> DISSOLVE_WORKBENCH = register("dissolve_workbench", DissolveWorkbenchBlockEntity::new, ModBlocks.DISSOLVE_WORKBENCH);
+    public static final BlockEntityType<SeparateWorkbenchBlockEntity> SEPARATE = register("separate_workbench", SeparateWorkbenchBlockEntity::new, ModBlocks.SEPARATE_WORKBENCH);
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntityFactory<? extends T> entityFactory, Block... blocks) {
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, NarchaoticsMain.id(name), BlockEntityType.Builder.<T>create(entityFactory, blocks).build());

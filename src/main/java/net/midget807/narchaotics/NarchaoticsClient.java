@@ -64,6 +64,7 @@ public class NarchaoticsClient implements ClientModInitializer {
                 ModBlocks.FILTER_WORKBENCH,
                 ModBlocks.EVAPORATE_WORKBENCH,
                 ModBlocks.DISSOLVE_WORKBENCH,
+                ModBlocks.SEPARATE_WORKBENCH,
                 ModBlocks.PHOTOELECTRIC_EXTRACTOR
         );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),

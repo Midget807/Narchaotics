@@ -4,6 +4,8 @@
   "block.narchaotics.ephedra": "Ephedra",
   "block.narchaotics.evaporate_workbench": "Evaporating Workbench",
   "block.narchaotics.filter_workbench": "Filtering Workbench",
+  "block.narchaotics.photoelectric_extractor": "Photoelectric Extractor",
+  "block.narchaotics.separate_workbench": "Separating Workbench",
   "container.narchaotics.dissolve_workbench": "Dissolving & Mixing",
   "container.narchaotics.distillation_workbench": "Distilling",
   "container.narchaotics.evaporate_workbench": "Evaporating",

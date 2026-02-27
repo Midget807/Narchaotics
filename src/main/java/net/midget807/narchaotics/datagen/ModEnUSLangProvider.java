@@ -33,6 +33,8 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add(ModBlocks.FILTER_WORKBENCH, "Filtering Workbench");
         translationBuilder.add(ModBlocks.EVAPORATE_WORKBENCH, "Evaporating Workbench");
         translationBuilder.add(ModBlocks.DISSOLVE_WORKBENCH, "Dissolving And Mixing Workbench");
+        translationBuilder.add(ModBlocks.SEPARATE_WORKBENCH, "Separating Workbench");
+        translationBuilder.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR, "Photoelectric Extractor");
 
         ModItems.BUCKETS.forEach((item, identifier) -> {
             translationBuilder.add(item, ModUtil.fluidItemDisplayName(identifier) + " Bucket");

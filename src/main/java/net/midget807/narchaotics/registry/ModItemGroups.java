@@ -15,6 +15,11 @@ public class ModItemGroups {
                     .icon(() -> new ItemStack(ModItems.ICON))
                     .entries((displayContext, entries) -> {
                         entries.add(ModBlocks.DISTILLATION_WORKBENCH.asItem());
+                        entries.add(ModBlocks.FILTER_WORKBENCH.asItem());
+                        entries.add(ModBlocks.EVAPORATE_WORKBENCH.asItem());
+                        entries.add(ModBlocks.DISSOLVE_WORKBENCH.asItem());
+                        entries.add(ModBlocks.SEPARATE_WORKBENCH.asItem());
+                        entries.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR.asItem());
                         entries.add(ModItems.EPHEDRA_SEEDS);
                         entries.add(ModItems.CONICAL_FLASK);
                         entries.add(ModItems.ROUND_FLASK);

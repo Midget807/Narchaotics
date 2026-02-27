@@ -34,6 +34,13 @@ public class FilterWorkbenchScreen extends HandledScreen<FilterScreenHandler> {
     public static final Identifier DISSOLVE_TAB_UNAVAILABLE_TEXTURE = NarchaoticsMain.id("textures/gui/container/dissolve_tab_unavailable.png");
     public static final Identifier DISSOLVE_TAB_AVAILABLE_TEXTURE = NarchaoticsMain.id("textures/gui/container/dissolve_tab_available.png");
     public static final Identifier DISSOLVE_TAB_SELECTED_TEXTURE = NarchaoticsMain.id("textures/gui/container/dissolve_tab_selected.png");
+    public static final Identifier DISTILLATION_ARROW = NarchaoticsMain.id("textures/gui/container/distillation_progress_arrow.png");
+    public static final Identifier FILTER_ARROW_H = NarchaoticsMain.id("textures/gui/container/filter_progress_arrow_horizontal.png");
+    public static final Identifier FILTER_ARROW_V = NarchaoticsMain.id("textures/gui/container/filter_progress_arrow_vertical.png");
+    public static final Identifier EVAPORATE_ARROW = NarchaoticsMain.id("textures/gui/container/evaporate_progress_arrow.png");
+    public static final Identifier DISSOLVE_ARROW = NarchaoticsMain.id("textures/gui/container/dissolve_progress_arrow.png");
+    public static final Identifier FLAME = NarchaoticsMain.id("textures/gui/container/burner_level.png");
+    public static final Identifier FLAME_SOUL = NarchaoticsMain.id("textures/gui/container/burner_level_soul.png");
 
     public static final int BACKGROUND_WIDTH = 212;
     public static final int BACKGROUND_HEIGHT = 222;
@@ -57,6 +64,16 @@ public class FilterWorkbenchScreen extends HandledScreen<FilterScreenHandler> {
         int y = (height - BACKGROUND_HEIGHT) / 2;
 
         context.drawTexture(FILTER_TEXTURE, x, y, 0, BACKGROUND_X_OFFSET, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT, 256, 256);
+
+        renderProgressArrow(context, x, y);
+    }
+
+
+    private void renderProgressArrow(DrawContext context, int x, int y) {
+        if (this.handler.isCooking()) {
+            context.drawTexture(FILTER_ARROW_H, x + 87, y + 63, 0, 0, 0, this.handler.getScaledArrowProgressH(), 16, 38, 16);
+            context.drawTexture(FILTER_ARROW_V, x + 97, y + 59, 0, 0, 0, 14, this.handler.getScaledArrowProgressV(), 14, 33);
+        }
     }
 
     @Override
@@ -66,6 +83,7 @@ public class FilterWorkbenchScreen extends HandledScreen<FilterScreenHandler> {
         drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 133, 61, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22), 22);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
+
     @SuppressWarnings("deprecation")
     public void drawFluid(DrawContext context, FluidVariant fluidVariant, int dx, int dy, int width, int height, int maxHeight) {
         if (fluidVariant.isBlank()) return;

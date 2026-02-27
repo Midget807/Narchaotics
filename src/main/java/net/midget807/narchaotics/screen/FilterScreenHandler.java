@@ -2,7 +2,6 @@ package net.midget807.narchaotics.screen;
 
 import net.midget807.narchaotics.block.entity.FilterWorkbenchBlockEntity;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
-import net.midget807.narchaotics.util.ModScreenUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -93,10 +92,17 @@ public class FilterScreenHandler extends ScreenHandler {
         return this.inventory.canPlayerUse(player);
     }
 
-    public int getScaledArrowProgress() {
+    public int getScaledArrowProgressH() {
         int progress = this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX);
         int maxProgress = this.propertyDelegate.get(MAX_PROGRESS_DELEGATE_INDEX);
-        int arrowPixelSize = 32;
+        int arrowPixelSize = 38;
+
+        return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
+    }
+    public int getScaledArrowProgressV() {
+        int progress = this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX);
+        int maxProgress = this.propertyDelegate.get(MAX_PROGRESS_DELEGATE_INDEX);
+        int arrowPixelSize = 33;
 
         return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
     }

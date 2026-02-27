@@ -3,6 +3,7 @@ package net.midget807.narchaotics.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.midget807.narchaotics.datagen.json_builder.DistillationRecipeJsonBuilder;
+import net.midget807.narchaotics.datagen.json_builder.FilterRecipeJsonBuilder;
 import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModFluids;
 import net.midget807.narchaotics.registry.ModItems;
@@ -37,9 +38,17 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 ModItems.EPHEDRA_DUST,
                 ModFluids.AMMONIA,
                 250L
-        )
-                .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
+        ).criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
                 .criterion(hasItem(Items.SOUL_SAND), conditionsFromItem(Items.SOUL_SAND))
                 .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.EPHEDRA_DUST)));
+
+        FilterRecipeJsonBuilder.create(
+                ModFluids.AMMONIA,
+                40,
+                ModFluids.HYDRAZINE,
+                250L,
+                ModItems.RED_PHOSPHORUS_DUST
+        ).criterion(hasItem(ModItems.CONICAL_FLASK), conditionsFromItem(ModItems.CONICAL_FLASK))
+                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.RED_PHOSPHORUS_DUST)));
     }
 }

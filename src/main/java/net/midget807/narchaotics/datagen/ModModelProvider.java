@@ -27,6 +27,7 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.FILTER_WORKBENCH);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.EVAPORATE_WORKBENCH);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.DISSOLVE_WORKBENCH);
+        blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.SEPARATE_WORKBENCH);
 
         blockStateModelGenerator.blockStateCollector.accept(createSingletonBlockState(
                 ModBlocks.DIRTY_SOLUTION_CAULDRON,
