@@ -78,7 +78,7 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
     public static final int[] ITEM_OUTPUT_INDICES = {3};
     public static final int[] FLUID_OUTPUT_INDICES = {1};
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(13, ItemStack.EMPTY);
-    private SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
+    public SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
     private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
         public int get(int index) {
@@ -247,6 +247,7 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
         if (shouldMarkDirty) {
             markDirty(world, pos, state);
         }
+
     }
 
     private boolean inputsEmpty() {
@@ -380,12 +381,12 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
     }
 
     private static int getCookTime(World world, EvaporateWorkbenchBlockEntity blockEntity) {
-        EvaporateRecipeInput filterRecipeInput = new EvaporateRecipeInput(
+        EvaporateRecipeInput evaporateRecipeInput = new EvaporateRecipeInput(
                 new FluidStack(blockEntity.reactantFluidStorage1.variant, blockEntity.reactantFluidStorage1.amount),
                 blockEntity.getStack(FUEL_INPUT_INDEX)
         );
         return (Integer) blockEntity.matchGetter
-                .getFirstMatch(filterRecipeInput, world)
+                .getFirstMatch(evaporateRecipeInput, world)
                 .map(recipe -> recipe.value().getEvaporateTime())
                 .orElse(120);
     }
@@ -400,6 +401,7 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
                 } else if (ItemStack.areItemsAndComponentsEqual(outputSlotItem1, recipeResult1)) {
                     outputSlotItem1.increment(recipeResult1.getCount());
                 }
+                this.reactantFluidStorage1.amount -= recipe.value().input.amount();
             }
 
             markDirty();

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_conical_flask": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:conical_flask"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:sodium_carbonate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_conical_flask"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:sodium_carbonate"
+    ]
+  }
+}
