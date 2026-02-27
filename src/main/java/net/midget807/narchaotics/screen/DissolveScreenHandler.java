@@ -1,7 +1,9 @@
 package net.midget807.narchaotics.screen;
 
 import net.midget807.narchaotics.block.entity.DissolveWorkbenchBlockEntity;
+import net.midget807.narchaotics.datagen.ModItemTagProvider;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
+import net.midget807.narchaotics.util.ModScreenUtil.FluidInputSlot;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,6 +14,9 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
+
+import static net.midget807.narchaotics.block.entity.DissolveWorkbenchBlockEntity.*;
+import static net.midget807.narchaotics.util.ModScreenUtil.*;
 
 public class DissolveScreenHandler extends ScreenHandler {
     public Inventory inventory;
@@ -24,13 +29,23 @@ public class DissolveScreenHandler extends ScreenHandler {
 
     public DissolveScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.DISSOLVE_WORKBENCH, syncId);
-        checkDataCount(propertyDelegate, 7);
+        checkDataCount(propertyDelegate, 6);
         this.inventory = (Inventory) blockEntity;
         this.blockEntity = (DissolveWorkbenchBlockEntity) blockEntity;
         this.propertyDelegate = propertyDelegate;
 
-        this.addSlot(new Slot(inventory, 0, 10, 12));
-        this.addSlot(new Slot(inventory, 1, 10, 34));
+        this.addSlot(new Slot(inventory, ITEM_INPUT_INDICES[0], 67, 49));
+        this.addSlot(new Slot(inventory, ITEM_INPUT_INDICES[1], 67, 79));
+
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[0], 13, 23));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[1], 13, 81));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[2], 165, 53));
+
+        this.addSlot(new Slot(inventory, FUEL_INPUT_INDEX, 101, 100));
+
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 13, 45));
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 13, 103));
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[2], 165, 75));
 
         this.addPlayerInventory(playerInventory);
         this.addPlayerHotbar(playerInventory);
@@ -80,5 +95,21 @@ public class DissolveScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
+    }
+
+    public int getScaledArrowProgress() {
+        int progress = this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX);
+        int maxProgress = this.propertyDelegate.get(MAX_PROGRESS_DELEGATE_INDEX);
+        int arrowPixelSize = 38;
+
+        return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
+    }
+
+    public boolean isCooking() {
+        return this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX) > 0;
+    }
+
+    public boolean isSoulBurner() {
+        return this.blockEntity.getStack(FUEL_INPUT_INDEX).isIn(ModItemTagProvider.SOUL_BURNER);
     }
 }

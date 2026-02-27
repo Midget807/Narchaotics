@@ -2,6 +2,7 @@ package net.midget807.narchaotics.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.midget807.narchaotics.datagen.json_builder.DissolveRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.DistillationRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.EvaporateRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.FilterRecipeJsonBuilder;
@@ -9,6 +10,7 @@ import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModFluids;
 import net.midget807.narchaotics.registry.ModItems;
 import net.minecraft.data.server.recipe.*;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
@@ -17,6 +19,7 @@ import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
@@ -94,7 +97,19 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     }
 
     private void addDissolveRecipes(RecipeExporter recipeExporter) {
-
+        DissolveRecipeJsonBuilder.create(
+                        Ingredient.ofItems(Items.COPPER_INGOT),
+                        Ingredient.EMPTY,
+                        ModFluids.SULPHURIC_ACID_SOLUTION,
+                        250L,
+                        ModFluids.VOLCANIC_WATER,
+                        250L,
+                        Ingredient.fromTag(ModItemTagProvider.SOUL_BURNER),
+                        40,
+                        ModFluids.SULPHURIC_ACID,
+                        250L
+        ).criterion(hasItem(ModItems.CONICAL_FLASK), conditionsFromItem(ModItems.CONICAL_FLASK))
+                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SULPHURIC_ACID)));
     }
 
     private void addSeparateRecipes(RecipeExporter recipeExporter) {
@@ -107,5 +122,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
     private void addAshRecipes(RecipeExporter recipeExporter) {
 
+    }
+
+    public static String getRecipeName(Fluid fluid) {
+        return "fluid/" + Registries.FLUID.getId(fluid).getPath();
     }
 }

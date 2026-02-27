@@ -2,10 +2,12 @@ package net.midget807.narchaotics.block;
 
 import com.mojang.serialization.MapCodec;
 import net.midget807.narchaotics.block.entity.DissolveWorkbenchBlockEntity;
-import net.midget807.narchaotics.block.entity.DistillationWorkbenchBlockEntity;
-import net.midget807.narchaotics.block.entity.FilterWorkbenchBlockEntity;
 import net.midget807.narchaotics.registry.ModBlockEntities;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -52,7 +54,7 @@ public class DissolveWorkbenchBlock extends BlockWithEntity implements BlockEnti
     @Override
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            NamedScreenHandlerFactory namedScreenHandlerFactory = (DistillationWorkbenchBlockEntity) world.getBlockEntity(pos);
+            NamedScreenHandlerFactory namedScreenHandlerFactory = (DissolveWorkbenchBlockEntity) world.getBlockEntity(pos);
             if (namedScreenHandlerFactory != null) {
                 player.openHandledScreen(namedScreenHandlerFactory);
             }

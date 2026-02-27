@@ -151,6 +151,11 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
                 this.markDirty();
             }
         }
+        if (slot == FUEL_INPUT_INDEX && !inputSameAsSlot) {
+            this.maxProgress = getCookTime(this.world, this);
+            this.progressTime = 0;
+            this.markDirty();
+        }
     }
 
     public boolean insertStack(int slot, ItemStack stack) {

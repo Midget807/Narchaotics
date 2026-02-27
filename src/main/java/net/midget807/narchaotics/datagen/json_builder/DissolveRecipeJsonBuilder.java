@@ -40,7 +40,7 @@ public class DissolveRecipeJsonBuilder {
         this.product = product;
     }
 
-    public static DissolveRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, Ingredient fuel, int cookingTime, ItemConvertible output1, ItemConvertible output2, Fluid fluidOutput1, long fluidOutput1Amount, Fluid fluidOutput2, long fluidOutput2Amount) {
+    public static DissolveRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
         return new DissolveRecipeJsonBuilder(
                 input1,
                 input2,
