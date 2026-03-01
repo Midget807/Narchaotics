@@ -7,13 +7,13 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.midget807.narchaotics.datagen.ModItemTagProvider;
 import net.midget807.narchaotics.item.FlaskItem;
-import net.midget807.narchaotics.recipe.FilterRecipe;
-import net.midget807.narchaotics.recipe.FilterRecipeInput;
 import net.midget807.narchaotics.recipe.FluidStack;
+import net.midget807.narchaotics.recipe.SeparateRecipe;
+import net.midget807.narchaotics.recipe.SeparateRecipeInput;
 import net.midget807.narchaotics.registry.ModBlockEntities;
 import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.registry.ModRecipes;
-import net.midget807.narchaotics.screen.FilterScreenHandler;
+import net.midget807.narchaotics.screen.SeparateScreenHandler;
 import net.midget807.narchaotics.util.ImplementedInventory;
 import net.midget807.narchaotics.util.ModFluidUtil;
 import net.midget807.narchaotics.util.inject.FlaskStorable;
@@ -60,7 +60,9 @@ import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET;
 import static net.midget807.narchaotics.util.ModBlockUtil.ANIMATION_TIME_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.MAX_PROGRESS_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.PRODUCT_FLUID_AMOUNT_1_KEY;
+import static net.midget807.narchaotics.util.ModBlockUtil.PRODUCT_FLUID_AMOUNT_2_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.PRODUCT_FLUID_VARIANT_1_KEY;
+import static net.midget807.narchaotics.util.ModBlockUtil.PRODUCT_FLUID_VARIANT_2_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.PROGRESS_TIME_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.REACTANT_FLUID_AMOUNT_1_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.REACTANT_FLUID_VARIANT_1_KEY;
@@ -72,14 +74,19 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
     public static final int ANIMATION_TIME_DELEGATE_INDEX = 2;
     public static final int REACTANT_FLUID_1_DELEGATE_INDEX = 3;
     public static final int PRODUCT_FLUID_1_DELEGATE_INDEX = 4;
-    public static final int[] INPUT_INDICES = {0, 1};
-    public static final int[] OUTPUT_INDICES = {2, 3, 4};
-    public static final int[] FLUID_INPUT_INDICES = {0, 1};
-    public static final int[] ITEM_OUTPUT_INDICES = {2};
-    public static final int[] FLUID_OUTPUT_INDICES = {3, 4};
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(5, ItemStack.EMPTY);
+    public static final int PRODUCT_FLUID_2_DELEGATE_INDEX = 5;
+    public static final int[] INPUT_INDICES = {0, 1, 2};
+    public static final int[] OUTPUT_INDICES = {3, 4, 5};
+    public static final int[] FLUID_INPUT_INDICES = {0, 1, 2};
+    public static final int[] FLUID_OUTPUT_INDICES = {3, 4, 5};
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(6, ItemStack.EMPTY);
     public SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
     public SingleVariantStorage<FluidVariant> productFluidStorage1 = ModFluidUtil.createTank(this);
+    public SingleVariantStorage<FluidVariant> productFluidStorage2 = ModFluidUtil.createTank(this);
+    private Item reactantItem1;
+    private Item reactantItem2;
+    private Item productItem1;
+    private Item productItem2;
     private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
         public int get(int index) {
@@ -89,6 +96,7 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                 case 2 -> SeparateWorkbenchBlockEntity.this.animationTime;
                 case 3 -> SeparateWorkbenchBlockEntity.this.reactantFluidStorage1.amount;
                 case 4 -> SeparateWorkbenchBlockEntity.this.productFluidStorage1.amount;
+                case 5 -> SeparateWorkbenchBlockEntity.this.productFluidStorage2.amount;
                 default -> 0;
             };
         }
@@ -101,23 +109,23 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                 case 2: SeparateWorkbenchBlockEntity.this.animationTime = value;
                 case 3: SeparateWorkbenchBlockEntity.this.reactantFluidStorage1.amount = value;
                 case 4: SeparateWorkbenchBlockEntity.this.productFluidStorage1.amount = value;
+                case 5: SeparateWorkbenchBlockEntity.this.productFluidStorage2.amount = value;
             }
         }
 
         @Override
         public int size() {
-            return 5;
+            return 6;
         }
     };
     private int progressTime;
     private int maxProgress;
     private int animationTime;
     private final Object2IntOpenHashMap<Identifier> recipeUsed = new Object2IntOpenHashMap<>();
-    private final RecipeManager.MatchGetter<FilterRecipeInput, FilterRecipe> matchGetter = RecipeManager.createCachedMatchGetter(ModRecipes.FILTER_TYPE);
-
+    private final RecipeManager.MatchGetter<SeparateRecipeInput, SeparateRecipe> matchGetter = RecipeManager.createCachedMatchGetter(ModRecipes.SEPARATE_TYPE);
 
     public SeparateWorkbenchBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.SEPARATE, pos, state);
+        super(ModBlockEntities.SEPARATE_WORKBENCH, pos, state);
     }
 
     @Override
@@ -127,7 +135,7 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
 
     @Override
     public DefaultedList<ItemStack> getItems() {
-        return inventory;
+        return this.inventory;
     }
 
     @Override
@@ -160,12 +168,12 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("container.narchaotics.filter_workbench");
+        return Text.translatable("container.narchaotics.separate_workbench");
     }
 
     @Override
     public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new FilterScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
+        return new SeparateScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     @Override
@@ -193,6 +201,10 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
             FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_1_KEY, nbtElement));
             nbt.putLong(PRODUCT_FLUID_AMOUNT_1_KEY, productFluidStorage1.amount);
         }
+        if (!productFluidStorage2.isResourceBlank()) {
+            FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage2.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_2_KEY, nbtElement));
+            nbt.putLong(PRODUCT_FLUID_AMOUNT_2_KEY, productFluidStorage2.amount);
+        }
         NbtCompound nbtCompound = new NbtCompound();
         this.recipeUsed.forEach((identifier, count) -> nbtCompound.putInt(identifier.toString(), count));
         nbt.put(RECIPES_USED_KEY, nbtCompound);
@@ -209,6 +221,9 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
         this.reactantFluidStorage1.amount = nbt.getLong(REACTANT_FLUID_AMOUNT_1_KEY);
         this.productFluidStorage1.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(PRODUCT_FLUID_VARIANT_1_KEY)).result().orElse(FluidVariant.blank());
         this.productFluidStorage1.amount = nbt.getLong(PRODUCT_FLUID_AMOUNT_1_KEY);
+        this.productFluidStorage2.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(PRODUCT_FLUID_VARIANT_2_KEY)).result().orElse(FluidVariant.blank());
+        this.productFluidStorage2.amount = nbt.getLong(PRODUCT_FLUID_AMOUNT_2_KEY);
+
 
         NbtCompound nbtCompound = nbt.getCompound(RECIPES_USED_KEY);
         for (String string : nbtCompound.getKeys()) {
@@ -221,8 +236,8 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
         removeFluid();
         boolean shouldMarkDirty = false;
         if (!inputsEmpty()) {
-            RecipeEntry<FilterRecipe> recipeEntry = this.matchGetter.getFirstMatch(
-                    new FilterRecipeInput(
+            RecipeEntry<SeparateRecipe> recipeEntry = this.matchGetter.getFirstMatch(
+                    new SeparateRecipeInput(
                             new FluidStack(this.reactantFluidStorage1.variant, this.reactantFluidStorage1.amount)
                     ),
                     world
@@ -248,7 +263,77 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
         if (shouldMarkDirty) {
             markDirty(world, pos, state);
         }
+
     }
+
+    private boolean craftRecipe(RecipeEntry<SeparateRecipe> recipe, DefaultedList<ItemStack> inventory) {
+        if (recipe != null && canAcceptRecipeOutput(recipe)) {
+
+            SingleVariantStorage<FluidVariant> inputSlotFluid1 = this.reactantFluidStorage1;
+            FluidStack recipeProduct = recipe.value().output;
+            FluidStack recipeRemainder = recipe.value().remainder;
+            SingleVariantStorage<FluidVariant> outputSlotFluid1 = this.productFluidStorage1;
+            SingleVariantStorage<FluidVariant> outputSlotFluid2 = this.productFluidStorage2;
+            if (!recipeProduct.isEmpty()) {
+                if (outputSlotFluid1.isResourceBlank()) {
+                    outputSlotFluid1.variant = recipeProduct.variant();
+                    outputSlotFluid1.amount = recipeProduct.amount();
+                } else if (outputSlotFluid1.variant.equals(recipeProduct.variant())) {
+                    outputSlotFluid1.amount += (long) (recipeProduct.amount() / 2);
+                }
+
+                inputSlotFluid1.amount -= recipeProduct.amount();
+            }
+
+            if (!recipeRemainder.isEmpty()) {
+                if (outputSlotFluid2.isResourceBlank()) {
+                    outputSlotFluid2.variant = recipeRemainder.variant();
+                    outputSlotFluid2.amount = recipeRemainder.amount();
+                } else if (outputSlotFluid2.variant.equals(recipeRemainder.variant())) {
+                    outputSlotFluid2.amount += (long) (recipeRemainder.amount() / 2);
+                }
+
+                inputSlotFluid1.amount -= recipeRemainder.amount();
+            }
+
+            markDirty();
+            if (this.getWorld() != null) this.getWorld().updateListeners(pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_LISTENERS);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canAcceptRecipeOutput(RecipeEntry<SeparateRecipe> recipeEntry) {
+        if (recipeEntry == null) return false;
+        SeparateRecipe recipe = recipeEntry.value();
+        boolean canOutputFluid1 = canOutputFluid(recipe.output, this.productFluidStorage1, recipe.input, this.reactantFluidStorage1);
+        boolean canOutputFluid2 = canOutputFluid(recipe.remainder, this.productFluidStorage2, recipe.input, this.reactantFluidStorage1);
+
+        return canOutputFluid1 && canOutputFluid2;
+    }
+
+    private static boolean canOutputFluid(FluidStack recipeOutput, SingleVariantStorage<FluidVariant> outputTank, FluidStack recipeInput, SingleVariantStorage<FluidVariant> inputTank) {
+        if (!recipeInput.isEmpty()) {
+            if (!inputTank.getResource().equals(recipeInput.variant())) {
+                return false;
+            }
+
+            if (inputTank.getAmount() < recipeInput.amount()) {
+                return false;
+            }
+        }
+
+        if (recipeOutput.isEmpty()) return true;
+
+        if (!outputTank.getResource().equals(recipeOutput.variant()) && outputTank.getAmount() > 0) {
+            return false;
+        }
+
+        long space = outputTank.getCapacity() - outputTank.getAmount();
+        return space >= (long) (recipeOutput.amount() / 2);
+    }
+
 
     private boolean inputsEmpty() {
         return this.reactantFluidStorage1.isResourceBlank();
@@ -360,6 +445,53 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                     }
                     break;
                 }
+                case 2: {
+                    Item outputFluidItem = null;
+                    if (this.productFluidStorage2.amount <= 0 || this.productFluidStorage2.variant.isBlank()) return;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[2]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[2]).getItem().getMaxCount()) return;
+                    if (stack.isOf(Items.BUCKET)) {
+                        if (this.productFluidStorage2.amount < 1000) return;
+                        outputFluidItem = this.productFluidStorage2.variant.getFluid().getBucketItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, BUCKET / 81, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getConicalFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.ROUND_FLASK)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getRoundFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.BEAKER)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getBeakerItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.TEST_TUBE)) {
+                        if (this.productFluidStorage2.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage2.variant.getFluid()).narchaotics$getTestTubeItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[2]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[2]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 50, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    }
+                    if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[2], outputFluidItem.getDefaultStack())) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
                 default:
                     throw new IllegalStateException("Unexpected value: " + slot);
             }
@@ -429,6 +561,29 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                     }
                     break;
                 }
+                case 2: {
+                    ItemStack remainderStack = null;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[2]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[2]).getMaxCount()) return;
+                    if (stack.getItem() instanceof BucketItem) {
+                        if (this.productFluidStorage2.amount > 0) return;
+                        this.productFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = new ItemStack(Items.BUCKET);
+                    } else if (stack.getItem() instanceof FlaskItem flaskItem) {
+                        if (this.productFluidStorage2.amount > 1000 - flaskItem.capacity) return;
+                        this.productFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = flaskItem.getRemainderStack();
+                    }
+                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[2], remainderStack)) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
                 default:
                     throw new IllegalStateException("Unexpected value: " + slot);
             }
@@ -451,86 +606,13 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
     }
 
     private static int getCookTime(World world, SeparateWorkbenchBlockEntity blockEntity) {
-        FilterRecipeInput filterRecipeInput = new FilterRecipeInput(
+        SeparateRecipeInput separateRecipeInput = new SeparateRecipeInput(
                 new FluidStack(blockEntity.reactantFluidStorage1.variant, blockEntity.reactantFluidStorage1.amount)
         );
         return (Integer) blockEntity.matchGetter
-                .getFirstMatch(filterRecipeInput, world)
-                .map(recipe -> recipe.value().getFilterTime())
+                .getFirstMatch(separateRecipeInput, world)
+                .map(recipe -> recipe.value().getSeparateTime())
                 .orElse(120);
-    }
-
-    private boolean craftRecipe(RecipeEntry<FilterRecipe> recipe, DefaultedList<ItemStack> inventory) {
-        if (recipe != null && canAcceptRecipeOutput(recipe)) {
-            ItemStack recipeResult1 = recipe.value().residue;
-            ItemStack outputSlotItem1 = inventory.get(ITEM_OUTPUT_INDICES[0]);
-            if (!recipeResult1.isEmpty()) {
-                if (outputSlotItem1.isEmpty()) {
-                    inventory.set(ITEM_OUTPUT_INDICES[0], recipeResult1.copy());
-                } else if (ItemStack.areItemsAndComponentsEqual(outputSlotItem1, recipeResult1)) {
-                    outputSlotItem1.increment(recipeResult1.getCount());
-                }
-            }
-
-            SingleVariantStorage<FluidVariant> inputSlotFluid1 = this.reactantFluidStorage1;
-            FluidStack recipeProduct1 = recipe.value().filtrate;
-            SingleVariantStorage<FluidVariant> outputSlotFluid1 = this.productFluidStorage1;
-            if (!recipeProduct1.isEmpty()) {
-                if (outputSlotFluid1.isResourceBlank()) {
-                    outputSlotFluid1.variant = recipeProduct1.variant();
-                    outputSlotFluid1.amount = recipeProduct1.amount();
-                } else if (outputSlotFluid1.variant.equals(recipeProduct1.variant())) {
-                    outputSlotFluid1.amount += recipeProduct1.amount();
-                }
-
-                inputSlotFluid1.amount -= recipeProduct1.amount();
-            }
-
-            markDirty();
-            if (this.getWorld() != null) this.getWorld().updateListeners(pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_LISTENERS);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean canAcceptRecipeOutput(RecipeEntry<FilterRecipe> recipeEntry) {
-        if (recipeEntry == null) return false;
-        FilterRecipe recipe = recipeEntry.value();
-        boolean canOutputFluid1 = canOutputFluid(recipe.filtrate, this.productFluidStorage1, recipe.input, this.reactantFluidStorage1);
-        boolean canOutputItem1 = canOutputItem(recipe.residue, this.inventory.get(ITEM_OUTPUT_INDICES[0]),recipe.residue.getMaxCount());
-        return canOutputItem1 && canOutputFluid1;
-    }
-
-    private static boolean canOutputItem(ItemStack recipeOutput, ItemStack slotStack, int maxCount) {
-        if (recipeOutput.isEmpty()) return true;
-
-        if (slotStack.isEmpty()) return true;
-
-        if (!ItemStack.areItemsAndComponentsEqual(slotStack, recipeOutput)) return false;
-
-        return slotStack.getCount() + recipeOutput.getCount() <= Math.min(maxCount, slotStack.getMaxCount());
-    }
-
-    private static boolean canOutputFluid(FluidStack recipeOutput, SingleVariantStorage<FluidVariant> outputTank, FluidStack recipeInput, SingleVariantStorage<FluidVariant> inputTank) {
-        if (!recipeInput.isEmpty()) {
-            if (!inputTank.getResource().equals(recipeInput.variant())) {
-                return false;
-            }
-
-            if (inputTank.getAmount() < recipeInput.amount()) {
-                return false;
-            }
-        }
-
-        if (recipeOutput.isEmpty()) return true;
-
-        if (!outputTank.getResource().equals(recipeOutput.variant()) && outputTank.getAmount() > 0) {
-            return false;
-        }
-
-        long space = outputTank.getCapacity() - outputTank.getAmount();
-        return space >= recipeOutput.amount();
     }
 
     @Override
@@ -564,7 +646,7 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        return side == Direction.DOWN && (slot == ITEM_OUTPUT_INDICES[0] || slot == ITEM_OUTPUT_INDICES[1]);
+        return side == Direction.DOWN && (slot == FLUID_OUTPUT_INDICES[1] || slot == FLUID_OUTPUT_INDICES[1]);
     }
 
     @Override
@@ -575,9 +657,9 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
     @Override
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) {
-            return ITEM_OUTPUT_INDICES;
+            return new int[]{FLUID_INPUT_INDICES[1], FLUID_OUTPUT_INDICES[1]};
         } else {
-            return new int[FLUID_INPUT_INDICES[0]];
+            return FLUID_INPUT_INDICES;
         }
     }
 }

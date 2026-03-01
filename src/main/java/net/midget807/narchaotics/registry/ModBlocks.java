@@ -138,10 +138,10 @@ public class ModBlocks {
     public static final Block EPHEDRA_CROP = registerBlockWithoutItem("ephedra", new EphedraCropBlock(AbstractBlock.Settings.create().nonOpaque().noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.CROP)));
 
     public static final Block CHEMISTRY_WORKBENCH = registerBlock("chemistry_workbench", new ChemistryWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-    public static final Block DISTILLATION_WORKBENCH = registerBlock("distillation_workbench", new DistillationWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque().luminance(state -> 3)));
+    public static final Block DISTILLATION_WORKBENCH = registerBlock("distillation_workbench", new DistillationWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block FILTER_WORKBENCH = registerBlock("filter_workbench", new FilterWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-    public static final Block EVAPORATE_WORKBENCH = registerBlock("evaporate_workbench", new EvaporateWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque().luminance(state -> 3)));
-    public static final Block DISSOLVE_WORKBENCH = registerBlock("dissolve_workbench", new DissolveWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque().luminance(state -> 3)));
+    public static final Block EVAPORATE_WORKBENCH = registerBlock("evaporate_workbench", new EvaporateWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block DISSOLVE_WORKBENCH = registerBlock("dissolve_workbench", new DissolveWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block SEPARATE_WORKBENCH = registerBlock("separate_workbench", new SeparateWorkbenchBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_AQUA).strength(0.6f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block PHOTOELECTRIC_EXTRACTOR = registerBlock("photoelectric_extractor", new PhotoelectricExtractorBlock(AbstractBlock.Settings.create().mapColor(MapColor.GOLD).strength(0.6f).sounds(BlockSoundGroup.METAL).nonOpaque()));
 

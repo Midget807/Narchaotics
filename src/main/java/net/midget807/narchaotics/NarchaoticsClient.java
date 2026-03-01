@@ -10,6 +10,9 @@ import net.midget807.narchaotics.screen.DissolveWorkbenchScreen;
 import net.midget807.narchaotics.screen.DistillationWorkbenchScreen;
 import net.midget807.narchaotics.screen.EvaporateWorkbenchScreen;
 import net.midget807.narchaotics.screen.FilterWorkbenchScreen;
+import net.midget807.narchaotics.screen.PhotoelectricExtractorWorkbenchScreen;
+import net.midget807.narchaotics.screen.SeparateScreenHandler;
+import net.midget807.narchaotics.screen.SeparateWorkbenchScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 
@@ -76,6 +79,8 @@ public class NarchaoticsClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.FILTER_WORKBENCH, FilterWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.EVAPORATE_WORKBENCH, EvaporateWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.DISSOLVE_WORKBENCH, DissolveWorkbenchScreen::new);
+        HandledScreens.register(ModScreenHandlers.SEPARATE_WORKBENCH, SeparateWorkbenchScreen::new);
+        HandledScreens.register(ModScreenHandlers.PHOTOELECTRIC_EXTRACTOR, PhotoelectricExtractorWorkbenchScreen::new);
 
     }
 }

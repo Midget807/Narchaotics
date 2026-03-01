@@ -13,6 +13,8 @@
   "container.narchaotics.fluid_tank.ashing": "Ashing",
   "container.narchaotics.fluid_tank.fermenting": "Fermenting",
   "container.narchaotics.fluid_tank.store": "Fluid Tank",
+  "container.narchaotics.photoelectric_extractor": "Photoelectric Extractor",
+  "container.narchaotics.separate_workbench": "Separating",
   "item.narchaotics.beaker": "Beaker",
   "item.narchaotics.beaker.alkaline_ephedra_solution": "Alkaline Ephedra Solution Beaker",
   "item.narchaotics.beaker.ammonia": "Ammonia Beaker",

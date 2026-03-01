@@ -129,7 +129,9 @@ public class DistillationWorkbenchBlock extends BlockWithEntity implements Block
     @Override
     public @Nullable BlockState getPlacementState(ItemPlacementContext ctx) {
         Direction direction = ctx.getHorizontalPlayerFacing();
-        return this.getDefaultState().with(FACING, direction).with(PART, Part.MAIN);
+        BlockPos otherPos = ctx.getBlockPos().offset(direction.rotateYClockwise());
+        World world = ctx.getWorld();
+        return world.getBlockState(otherPos).canReplace(ctx) && world.getWorldBorder().contains(otherPos) ? this.getDefaultState().with(FACING, direction).with(PART, Part.MAIN) : null;
     }
 
     @Override

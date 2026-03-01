@@ -1,11 +1,11 @@
-// 1.21.1	2026-02-28T01:53:22.4496642	Narchaotics/Recipes
+// 1.21.1	2026-03-01T22:42:29.2388718	Narchaotics/Recipes
 0c3dea6dec7e0c6d4f9a20e4ebf17117c5a49603 data\minecraft\recipe\dust\ephedra.json
 41c3d8b4bd4fcbdeef92537ba2bbfb355ba0c59d data\minecraft\advancement\recipes\dust\netherrack.json
 79ecf7854551619bc62e7478258f1bdd4cfdb9fe data\minecraft\advancement\recipes\sodium_carbonate.json
 a12ace7083c0474f6e8161c3f6df4a4995a61788 data\minecraft\advancement\recipes\dust\red_phosphorus.json
 08b6c037e7dfff3e544d54e310f06dba4b776723 data\minecraft\recipe\sodium_carbonate.json
-d95dacf110639200e85a2625d266150f26263922 data\minecraft\advancement\recipes\fluid\sulphuric_acid.json
 82e99e13558ff5ea1d0db5345c94aec7bb24fbdc data\minecraft\recipe\fluid\sulphuric_acid.json
+d95dacf110639200e85a2625d266150f26263922 data\minecraft\advancement\recipes\fluid\sulphuric_acid.json
 af9d552ec4956a417d8df0e725dd9a181a210259 data\minecraft\recipe\dust\red_phosphorus.json
 a48ba8b58e4c50401e09f87611515ce058e391ed data\minecraft\advancement\recipes\dust\ephedra.json
 2527716c5481de4f6dabb508cd3c648d176a0db7 data\minecraft\recipe\dust\netherrack.json

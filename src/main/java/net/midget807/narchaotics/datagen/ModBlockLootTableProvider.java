@@ -17,5 +17,11 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
     @Override
     public void generate() {
         addDrop(ModBlocks.EPHEDRA_CROP, this.cropDrops(ModBlocks.EPHEDRA_CROP, ModItems.EPHEDRA, ModItems.EPHEDRA_SEEDS, BlockStatePropertyLootCondition.builder(ModBlocks.EPHEDRA_CROP)));
+        addDrop(ModBlocks.DISTILLATION_WORKBENCH);
+        addDrop(ModBlocks.FILTER_WORKBENCH);
+        addDrop(ModBlocks.EVAPORATE_WORKBENCH);
+        addDrop(ModBlocks.DISSOLVE_WORKBENCH);
+        addDrop(ModBlocks.SEPARATE_WORKBENCH);
+        addDrop(ModBlocks.PHOTOELECTRIC_EXTRACTOR);
     }
 }

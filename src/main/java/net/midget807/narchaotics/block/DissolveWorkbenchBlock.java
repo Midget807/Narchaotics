@@ -5,6 +5,7 @@ import net.midget807.narchaotics.block.entity.DissolveWorkbenchBlockEntity;
 import net.midget807.narchaotics.registry.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -38,6 +39,11 @@ public class DissolveWorkbenchBlock extends BlockWithEntity implements BlockEnti
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    protected BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Override

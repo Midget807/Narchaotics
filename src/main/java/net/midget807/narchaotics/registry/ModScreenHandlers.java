@@ -29,6 +29,18 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("dissolve_workbench"),
                     new ExtendedScreenHandlerType<>(DissolveScreenHandler::new, BlockPos.PACKET_CODEC)
             );
+    public static final ScreenHandlerType<SeparateScreenHandler> SEPARATE_WORKBENCH =
+            Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("separate_workbench"),
+                    new ExtendedScreenHandlerType<>(SeparateScreenHandler::new, BlockPos.PACKET_CODEC)
+            );
+    public static final ScreenHandlerType<PhotoelectricExtractorScreenHandler> PHOTOELECTRIC_EXTRACTOR =
+            Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("photoelectric_extractor"),
+                    new ExtendedScreenHandlerType<>(PhotoelectricExtractorScreenHandler::new, BlockPos.PACKET_CODEC)
+            );
+    public static final ScreenHandlerType<TankScreenHandler> TANK =
+            Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("tank"),
+                    new ExtendedScreenHandlerType<>(TankScreenHandler::new, BlockPos.PACKET_CODEC)
+            );
 
     public static void registerModScreenHandlers() {
         NarchaoticsMain.LOGGER.info("Registering Mod Screen Handlers");

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "narchaotics:block/photoelectric_extractor_bottom",
+    "side": "narchaotics:block/photoelectric_extractor_side",
+    "top": "narchaotics:block/photoelectric_extractor_top"
+  }
+}

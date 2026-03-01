@@ -20,6 +20,8 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add("container.narchaotics.filter_workbench", "Filtering");
         translationBuilder.add("container.narchaotics.evaporate_workbench", "Evaporating");
         translationBuilder.add("container.narchaotics.dissolve_workbench", "Dissolving & Mixing");
+        translationBuilder.add("container.narchaotics.separate_workbench", "Separating");
+        translationBuilder.add("container.narchaotics.photoelectric_extractor", "Photoelectric Extractor");
         translationBuilder.add("container.narchaotics.fluid_tank.store", "Fluid Tank");
         translationBuilder.add("container.narchaotics.fluid_tank.fermenting", "Fermenting");
         translationBuilder.add("container.narchaotics.fluid_tank.ashing", "Ashing");

@@ -11,6 +11,7 @@ import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
 import net.minecraft.data.client.TextureKey;
 import net.minecraft.data.client.TextureMap;
+import net.minecraft.data.client.TexturedModel;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
@@ -31,6 +32,7 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.EVAPORATE_WORKBENCH);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.DISSOLVE_WORKBENCH);
         blockStateModelGenerator.registerNorthDefaultHorizontalRotation(ModBlocks.SEPARATE_WORKBENCH);
+        blockStateModelGenerator.registerSingleton(ModBlocks.PHOTOELECTRIC_EXTRACTOR, TexturedModel.CUBE_BOTTOM_TOP);
 
         registerCauldrons(blockStateModelGenerator);
 

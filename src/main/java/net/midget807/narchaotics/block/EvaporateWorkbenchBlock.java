@@ -21,6 +21,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +37,11 @@ public class EvaporateWorkbenchBlock extends BlockWithEntity implements BlockEnt
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    protected BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Override
@@ -83,5 +89,10 @@ public class EvaporateWorkbenchBlock extends BlockWithEntity implements BlockEnt
             return null;
         }
         return validateTicker(type, ModBlockEntities.EVAPORATE_WORKBENCH, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
+    }
+
+    @Override
+    protected float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
+        return super.getAmbientOcclusionLightLevel(state, world, pos);
     }
 }

@@ -90,6 +90,6 @@ public class SeparateWorkbenchBlock extends BlockWithEntity implements BlockEnti
         if (world.isClient) {
             return null;
         }
-        return validateTicker(type, ModBlockEntities.FILTER_WORKBENCH, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
+        return validateTicker(type, ModBlockEntities.SEPARATE_WORKBENCH, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
     }
 }
