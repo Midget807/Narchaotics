@@ -1,0 +1,19 @@
+{
+  "values": [
+    "narchaotics:conical_flask",
+    "narchaotics:round_flask",
+    "narchaotics:beaker",
+    "narchaotics:test_tube",
+    "narchaotics:burner",
+    "narchaotics:filter_funnel",
+    "narchaotics:stand_and_clamp",
+    "narchaotics:condenser_column",
+    "narchaotics:separatory_funnel",
+    "narchaotics:distillation_workbench",
+    "narchaotics:filter_workbench",
+    "narchaotics:evaporate_workbench",
+    "narchaotics:dissolve_workbench",
+    "narchaotics:separate_workbench",
+    "narchaotics:photoelectric_extractor"
+  ]
+}

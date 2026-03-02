@@ -17,4 +17,5 @@ public class ModBlockUtil {
     public static final String PRODUCT_ITEM_1_KEY = "productItem1";
     public static final String PRODUCT_ITEM_2_KEY = "productItem2";
     public static final String RECIPES_USED_KEY = "RecipesUsed";
+    public static final String HAS_SUNLIGHT_KEY = "HasSunlight";
 }

@@ -13,20 +13,31 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:fluid/sulphuric_acid"
+        "recipe": "minecraft:fluid/hydrogen_peroxide"
       },
       "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_oxide": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:tungsten_oxide"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_chemistry"
+      "has_chemistry",
+      "has_tungsten_oxide"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:fluid/sulphuric_acid"
+      "minecraft:fluid/hydrogen_peroxide"
     ]
   }
 }

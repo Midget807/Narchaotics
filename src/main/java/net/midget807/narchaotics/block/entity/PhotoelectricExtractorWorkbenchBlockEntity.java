@@ -10,10 +10,11 @@ import net.midget807.narchaotics.item.FlaskItem;
 import net.midget807.narchaotics.recipe.EvaporateRecipe;
 import net.midget807.narchaotics.recipe.EvaporateRecipeInput;
 import net.midget807.narchaotics.recipe.FluidStack;
+import net.midget807.narchaotics.recipe.PhotoelectricExtractorRecipe;
+import net.midget807.narchaotics.recipe.PhotoelectricExtractorRecipeInput;
 import net.midget807.narchaotics.registry.ModBlockEntities;
 import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.registry.ModRecipes;
-import net.midget807.narchaotics.screen.EvaporateScreenHandler;
 import net.midget807.narchaotics.screen.PhotoelectricExtractorScreenHandler;
 import net.midget807.narchaotics.util.ImplementedInventory;
 import net.midget807.narchaotics.util.ModFluidUtil;
@@ -35,6 +36,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeInputProvider;
 import net.minecraft.recipe.RecipeManager;
@@ -52,6 +54,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +62,10 @@ import java.util.List;
 
 import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET;
 import static net.midget807.narchaotics.util.ModBlockUtil.ANIMATION_TIME_KEY;
+import static net.midget807.narchaotics.util.ModBlockUtil.HAS_SUNLIGHT_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.MAX_PROGRESS_KEY;
+import static net.midget807.narchaotics.util.ModBlockUtil.PRODUCT_FLUID_AMOUNT_1_KEY;
+import static net.midget807.narchaotics.util.ModBlockUtil.PRODUCT_FLUID_VARIANT_1_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.PROGRESS_TIME_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.REACTANT_FLUID_AMOUNT_1_KEY;
 import static net.midget807.narchaotics.util.ModBlockUtil.REACTANT_FLUID_VARIANT_1_KEY;
@@ -70,13 +76,16 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
     public static final int MAX_PROGRESS_DELEGATE_INDEX = 1;
     public static final int ANIMATION_TIME_DELEGATE_INDEX = 2;
     public static final int REACTANT_FLUID_1_DELEGATE_INDEX = 3;
-    public static final int[] INPUT_INDICES = {0, 2};
-    public static final int[] OUTPUT_INDICES = {1, 3};
-    public static final int[] ITEM_INPUT_INDICES = {2};
+    public static final int PRODUCT_FLUID_1_DELEGATE_INDEX = 4;
+    public static final int HAS_SUNLIGHT_DELEGATE_INDEX = 5;
+    public static final int[] INPUT_INDICES = {0, 1, 4};
+    public static final int[] OUTPUT_INDICES = {2, 3, 5};
+    public static final int[] ITEM_INPUT_INDICES = {4};
     public static final int[] FLUID_INPUT_INDICES = {0, 1};
-    public static final int FUEL_INPUT_INDEX = 2;
+    public static final int FUEL_INPUT_INDEX = 4;
+    public static final int[] ITEM_OUTPUT_INDICES = {5};
     public static final int[] FLUID_OUTPUT_INDICES = {2, 3};
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(13, ItemStack.EMPTY);
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(6, ItemStack.EMPTY);
     public SingleVariantStorage<FluidVariant> reactantFluidStorage1 = ModFluidUtil.createTank(this);
     public SingleVariantStorage<FluidVariant> productFluidStorage1 = ModFluidUtil.createTank(this);
     private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
@@ -88,6 +97,7 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
                 case 2 -> PhotoelectricExtractorWorkbenchBlockEntity.this.animationTime;
                 case 3 -> PhotoelectricExtractorWorkbenchBlockEntity.this.reactantFluidStorage1.amount;
                 case 4 -> PhotoelectricExtractorWorkbenchBlockEntity.this.productFluidStorage1.amount;
+                case 5 -> PhotoelectricExtractorWorkbenchBlockEntity.this.hasSunlight;
                 default -> 0;
             };
         }
@@ -100,19 +110,21 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
                 case 2: PhotoelectricExtractorWorkbenchBlockEntity.this.animationTime = value;
                 case 3: PhotoelectricExtractorWorkbenchBlockEntity.this.reactantFluidStorage1.amount = value;
                 case 4: PhotoelectricExtractorWorkbenchBlockEntity.this.productFluidStorage1.amount = value;
+                case 5: PhotoelectricExtractorWorkbenchBlockEntity.this.hasSunlight = value;
             }
         }
 
         @Override
         public int size() {
-            return 5;
+            return 6;
         }
     };
     private int progressTime;
     private int maxProgress;
     private int animationTime;
+    private int hasSunlight;
     private final Object2IntOpenHashMap<Identifier> recipeUsed = new Object2IntOpenHashMap<>();
-    private final RecipeManager.MatchGetter<EvaporateRecipeInput, EvaporateRecipe> matchGetter = RecipeManager.createCachedMatchGetter(ModRecipes.EVAPORATE_TYPE);
+    private final RecipeManager.MatchGetter<PhotoelectricExtractorRecipeInput, PhotoelectricExtractorRecipe> matchGetter = RecipeManager.createCachedMatchGetter(ModRecipes.PHOTOELECTRIC_TYPE);
 
 
     public PhotoelectricExtractorWorkbenchBlockEntity(BlockPos pos, BlockState state) {
@@ -171,7 +183,7 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("container.narchaotics.evaporate_workbench");
+        return Text.translatable("container.narchaotics.photoelectric_extractor");
     }
 
     @Override
@@ -200,6 +212,12 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
             FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, reactantFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(REACTANT_FLUID_VARIANT_1_KEY, nbtElement));
             nbt.putLong(REACTANT_FLUID_AMOUNT_1_KEY, reactantFluidStorage1.amount);
         }
+        if (!productFluidStorage1.isResourceBlank()) {
+            FluidVariant.CODEC.encodeStart(NbtOps.INSTANCE, productFluidStorage1.variant).result().ifPresent(nbtElement -> nbt.put(PRODUCT_FLUID_VARIANT_1_KEY, nbtElement));
+            nbt.putLong(PRODUCT_FLUID_AMOUNT_1_KEY, productFluidStorage1.amount);
+        }
+        nbt.putInt(HAS_SUNLIGHT_KEY, this.hasSunlight);
+
         NbtCompound nbtCompound = new NbtCompound();
         this.recipeUsed.forEach((identifier, count) -> nbtCompound.putInt(identifier.toString(), count));
         nbt.put(RECIPES_USED_KEY, nbtCompound);
@@ -214,6 +232,9 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
         this.animationTime = nbt.getInt(ANIMATION_TIME_KEY);
         this.reactantFluidStorage1.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(REACTANT_FLUID_VARIANT_1_KEY)).result().orElse(FluidVariant.blank());
         this.reactantFluidStorage1.amount = nbt.getLong(REACTANT_FLUID_AMOUNT_1_KEY);
+        this.productFluidStorage1.variant = FluidVariant.CODEC.parse(NbtOps.INSTANCE, nbt.get(PRODUCT_FLUID_VARIANT_1_KEY)).result().orElse(FluidVariant.blank());
+        this.productFluidStorage1.amount = nbt.getLong(PRODUCT_FLUID_AMOUNT_1_KEY);
+        this.hasSunlight = nbt.getInt(HAS_SUNLIGHT_KEY);
 
         NbtCompound nbtCompound = nbt.getCompound(RECIPES_USED_KEY);
         for (String string : nbtCompound.getKeys()) {
@@ -224,10 +245,25 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
     public void tick(World world, BlockPos pos, BlockState state) {
         fillUpOnFluid();
         removeFluid();
+        if (world.getTime() % 20L == 0L) {
+            float lightLevel = world.getLightLevel(LightType.SKY, pos) - world.getAmbientDarkness();
+            float skyAngleRadians = world.getSkyAngleRadians(1.0f);
+            if (lightLevel > 0) {
+                float g = skyAngleRadians < (float) Math.PI ? 0.0F : (float) (Math.PI * 2);
+                skyAngleRadians += (g - skyAngleRadians) * 0.2F;
+                lightLevel = Math.round(lightLevel * MathHelper.cos(skyAngleRadians));
+            }
+            lightLevel = Math.max(lightLevel, 0);
+            if (lightLevel > 0.0f) {
+                this.hasSunlight = 1;
+            } else {
+                this.hasSunlight = 0;
+            }
+        }
         boolean shouldMarkDirty = false;
         if (!inputsEmpty()) {
-            RecipeEntry<EvaporateRecipe> recipeEntry = this.matchGetter.getFirstMatch(
-                    new EvaporateRecipeInput(
+            RecipeEntry<PhotoelectricExtractorRecipe> recipeEntry = this.matchGetter.getFirstMatch(
+                    new PhotoelectricExtractorRecipeInput(
                             new FluidStack(this.reactantFluidStorage1.variant, this.reactantFluidStorage1.amount),
                             this.getStack(FUEL_INPUT_INDEX)
                     ),
@@ -243,7 +279,9 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
                     }
                     shouldMarkDirty = true;
                 }
-                this.progressTime++;
+                if (this.hasSunlight > 0) {
+                    this.progressTime++;
+                }
             } else {
                 this.progressTime = 0;
             }
@@ -320,6 +358,53 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
                     }
                     break;
                 }
+                case 1: {
+                    Item outputFluidItem = null;
+                    if (this.productFluidStorage1.amount <= 0 || this.productFluidStorage1.variant.isBlank()) return;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getItem().getMaxCount()) return;
+                    if (stack.isOf(Items.BUCKET)) {
+                        if (this.productFluidStorage1.amount < 1000) return;
+                        outputFluidItem = this.productFluidStorage1.variant.getFluid().getBucketItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, BUCKET / 81, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.CONICAL_FLASK)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getConicalFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.ROUND_FLASK)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getRoundFlaskItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.BEAKER)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getBeakerItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 250, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    } else if (stack.isOf(ModItems.TEST_TUBE)) {
+                        if (this.productFluidStorage1.amount < ((FlaskItem) stack.getItem()).capacity) return;
+                        outputFluidItem = ((FlaskStorable) this.productFluidStorage1.variant.getFluid()).narchaotics$getTestTubeItem();
+                        if (!this.getStack(FLUID_OUTPUT_INDICES[1]).isEmpty() && !this.getStack(FLUID_OUTPUT_INDICES[1]).isOf(outputFluidItem)) return;
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 50, transaction);
+                        this.playFluidExtractSound(this.getWorld());
+                        transaction.commit();
+                    }
+                    if (outputFluidItem != null && this.insertStack(FLUID_OUTPUT_INDICES[1], outputFluidItem.getDefaultStack())) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
                 default:
                     throw new IllegalStateException("Unexpected value: " + slot);
             }
@@ -366,6 +451,29 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
                     }
                     break;
                 }
+                case 1: {
+                    ItemStack remainderStack = null;
+                    if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getMaxCount()) return;
+                    if (stack.getItem() instanceof BucketItem) {
+                        if (this.productFluidStorage1.amount > 0) return;
+                        this.productFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = new ItemStack(Items.BUCKET);
+                    } else if (stack.getItem() instanceof FlaskItem flaskItem) {
+                        if (this.productFluidStorage1.amount > 1000 - flaskItem.capacity) return;
+                        this.productFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                        playFluidInsertSound(this.getWorld());
+                        transaction.commit();
+                        remainderStack = flaskItem.getRemainderStack();
+                    }
+                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[1], remainderStack)) {
+                        stack.decrement(1);
+                        this.setStack(slot, stack);
+                        this.markDirty();
+                    }
+                    break;
+                }
                 default:
                     throw new IllegalStateException("Unexpected value: " + slot);
             }
@@ -388,19 +496,54 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
     }
 
     private static int getCookTime(World world, PhotoelectricExtractorWorkbenchBlockEntity blockEntity) {
-        EvaporateRecipeInput evaporateRecipeInput = new EvaporateRecipeInput(
+        PhotoelectricExtractorRecipeInput photoelectricExtractorRecipe = new PhotoelectricExtractorRecipeInput(
                 new FluidStack(blockEntity.reactantFluidStorage1.variant, blockEntity.reactantFluidStorage1.amount),
                 blockEntity.getStack(FUEL_INPUT_INDEX)
         );
         return (Integer) blockEntity.matchGetter
-                .getFirstMatch(evaporateRecipeInput, world)
-                .map(recipe -> recipe.value().getEvaporateTime())
+                .getFirstMatch(photoelectricExtractorRecipe, world)
+                .map(recipe -> recipe.value().getExtractTime())
                 .orElse(120);
     }
 
-    private boolean craftRecipe(RecipeEntry<EvaporateRecipe> recipe, DefaultedList<ItemStack> inventory) {
+    private boolean craftRecipe(RecipeEntry<PhotoelectricExtractorRecipe> recipe, DefaultedList<ItemStack> inventory) {
         if (recipe != null && canAcceptRecipeOutput(recipe)) {
+            ItemStack recipeResult = recipe.value().itemOutput;
+            ItemStack outputSlotItem = inventory.get(ITEM_OUTPUT_INDICES[0]);
+            boolean shouldDecrementReactant = false;
+            if (!recipeResult.isEmpty()) {
+                if (outputSlotItem.isEmpty()) {
+                    inventory.set(ITEM_OUTPUT_INDICES[0], recipeResult.copy());
+                } else if (ItemStack.areItemsAndComponentsEqual(outputSlotItem, recipeResult)) {
+                    outputSlotItem.increment(recipeResult.getCount());
+                }
+                if (!shouldDecrementReactant) shouldDecrementReactant = true;
+            }
 
+            SingleVariantStorage<FluidVariant> inputSlotFluid = this.reactantFluidStorage1;
+            FluidStack recipeOutput = recipe.value().output;
+            SingleVariantStorage<FluidVariant> outputSlotFluid = this.productFluidStorage1;
+            if (!recipeOutput.isEmpty()) {
+                if (outputSlotFluid.isResourceBlank()) {
+                    outputSlotFluid.variant = recipeOutput.variant();
+                    outputSlotFluid.amount = recipeOutput.amount();
+                } else if (outputSlotFluid.variant.equals(recipeOutput.variant())) {
+                    outputSlotFluid.amount += recipeOutput.amount();
+                }
+                if (!shouldDecrementReactant) shouldDecrementReactant = true;
+            }
+
+            if (shouldDecrementReactant) {
+                inputSlotFluid.amount -= recipeOutput.amount();
+            }
+
+            Ingredient recipeCatalyst = recipe.value().catalyst;
+            ItemStack catalystSlotItem = inventory.get(FUEL_INPUT_INDEX);
+            if (!recipeCatalyst.isEmpty()) {
+                if (!catalystSlotItem.isEmpty()) {
+                    catalystSlotItem.decrement(1);
+                }
+            }
 
             markDirty();
             if (this.getWorld() != null) this.getWorld().updateListeners(pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_LISTENERS);
@@ -410,14 +553,25 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
         }
     }
 
-    public boolean canAcceptRecipeOutput(RecipeEntry<EvaporateRecipe> recipeEntry) {
+    public boolean canAcceptRecipeOutput(RecipeEntry<PhotoelectricExtractorRecipe> recipeEntry) {
         if (recipeEntry == null) return false;
-        EvaporateRecipe recipe = recipeEntry.value();
-        //boolean canOutputItem1 = canOutputItem(recipe.output, this.inventory.get(ITEM_OUTPUT_INDICES[0]), recipe.input, this.reactantFluidStorage1);
-        return true;
+        PhotoelectricExtractorRecipe recipe = recipeEntry.value();
+        boolean canOutputItem = canOutputItem(recipe.itemOutput, inventory.get(ITEM_OUTPUT_INDICES[0]), inventory.get(ITEM_OUTPUT_INDICES[0]).getMaxCount());
+        boolean canOutputFluid = canOutputFluid(recipe.output, this.productFluidStorage1, recipe.input, this.reactantFluidStorage1);
+        return canOutputItem && canOutputFluid;
     }
 
-    private static boolean canOutputItem(ItemStack recipeOutput, ItemStack slotStack,  FluidStack recipeInput, SingleVariantStorage<FluidVariant> inputTank) {
+    private static boolean canOutputItem(ItemStack recipeOutput, ItemStack slotStack, int maxCount) {
+        if (recipeOutput.isEmpty()) return true;
+
+        if (slotStack.isEmpty()) return true;
+
+        if (!ItemStack.areItemsAndComponentsEqual(slotStack, recipeOutput)) return false;
+
+        return slotStack.getCount() + recipeOutput.getCount() <= Math.min(maxCount, slotStack.getMaxCount());
+    }
+
+    private static boolean canOutputFluid(FluidStack recipeOutput, SingleVariantStorage<FluidVariant> outputTank, FluidStack recipeInput, SingleVariantStorage<FluidVariant> inputTank) {
         if (!recipeInput.isEmpty()) {
             if (!inputTank.getResource().equals(recipeInput.variant())) {
                 return false;
@@ -427,13 +581,15 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
                 return false;
             }
         }
+
         if (recipeOutput.isEmpty()) return true;
 
-        if (slotStack.isEmpty()) return true;
+        if (!outputTank.getResource().equals(recipeOutput.variant()) && outputTank.getAmount() > 0) {
+            return false;
+        }
 
-        if (!ItemStack.areItemsAndComponentsEqual(slotStack, recipeOutput)) return false;
-
-        return slotStack.getCount() + recipeOutput.getCount() <= Math.min(recipeOutput.getMaxCount(), slotStack.getMaxCount());
+        long space = outputTank.getCapacity() - outputTank.getAmount();
+        return space >= recipeOutput.amount();
     }
 
     @Override
@@ -462,12 +618,12 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
 
     @Override
     public boolean isValid(int slot, ItemStack stack) {
-        return slot == FLUID_INPUT_INDICES[0];
+        return slot == FLUID_INPUT_INDICES[0] || slot == ITEM_INPUT_INDICES[0];
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        return side == Direction.DOWN && (slot == FLUID_OUTPUT_INDICES[1]);
+        return side == Direction.DOWN && (slot == FLUID_OUTPUT_INDICES[1] || slot == ITEM_OUTPUT_INDICES[0]);
     }
 
     @Override
@@ -478,9 +634,9 @@ public class PhotoelectricExtractorWorkbenchBlockEntity extends BlockEntity impl
     @Override
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) {
-            return new int[FLUID_OUTPUT_INDICES[1]];
+            return new int[] {FLUID_OUTPUT_INDICES[1], FLUID_OUTPUT_INDICES[0]};
         } else {
-            return new int[FLUID_INPUT_INDICES[0]];
+            return new int[] {FLUID_INPUT_INDICES[0], ITEM_INPUT_INDICES[0]};
         }
     }
 

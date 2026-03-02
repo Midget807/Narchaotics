@@ -1,11 +1,17 @@
-// 1.21.1	2026-03-01T22:42:29.2388718	Narchaotics/Recipes
-0c3dea6dec7e0c6d4f9a20e4ebf17117c5a49603 data\minecraft\recipe\dust\ephedra.json
-41c3d8b4bd4fcbdeef92537ba2bbfb355ba0c59d data\minecraft\advancement\recipes\dust\netherrack.json
-79ecf7854551619bc62e7478258f1bdd4cfdb9fe data\minecraft\advancement\recipes\sodium_carbonate.json
-a12ace7083c0474f6e8161c3f6df4a4995a61788 data\minecraft\advancement\recipes\dust\red_phosphorus.json
+// 1.21.1	2026-03-02T21:45:53.9380919	Narchaotics/Recipes
+244dda81ebeb4ab35add7d33d57f671b2a15e797 data\minecraft\advancement\recipes\dust\netherrack.json
+56890808bb7220ed3267024bf711c6570930fbbf data\minecraft\advancement\recipes\sodium_carbonate.json
+04d5773f0b7b941fbaa85ecf88d8760f29d794c2 data\minecraft\advancement\recipes\fluid\hydrogen_peroxide_dust.json
 08b6c037e7dfff3e544d54e310f06dba4b776723 data\minecraft\recipe\sodium_carbonate.json
 82e99e13558ff5ea1d0db5345c94aec7bb24fbdc data\minecraft\recipe\fluid\sulphuric_acid.json
-d95dacf110639200e85a2625d266150f26263922 data\minecraft\advancement\recipes\fluid\sulphuric_acid.json
+8cd43e41be3ffc7c267958ccb71d7e509514829a data\minecraft\advancement\recipes\dust\ephedra.json
+ae19a0d7012f3f6aceddeb1daa3a8e2d84680a29 data\minecraft\advancement\recipes\fluid\hydrogen_peroxide.json
+d3b171db45312c9dce5d85a28a48291501815e4f data\minecraft\recipe\fluid\hydrogen_peroxide.json
+0c3dea6dec7e0c6d4f9a20e4ebf17117c5a49603 data\minecraft\recipe\dust\ephedra.json
+9ba6f5e0a70b8d0fa5327c3d0cf58663a18d4399 data\minecraft\recipe\fluid\hydrogen_peroxide_dust.json
+6e811d9bc69defef8dc3b358acecb37d3095bf83 data\minecraft\advancement\recipes\dust\red_phosphorus.json
+e2f1a2cef8b7da3844de14a1b854f39581c38833 data\minecraft\recipe\fluid\methamphetamine_solution.json
+d6878b4020f361b0b7c881ea2f836e46f38ae6da data\minecraft\advancement\recipes\fluid\sulphuric_acid.json
 af9d552ec4956a417d8df0e725dd9a181a210259 data\minecraft\recipe\dust\red_phosphorus.json
-a48ba8b58e4c50401e09f87611515ce058e391ed data\minecraft\advancement\recipes\dust\ephedra.json
+30107de1c21bc67db0878a39305a242ea9378855 data\minecraft\advancement\recipes\fluid\methamphetamine_solution.json
 2527716c5481de4f6dabb508cd3c648d176a0db7 data\minecraft\recipe\dust\netherrack.json

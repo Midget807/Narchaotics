@@ -3,6 +3,7 @@ package net.midget807.narchaotics.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.midget807.narchaotics.NarchaoticsMain;
+import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
+    public static final TagKey<Item> UNLOCK_NARCHAOTICS_RECIPES = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("unlock_narchaotics_recipes"));
     public static final TagKey<Item> SOUL_BURNER = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("soul_burner"));
     public static final TagKey<Item> PHOTOELECTRIC_CATALYSTS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("photoelectric_catalysts"));
     public static final TagKey<Item> METH_REDUCER = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("meth_reducer"));
@@ -39,6 +41,24 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        this.getOrCreateTagBuilder(UNLOCK_NARCHAOTICS_RECIPES)
+                .add(
+                        ModItems.CONICAL_FLASK,
+                        ModItems.ROUND_FLASK,
+                        ModItems.BEAKER,
+                        ModItems.TEST_TUBE,
+                        ModItems.BURNER,
+                        ModItems.FILTER_FUNNEL,
+                        ModItems.STAND_AND_CLAMP,
+                        ModItems.CONDENSER,
+                        ModItems.SEPARATORY_FUNNEL,
+                        ModBlocks.DISTILLATION_WORKBENCH.asItem(),
+                        ModBlocks.FILTER_WORKBENCH.asItem(),
+                        ModBlocks.EVAPORATE_WORKBENCH.asItem(),
+                        ModBlocks.DISSOLVE_WORKBENCH.asItem(),
+                        ModBlocks.SEPARATE_WORKBENCH.asItem(),
+                        ModBlocks.PHOTOELECTRIC_EXTRACTOR.asItem()
+                );
         this.getOrCreateTagBuilder(SOUL_BURNER)
                 .add(
                         Items.SOUL_SAND,

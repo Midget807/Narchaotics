@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_conical_flask": {
+    "has_chemistry": {
       "conditions": {
         "items": [
           {
-            "items": "narchaotics:conical_flask"
+            "items": "#narchaotics:unlock_narchaotics_recipes"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_conical_flask"
+      "has_chemistry"
     ]
   ],
   "rewards": {

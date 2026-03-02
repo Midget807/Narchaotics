@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:photoelectric",
+  "catalyst": {
+    "item": "narchaotics:dust/tungsten_oxide"
+  },
+  "extractTime": 40,
+  "input": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:salt_water"
+    }
+  },
+  "output": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:hydrogen_peroxide"
+    }
+  }
+}

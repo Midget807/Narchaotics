@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.util.ModUtil;
+import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
@@ -59,6 +60,12 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         ModItems.TEST_TUBES.forEach((item, identifier) -> {
             if (item != ModItems.TEST_TUBE) {
                 translationBuilder.add(item, ModUtil.fluidItemDisplayName(identifier) + " Test Tube");
+            }
+        });
+
+        ModBlocks.FLUIDS.forEach((block, identifier) -> {
+            if (block != Blocks.WATER) {
+                translationBuilder.add(block, ModUtil.getFluidBlockDisplayName(identifier));
             }
         });
 

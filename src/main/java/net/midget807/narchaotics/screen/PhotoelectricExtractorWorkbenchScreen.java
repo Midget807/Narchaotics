@@ -44,6 +44,7 @@ public class PhotoelectricExtractorWorkbenchScreen extends HandledScreen<Photoel
     public static final Identifier FLAME = NarchaoticsMain.id("textures/gui/container/burner_level.png");
     public static final Identifier FLAME_SOUL = NarchaoticsMain.id("textures/gui/container/burner_level_soul.png");
     public static final Identifier CATALYST = NarchaoticsMain.id("textures/gui/container/catalyst.png");
+    public static final Identifier SUNLIGHT = NarchaoticsMain.id("textures/gui/container/sunlight.png");
 
     public static final int BACKGROUND_WIDTH = 212;
     public static final int BACKGROUND_HEIGHT = 222;
@@ -69,24 +70,29 @@ public class PhotoelectricExtractorWorkbenchScreen extends HandledScreen<Photoel
         context.drawTexture(PHOTOELECTRIC_TEXTURE, x, y, 0, BACKGROUND_X_OFFSET, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT, 256, 256);
 
         renderProgressArrow(context, x, y);
-        if (this.handler.hasCatalyst()) renderFlame(context, x, y);
+        if (this.handler.hasCatalyst()) renderCatalyst(context, x, y);
+        if (this.handler.hasSunlight()) renderSun(context, x, y);
 
     }
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
         if (this.handler.isCooking()) {
-            context.drawTexture(EVAPORATE_ARROW, x + 91, y + 63, 0, 0, 0, this.handler.getScaledArrowProgress(), 16, 32, 16);
+            context.drawTexture(EVAPORATE_ARROW, x + 79, y + 63, 0, 0, 0, this.handler.getScaledArrowProgress(), 16, 32, 16);
         }
     }
 
-    private void renderFlame(DrawContext context, int x, int y) {
-        context.drawTexture(CATALYST, x + 99, y + 84, 0, 0, 0, 14, 14, 14, 14);
+    private void renderCatalyst(DrawContext context, int x, int y) {
+        context.drawTexture(CATALYST, x + 87, y + 85, 0, 0, 0, 15, 15, 15, 15);
+    }
+    private void renderSun(DrawContext context, int x, int y) {
+        context.drawTexture(SUNLIGHT, x + 91, y + 56, 0, 0, 0, 7, 7, 7, 7);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        drawFluid(context, handler.blockEntity.reactantFluidStorage1.variant, 61, 61, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage1, 22), 22);
+        drawFluid(context, handler.blockEntity.reactantFluidStorage1.variant, 49, 61, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.reactantFluidStorage1, 22), 22);
+        drawFluid(context, handler.blockEntity.productFluidStorage1.variant, 141, 61, 22, ModScreenUtil.getHeightForVolume(handler.blockEntity.productFluidStorage1, 22), 22);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 

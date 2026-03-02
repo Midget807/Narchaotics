@@ -14,8 +14,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
 
-import static net.midget807.narchaotics.block.entity.EvaporateWorkbenchBlockEntity.MAX_PROGRESS_DELEGATE_INDEX;
-import static net.midget807.narchaotics.block.entity.EvaporateWorkbenchBlockEntity.PROGRESS_TIME_DELEGATE_INDEX;
 import static net.midget807.narchaotics.block.entity.PhotoelectricExtractorWorkbenchBlockEntity.*;
 import static net.midget807.narchaotics.util.ModScreenUtil.FluidInputSlot;
 import static net.midget807.narchaotics.util.ModScreenUtil.FluidOutputSlot;
@@ -32,12 +30,20 @@ public class PhotoelectricExtractorScreenHandler extends ScreenHandler {
 
     public PhotoelectricExtractorScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.PHOTOELECTRIC_EXTRACTOR, syncId);
-        checkDataCount(propertyDelegate, 5);
+        checkDataCount(propertyDelegate, 6);
         this.inventory = (Inventory) blockEntity;
         this.blockEntity = (PhotoelectricExtractorWorkbenchBlockEntity) blockEntity;
         this.propertyDelegate = propertyDelegate;
 
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[0], 27, 53));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[1], 169, 53));
 
+        this.addSlot(new Slot(inventory, FUEL_INPUT_INDEX, 86, 100));
+
+        this.addSlot(new OutputSlot(inventory, ITEM_OUTPUT_INDICES[0], 119, 64));
+
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 27, 75));
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 169, 75));
 
         this.addPlayerInventory(playerInventory);
         this.addPlayerHotbar(playerInventory);
@@ -103,5 +109,9 @@ public class PhotoelectricExtractorScreenHandler extends ScreenHandler {
 
     public boolean hasCatalyst() {
         return this.blockEntity.getStack(FUEL_INPUT_INDEX).isIn(ModItemTagProvider.PHOTOELECTRIC_CATALYSTS);
+    }
+
+    public boolean hasSunlight() {
+        return this.propertyDelegate.get(HAS_SUNLIGHT_DELEGATE_INDEX) > 0;
     }
 }

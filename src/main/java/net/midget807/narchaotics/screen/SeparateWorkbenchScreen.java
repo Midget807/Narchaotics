@@ -72,8 +72,8 @@ public class SeparateWorkbenchScreen extends HandledScreen<SeparateScreenHandler
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
         if (this.handler.isCooking()) {
-            context.drawTexture(FILTER_ARROW_H, x + 87, y + 59, 0, 0, 0, this.handler.getScaledArrowProgressH(), 16, 38, 16);
-            context.drawTexture(FILTER_ARROW_V, x + 97, y + 54, 0, 0, 0, 14, this.handler.getScaledArrowProgressV(), 14, 33);
+            context.drawTexture(FILTER_ARROW_H, x + 87, y + 43, 0, 0, 0, this.handler.getScaledArrowProgressH(), 16, 38, 16);
+            context.drawTexture(FILTER_ARROW_V, x + 97, y + 39, 0, 0, 0, 14, this.handler.getScaledArrowProgressV(), 14, 33);
         }
     }
 
