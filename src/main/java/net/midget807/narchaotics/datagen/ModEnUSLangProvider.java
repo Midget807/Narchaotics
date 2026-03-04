@@ -17,6 +17,8 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+        translationBuilder.add("emi.cooking.time", "%s Seconds");
+
         translationBuilder.add("container.narchaotics.distillation_workbench", "Distilling");
         translationBuilder.add("container.narchaotics.filter_workbench", "Filtering");
         translationBuilder.add("container.narchaotics.evaporate_workbench", "Evaporating");

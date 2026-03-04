@@ -2,7 +2,6 @@ package net.midget807.narchaotics.datagen.json_builder;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.midget807.narchaotics.recipe.DissolveRecipe;
-import net.midget807.narchaotics.recipe.DistillationRecipe;
 import net.midget807.narchaotics.recipe.FluidStack;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementCriterion;
@@ -11,14 +10,14 @@ import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.conditionsFromChemistry;
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.hasChemistry;
 
 public class DissolveRecipeJsonBuilder {
     private final Ingredient input1;
@@ -49,7 +48,7 @@ public class DissolveRecipeJsonBuilder {
                 fuel,
                 cookingTime,
                 new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
-        );
+        ).criterion(hasChemistry(), conditionsFromChemistry());
     }
 
     public DissolveRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {

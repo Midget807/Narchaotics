@@ -2,9 +2,11 @@ package net.midget807.narchaotics.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.midget807.narchaotics.datagen.json_builder.AshRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.DissolveRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.DistillationRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.EvaporateRecipeJsonBuilder;
+import net.midget807.narchaotics.datagen.json_builder.FermentRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.FilterRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.PhotoelectricExtractorRecipeJsonBuilder;
 import net.midget807.narchaotics.datagen.json_builder.SeparateRecipeJsonBuilder;
@@ -15,6 +17,7 @@ import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.data.server.recipe.*;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
@@ -48,85 +51,30 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         addSeparateRecipes(recipeExporter);
         addPhotoelectricRecipes(recipeExporter);
         addAshRecipes(recipeExporter);
+        addFermentRecipes(recipeExporter);
 
     }
 
     private void addDistillationRecipes(RecipeExporter recipeExporter) {
-        DistillationRecipeJsonBuilder.create(
-                        Ingredient.ofItems(Items.IRON_INGOT),
-                        ModFluids.SULPHURIC_ACID,
-                        Ingredient.fromTag(ModItemTagProvider.SOUL_BURNER),
-                        40,
-                        ModItems.EPHEDRA_DUST,
-                        ModFluids.AMMONIA,
-                        250L
-                ).criterion(hasChemistry(), conditionsFromChemistry())
-                .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                .criterion(hasItem(Items.SOUL_SAND), conditionsFromItem(Items.SOUL_SAND))
-                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.EPHEDRA_DUST)));
-
-        DistillationRecipeJsonBuilder.create(
-                        Ingredient.ofItems(Items.GOLD_INGOT),
-                        ModFluids.SULPHURIC_ACID,
-                        Ingredient.EMPTY,
-                        40,
-                        ModItems.NETHERRACK_DUST,
-                        ModFluids.AMMONIA,
-                        250L
-        ).criterion(hasChemistry(), conditionsFromChemistry())
-                .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                .criterion(hasItem(Items.SOUL_SAND), conditionsFromItem(Items.SOUL_SAND))
-                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.NETHERRACK_DUST)));
-
+        DistillationRecipeJsonBuilder.createConcentrating(
+                ModFluids.VOLCANIC_WATER,
+                40,
+                ModFluids.CONCENTRATED_VOLCANIC_WATER,
+                100L,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.CONCENTRATED_VOLCANIC_WATER)));
     }
 
     private void addFilterRecipes(RecipeExporter recipeExporter) {
-        FilterRecipeJsonBuilder.create(
-                ModFluids.AMMONIA,
-                40,
-                ModFluids.HYDRAZINE,
-                250L,
-                ModItems.RED_PHOSPHORUS_DUST
-        ).criterion(hasChemistry(), conditionsFromChemistry())
-                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.RED_PHOSPHORUS_DUST)));
     }
 
     private void addEvaporateRecipes(RecipeExporter recipeExporter) {
-        EvaporateRecipeJsonBuilder.create(
-                ModFluids.SODIUM_CARBONATE,
-                250L,
-                Ingredient.fromTag(ModItemTagProvider.SOUL_BURNER),
-                40,
-                ModItems.SODIUM_CARBONATE
-        ).criterion(hasChemistry(), conditionsFromChemistry())
-                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.SODIUM_CARBONATE)));
     }
 
     private void addDissolveRecipes(RecipeExporter recipeExporter) {
-        DissolveRecipeJsonBuilder.create(
-                        Ingredient.ofItems(Items.COPPER_INGOT),
-                        Ingredient.EMPTY,
-                        ModFluids.SULPHURIC_ACID_SOLUTION,
-                        250L,
-                        ModFluids.VOLCANIC_WATER,
-                        250L,
-                        Ingredient.fromTag(ModItemTagProvider.SOUL_BURNER),
-                        40,
-                        ModFluids.SULPHURIC_ACID,
-                        250L
-        ).criterion(hasChemistry(), conditionsFromChemistry())
-                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SULPHURIC_ACID)));
     }
 
     private void addSeparateRecipes(RecipeExporter recipeExporter) {
-        SeparateRecipeJsonBuilder.create(
-                ModFluids.METHAMPHETAMINE_ACID_SOLUTION,
-                40,
-                ModFluids.METHAMPHETAMINE_SOLUTION,
-                ModFluids.RED_PHOSPHORUS,
-                50L
-        ).criterion(hasChemistry(), conditionsFromChemistry())
-                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.METHAMPHETAMINE_SOLUTION)));
     }
 
     private void addPhotoelectricRecipes(RecipeExporter recipeExporter) {
@@ -153,7 +101,24 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     }
 
     private void addAshRecipes(RecipeExporter recipeExporter) {
+        AshRecipeJsonBuilder.create(
+                Ingredient.ofItems(Items.DRIED_KELP),
+                100,
+                ModItems.KELP_ASH
+        ).criterion(hasChemistry(), conditionsFromChemistry())
+                .criterion(hasItem(Items.DRIED_KELP), conditionsFromItem(Items.DRIED_KELP))
+                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.KELP_ASH)));
+    }
 
+    private void addFermentRecipes(RecipeExporter recipeExporter) {
+        FermentRecipeJsonBuilder.create(
+                Fluids.WATER,
+                Ingredient.fromTag(ModItemTagProvider.FERMENTER),
+                240,
+                ModFluids.ETHANOL,
+                50L
+        ).criterion(hasChemistry(), conditionsFromChemistry())
+                .offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.ETHANOL)));;
     }
 
     public static String getRecipeName(Fluid fluid) {

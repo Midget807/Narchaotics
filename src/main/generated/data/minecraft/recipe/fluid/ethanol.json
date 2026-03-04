@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:ferment",
+  "catalyst": {
+    "tag": "narchaotics:fermenter"
+  },
+  "ferment_time": 240,
+  "input": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "output": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ethanol"
+    }
+  }
+}

@@ -1,14 +1,14 @@
 package net.midget807.narchaotics.recipe;
 
-import net.midget807.narchaotics.block.entity.PhotoelectricExtractorBlockEntity;
+import net.midget807.narchaotics.block.entity.DistillationWorkbenchBlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.input.RecipeInput;
 
-public record PhotoelectricExtractorRecipeInput(FluidStack input, ItemStack catalyst) implements RecipeInput {
+public record AshRecipeInput(ItemStack input) implements RecipeInput {
     @Override
     public ItemStack getStackInSlot(int slot) {
         return switch (slot) {
-            case PhotoelectricExtractorBlockEntity.FUEL_INPUT_INDEX -> this.catalyst;
+            case 4 -> this.input;
             default -> throw new IllegalArgumentException("No item for index " + slot);
         };
     }
@@ -20,6 +20,6 @@ public record PhotoelectricExtractorRecipeInput(FluidStack input, ItemStack cata
 
     @Override
     public boolean isEmpty() {
-        return this.input.isEmpty() && this.catalyst.isEmpty();
+        return input.isEmpty();
     }
 }

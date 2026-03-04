@@ -21,6 +21,9 @@ import net.minecraft.util.Identifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.conditionsFromChemistry;
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.hasChemistry;
+
 public class FilterRecipeJsonBuilder {
     private final FluidStack input;
     private final int cookingTime;
@@ -43,7 +46,7 @@ public class FilterRecipeJsonBuilder {
                 cookingTime,
                 new FluidStack(FluidVariant.of(filtrate), fluidAmount),
                 residue
-        );
+        ).criterion(hasChemistry(), conditionsFromChemistry());
     }
 
     public FilterRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {

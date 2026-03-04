@@ -1,0 +1,11 @@
+{
+  "type": "narchaotics:ash",
+  "ash_time": 100,
+  "input": {
+    "item": "minecraft:dried_kelp"
+  },
+  "output": {
+    "count": 1,
+    "id": "narchaotics:kelp_ash"
+  }
+}

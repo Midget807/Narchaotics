@@ -22,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
     public static final TagKey<Item> UNLOCK_NARCHAOTICS_RECIPES = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("unlock_narchaotics_recipes"));
     public static final TagKey<Item> SOUL_BURNER = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("soul_burner"));
+    public static final TagKey<Item> FERMENTER = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("fermenter"));
     public static final TagKey<Item> PHOTOELECTRIC_CATALYSTS = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("photoelectric_catalysts"));
     public static final TagKey<Item> METH_REDUCER = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("meth_reducer"));
     public static final TagKey<Item> DISTILLATION_OUTPUT = TagKey.of(RegistryKeys.ITEM, NarchaoticsMain.id("distillation_output"));
@@ -63,6 +64,14 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .add(
                         Items.SOUL_SAND,
                         Items.SOUL_SOIL
+                );
+        this.getOrCreateTagBuilder(FERMENTER)
+                .add(
+                        Items.BROWN_MUSHROOM,
+                        Items.RED_MUSHROOM,
+                        Blocks.BROWN_MUSHROOM_BLOCK.asItem(),
+                        Blocks.RED_MUSHROOM_BLOCK.asItem(),
+                        Blocks.MUSHROOM_STEM.asItem()
                 );
         this.getOrCreateTagBuilder(PHOTOELECTRIC_CATALYSTS)
                 .add(

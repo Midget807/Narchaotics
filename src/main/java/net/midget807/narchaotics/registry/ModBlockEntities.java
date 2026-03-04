@@ -15,7 +15,8 @@ public class ModBlockEntities {
     public static final BlockEntityType<EvaporateWorkbenchBlockEntity> EVAPORATE_WORKBENCH = register("evaporate_workbench", EvaporateWorkbenchBlockEntity::new, ModBlocks.EVAPORATE_WORKBENCH);
     public static final BlockEntityType<DissolveWorkbenchBlockEntity> DISSOLVE_WORKBENCH = register("dissolve_workbench", DissolveWorkbenchBlockEntity::new, ModBlocks.DISSOLVE_WORKBENCH);
     public static final BlockEntityType<SeparateWorkbenchBlockEntity> SEPARATE_WORKBENCH = register("separate_workbench", SeparateWorkbenchBlockEntity::new, ModBlocks.SEPARATE_WORKBENCH);
-    public static final BlockEntityType<PhotoelectricExtractorWorkbenchBlockEntity> PHOTOELECTRIC_EXTRACTOR = register("photoelectric_extractor", PhotoelectricExtractorWorkbenchBlockEntity::new, ModBlocks.PHOTOELECTRIC_EXTRACTOR);
+    public static final BlockEntityType<PhotoelectricExtractorBlockEntity> PHOTOELECTRIC_EXTRACTOR = register("photoelectric_extractor", PhotoelectricExtractorBlockEntity::new, ModBlocks.PHOTOELECTRIC_EXTRACTOR);
+    public static final BlockEntityType<FluidTankBlockEntity> FLUID_TANK = register("fluid_tank", FluidTankBlockEntity::new, ModBlocks.TANK);
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntityFactory<? extends T> entityFactory, Block... blocks) {
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, NarchaoticsMain.id(name), BlockEntityType.Builder.<T>create(entityFactory, blocks).build());

@@ -1,0 +1,16 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:volcanic_water"
+    }
+  },
+  "product1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:concentrated_volcanic_water"
+    }
+  }
+}

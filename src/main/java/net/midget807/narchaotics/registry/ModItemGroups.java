@@ -20,6 +20,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.DISSOLVE_WORKBENCH.asItem());
                         entries.add(ModBlocks.SEPARATE_WORKBENCH.asItem());
                         entries.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR.asItem());
+                        entries.add(ModBlocks.TANK.asItem());
                         entries.add(ModItems.EPHEDRA_SEEDS);
                         entries.add(ModItems.CONICAL_FLASK);
                         entries.add(ModItems.ROUND_FLASK);

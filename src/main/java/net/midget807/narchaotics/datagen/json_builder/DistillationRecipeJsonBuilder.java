@@ -20,6 +20,9 @@ import net.minecraft.util.Identifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.conditionsFromChemistry;
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.hasChemistry;
+
 public class DistillationRecipeJsonBuilder {
     private final Ingredient input1;
     private final Ingredient input2;
@@ -178,7 +181,35 @@ public class DistillationRecipeJsonBuilder {
                 Items.AIR,
                 new FluidStack(FluidVariant.of(fluidOutput1), fluidAmount),
                 FluidStack.EMPTY
-        );
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DistillationRecipeJsonBuilder createConcentrating(Fluid fluidInput1, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long inputAmount, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                fuel,
+                cookingTime,
+                Items.AIR,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), inputAmount),
+                FluidStack.EMPTY
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DistillationRecipeJsonBuilder createConcentrating(Fluid fluidInput1, int cookingTime, Fluid fluidOutput1, long inputAmount, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                Ingredient.EMPTY,
+                cookingTime,
+                Items.AIR,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                FluidStack.EMPTY
+        ).criterion(hasChemistry(), conditionsFromChemistry());
     }
 
     public DistillationRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {

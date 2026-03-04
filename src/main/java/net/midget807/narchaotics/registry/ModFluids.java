@@ -52,7 +52,6 @@ public class ModFluids {
     public static final FlowableFluid DIRTY_SOLUTION = registerFluid("dirty_solution", new DirtySolutionFluid.Still());
     public static final FlowableFluid DIRTY_SOLUTION_FLOWING = registerFluid("dirty_solution_flowing", new DirtySolutionFluid.Flowing());
 
-
     public static final FlowableFluid ETHANOL = registerFluid("ethanol", new EthanolFluid.Still());
     public static final FlowableFluid ETHANOL_FLOWING = registerFluid("ethanol_flowing", new EthanolFluid.Flowing());
     public static final FlowableFluid SALT_WATER = registerFluid("salt_water", new SaltWaterFluid.Still());

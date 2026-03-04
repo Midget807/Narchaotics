@@ -1,6 +1,6 @@
 package net.midget807.narchaotics.screen;
 
-import net.midget807.narchaotics.block.entity.PhotoelectricExtractorBlockEntity;
+import net.midget807.narchaotics.block.entity.FluidTankBlockEntity;
 import net.midget807.narchaotics.datagen.ModItemTagProvider;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
 import net.minecraft.block.entity.BlockEntity;
@@ -14,36 +14,36 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
 
-import static net.midget807.narchaotics.block.entity.PhotoelectricExtractorBlockEntity.*;
+import static net.midget807.narchaotics.block.entity.FluidTankBlockEntity.*;
 import static net.midget807.narchaotics.util.ModScreenUtil.FluidInputSlot;
 import static net.midget807.narchaotics.util.ModScreenUtil.FluidOutputSlot;
 import static net.midget807.narchaotics.util.ModScreenUtil.OutputSlot;
 
-public class PhotoelectricExtractorScreenHandler extends ScreenHandler {
+public class FluidTankScreenHandler extends ScreenHandler {
     public Inventory inventory;
     public final PropertyDelegate propertyDelegate;
-    public final PhotoelectricExtractorBlockEntity blockEntity;
+    public final FluidTankBlockEntity blockEntity;
 
-    public PhotoelectricExtractorScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
+    public FluidTankScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
         this(syncId, playerInventory, playerInventory.player.getEntityWorld().getBlockEntity(pos), new ArrayPropertyDelegate(7));
     }
 
-    public PhotoelectricExtractorScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
-        super(ModScreenHandlers.PHOTOELECTRIC_EXTRACTOR, syncId);
+    public FluidTankScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
+        super(ModScreenHandlers.TANK, syncId);
         checkDataCount(propertyDelegate, 6);
         this.inventory = (Inventory) blockEntity;
-        this.blockEntity = (PhotoelectricExtractorBlockEntity) blockEntity;
+        this.blockEntity = (FluidTankBlockEntity) blockEntity;
         this.propertyDelegate = propertyDelegate;
 
-        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[0], 27, 53));
-        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[1], 169, 53));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[0], 13, 27));
+        this.addSlot(new FluidInputSlot(inventory, FLUID_INPUT_INDICES[1], 183, 53));
 
-        this.addSlot(new Slot(inventory, FUEL_INPUT_INDEX, 86, 100));
+        this.addSlot(new Slot(inventory, ITEM_INPUT_INDICES[0], 69, 64));
 
-        this.addSlot(new OutputSlot(inventory, ITEM_OUTPUT_INDICES[0], 119, 64));
+        this.addSlot(new OutputSlot(inventory, ITEM_OUTPUT_INDICES[0], 133, 64));
 
-        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 27, 75));
-        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 169, 75));
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[0], 13, 101));
+        this.addSlot(new FluidOutputSlot(inventory, FLUID_OUTPUT_INDICES[1], 183, 75));
 
         this.addPlayerInventory(playerInventory);
         this.addPlayerHotbar(playerInventory);
@@ -105,13 +105,5 @@ public class PhotoelectricExtractorScreenHandler extends ScreenHandler {
 
     public boolean isCooking() {
         return this.propertyDelegate.get(PROGRESS_TIME_DELEGATE_INDEX) > 0;
-    }
-
-    public boolean hasCatalyst() {
-        return this.blockEntity.getStack(FUEL_INPUT_INDEX).isIn(ModItemTagProvider.PHOTOELECTRIC_CATALYSTS);
-    }
-
-    public boolean hasSunlight() {
-        return this.propertyDelegate.get(HAS_SUNLIGHT_DELEGATE_INDEX) > 0;
     }
 }

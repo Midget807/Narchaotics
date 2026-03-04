@@ -331,6 +331,8 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             SingleVariantStorage<FluidVariant> inputSlotFluid2 = this.reactantFluidStorage2;
             FluidStack recipeProduct1 = recipe.value().product1;
             FluidStack recipeProduct2 = recipe.value().product2;
+            FluidStack recipeReactant1 = recipe.value().fluid1;
+            FluidStack recipeReactant2 = recipe.value().fluid2;
             SingleVariantStorage<FluidVariant> outputSlotFluid1 = this.productFluidStorage1;
             SingleVariantStorage<FluidVariant> outputSlotFluid2 = this.productFluidStorage2;
             if (!recipeProduct1.isEmpty()) {
@@ -341,7 +343,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                     outputSlotFluid1.amount += recipeProduct1.amount();
                 }
 
-                inputSlotFluid1.amount -= recipeProduct1.amount();
+                inputSlotFluid1.amount -= recipeReactant1.amount();
             }
 
             if (!recipeProduct2.isEmpty()) {
@@ -352,7 +354,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                     outputSlotFluid2.amount += recipeProduct2.amount();
                 }
 
-                inputSlotFluid2.amount -= recipeProduct2.amount();
+                inputSlotFluid2.amount -= recipeReactant2.amount();
             }
 
             if (!recipeFuel.isEmpty()) {

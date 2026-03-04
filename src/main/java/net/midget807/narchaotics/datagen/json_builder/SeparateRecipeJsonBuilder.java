@@ -34,12 +34,28 @@ public class SeparateRecipeJsonBuilder {
 
 
 
-    public static SeparateRecipeJsonBuilder create(Fluid input, int cookingTime, Fluid output, Fluid remainder, long fluidAmount) {
+    public static SeparateRecipeJsonBuilder create(Fluid input, long inputAmount, int cookingTime, Fluid output, long outputAmount, Fluid remainder, long remainderAmount) {
         return new SeparateRecipeJsonBuilder(
-                new FluidStack(FluidVariant.of(input), fluidAmount),
+                new FluidStack(FluidVariant.of(input), inputAmount),
                 cookingTime,
-                new FluidStack(FluidVariant.of(output), fluidAmount),
-                new FluidStack(FluidVariant.of(remainder), fluidAmount)
+                new FluidStack(FluidVariant.of(output), outputAmount),
+                new FluidStack(FluidVariant.of(remainder), remainderAmount)
+        );
+    }
+    public static SeparateRecipeJsonBuilder create(Fluid input, int cookingTime, Fluid output, long outputAmount, Fluid remainder, long remainderAmount) {
+        return new SeparateRecipeJsonBuilder(
+                new FluidStack(FluidVariant.of(input), outputAmount + remainderAmount),
+                cookingTime,
+                new FluidStack(FluidVariant.of(output), outputAmount),
+                new FluidStack(FluidVariant.of(remainder), remainderAmount)
+        );
+    }
+    public static SeparateRecipeJsonBuilder create(Fluid input, int cookingTime, Fluid output, long outputAmount, Fluid remainder) {
+        return new SeparateRecipeJsonBuilder(
+                new FluidStack(FluidVariant.of(input), outputAmount + outputAmount),
+                cookingTime,
+                new FluidStack(FluidVariant.of(output), outputAmount),
+                new FluidStack(FluidVariant.of(remainder), outputAmount)
         );
     }
 

@@ -10,6 +10,7 @@ import net.midget807.narchaotics.screen.DissolveWorkbenchScreen;
 import net.midget807.narchaotics.screen.DistillationWorkbenchScreen;
 import net.midget807.narchaotics.screen.EvaporateWorkbenchScreen;
 import net.midget807.narchaotics.screen.FilterWorkbenchScreen;
+import net.midget807.narchaotics.screen.FluidTankScreen;
 import net.midget807.narchaotics.screen.PhotoelectricExtractorWorkbenchScreen;
 import net.midget807.narchaotics.screen.SeparateScreenHandler;
 import net.midget807.narchaotics.screen.SeparateWorkbenchScreen;
@@ -81,6 +82,7 @@ public class NarchaoticsClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.DISSOLVE_WORKBENCH, DissolveWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.SEPARATE_WORKBENCH, SeparateWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.PHOTOELECTRIC_EXTRACTOR, PhotoelectricExtractorWorkbenchScreen::new);
+        HandledScreens.register(ModScreenHandlers.TANK, FluidTankScreen::new);
 
     }
 }

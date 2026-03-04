@@ -11,9 +11,19 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "has_dried_kelp": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:dried_kelp"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:sodium_carbonate"
+        "recipe": "minecraft:kelp_ash"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +31,13 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_chemistry"
+      "has_chemistry",
+      "has_dried_kelp"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:sodium_carbonate"
+      "minecraft:kelp_ash"
     ]
   }
 }

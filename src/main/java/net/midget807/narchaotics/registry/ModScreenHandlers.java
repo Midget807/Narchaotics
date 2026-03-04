@@ -37,9 +37,9 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("photoelectric_extractor"),
                     new ExtendedScreenHandlerType<>(PhotoelectricExtractorScreenHandler::new, BlockPos.PACKET_CODEC)
             );
-    public static final ScreenHandlerType<TankScreenHandler> TANK =
+    public static final ScreenHandlerType<FluidTankScreenHandler> TANK =
             Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("tank"),
-                    new ExtendedScreenHandlerType<>(TankScreenHandler::new, BlockPos.PACKET_CODEC)
+                    new ExtendedScreenHandlerType<>(FluidTankScreenHandler::new, BlockPos.PACKET_CODEC)
             );
 
     public static void registerModScreenHandlers() {

@@ -109,7 +109,7 @@ public class PhotoelectricExtractorRecipe implements Recipe<PhotoelectricExtract
         private static PhotoelectricExtractorRecipe read(RegistryByteBuf buf) {
             FluidStack input = FluidStack.PACKET_CODEC.decode(buf);
             Ingredient catalyst = Ingredient.PACKET_CODEC.decode(buf);
-            int extractTime = buf.readInt();
+            int extractTime = PacketCodecs.INTEGER.decode(buf);
 
             FluidStack output = FluidStack.EMPTY;
             if (buf.readBoolean()) output = FluidStack.PACKET_CODEC.decode(buf);

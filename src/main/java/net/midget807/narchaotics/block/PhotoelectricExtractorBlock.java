@@ -1,7 +1,7 @@
 package net.midget807.narchaotics.block;
 
 import com.mojang.serialization.MapCodec;
-import net.midget807.narchaotics.block.entity.PhotoelectricExtractorWorkbenchBlockEntity;
+import net.midget807.narchaotics.block.entity.PhotoelectricExtractorBlockEntity;
 import net.midget807.narchaotics.registry.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -48,7 +48,7 @@ public class PhotoelectricExtractorBlock extends BlockWithEntity implements Bloc
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new PhotoelectricExtractorWorkbenchBlockEntity(pos, state);
+        return new PhotoelectricExtractorBlockEntity(pos, state);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PhotoelectricExtractorBlock extends BlockWithEntity implements Bloc
     @Override
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            NamedScreenHandlerFactory namedScreenHandlerFactory = (PhotoelectricExtractorWorkbenchBlockEntity) world.getBlockEntity(pos);
+            NamedScreenHandlerFactory namedScreenHandlerFactory = (PhotoelectricExtractorBlockEntity) world.getBlockEntity(pos);
             if (namedScreenHandlerFactory != null) {
                 player.openHandledScreen(namedScreenHandlerFactory);
             }

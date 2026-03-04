@@ -1,8 +1,7 @@
 package net.midget807.narchaotics.datagen.json_builder;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.midget807.narchaotics.recipe.EvaporateRecipe;
-import net.midget807.narchaotics.recipe.FilterRecipe;
+import net.midget807.narchaotics.recipe.FermentRecipe;
 import net.midget807.narchaotics.recipe.FluidStack;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementCriterion;
@@ -11,45 +10,37 @@ import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static net.midget807.narchaotics.datagen.ModRecipeProvider.conditionsFromChemistry;
-import static net.midget807.narchaotics.datagen.ModRecipeProvider.hasChemistry;
-
-public class EvaporateRecipeJsonBuilder {
+public class FermentRecipeJsonBuilder {
     private final FluidStack input;
-    private final Ingredient fuelType;
-    private final int cookingTime;
-    private final Item output;
+    private final Ingredient catalyst;
+    private final int fermentTime;
+    private final FluidStack output;
     private final Map<String, AdvancementCriterion<?>> criteria = new LinkedHashMap();
 
-    public EvaporateRecipeJsonBuilder(FluidStack input, Ingredient fuelType, int cookingTime, ItemConvertible residue) {
+    public FermentRecipeJsonBuilder(FluidStack input, Ingredient catalyst, int fermentTime, FluidStack output) {
         this.input = input;
-        this.fuelType = fuelType;
-        this.cookingTime = cookingTime;
-        this.output = residue.asItem();
+        this.catalyst = catalyst;
+        this.fermentTime = fermentTime;
+        this.output = output;
     }
 
 
-
-    public static EvaporateRecipeJsonBuilder create(Fluid input, long fluidAmount, Ingredient fuel, int cookingTime, ItemConvertible output) {
-        return new EvaporateRecipeJsonBuilder(
+    public static FermentRecipeJsonBuilder create(Fluid input, Ingredient catalyst, int fermentTime, Fluid output, long fluidAmount) {
+        return new FermentRecipeJsonBuilder(
                 new FluidStack(FluidVariant.of(input), fluidAmount),
-                fuel,
-                cookingTime,
-                output
-        ).criterion(hasChemistry(), conditionsFromChemistry());
+                catalyst,
+                fermentTime,
+                new FluidStack(FluidVariant.of(output), fluidAmount)
+        );
     }
 
-    public EvaporateRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {
+    public FermentRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {
         this.criteria.put(string, advancementCriterion);
         return this;
     }
@@ -61,13 +52,13 @@ public class EvaporateRecipeJsonBuilder {
                 .rewards(AdvancementRewards.Builder.recipe(recipeId))
                 .criteriaMerger(AdvancementRequirements.CriterionMerger.OR);
         this.criteria.forEach(builder::criterion);
-        EvaporateRecipe evaporateRecipe = new EvaporateRecipe(
+        FermentRecipe fermentRecipe = new FermentRecipe(
                 this.input,
-                this.fuelType,
-                this.cookingTime,
-                this.output == Items.AIR ? ItemStack.EMPTY : new ItemStack(this.output)
+                this.catalyst,
+                this.fermentTime,
+                this.output
         );
-        exporter.accept(recipeId, evaporateRecipe, builder.build(recipeId.withPrefixedPath("recipes/")));
+        exporter.accept(recipeId, fermentRecipe, builder.build(recipeId.withPrefixedPath("recipes/")));
     }
 
     private void validate(Identifier recipeId) {

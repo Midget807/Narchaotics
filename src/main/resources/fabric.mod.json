@@ -21,6 +21,9 @@
         ],
 		"fabric-datagen": [
 			"net.midget807.narchaotics.NarchaoticsDataGenerator"
+		],
+		"emi" : [
+			"net.midget807.narchaotics.registry.ModEmiPlugin"
 		]
 	},
 	"mixins": [

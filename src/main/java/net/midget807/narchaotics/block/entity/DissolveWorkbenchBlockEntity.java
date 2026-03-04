@@ -298,6 +298,8 @@ public class DissolveWorkbenchBlockEntity extends BlockEntity implements Extende
             SingleVariantStorage<FluidVariant> inputSlotFluid1 = this.reactantFluidStorage1;
             SingleVariantStorage<FluidVariant> inputSlotFluid2 = this.reactantFluidStorage2;
             FluidStack recipeProduct = recipe.value().product;
+            FluidStack recipeInput1 = recipe.value().fluid1;
+            FluidStack recipeInput2 = recipe.value().fluid2;
             SingleVariantStorage<FluidVariant> outputSlotFluid = this.productFluidStorage1;
             if (!recipeProduct.isEmpty()) {
                 if (outputSlotFluid.isResourceBlank()) {
@@ -307,8 +309,8 @@ public class DissolveWorkbenchBlockEntity extends BlockEntity implements Extende
                     outputSlotFluid.amount += recipeProduct.amount();
                 }
 
-                inputSlotFluid1.amount -= (long) (recipeProduct.amount() / 2);
-                inputSlotFluid2.amount -= (long) (recipeProduct.amount() / 2);
+                inputSlotFluid1.amount -= (long) (recipeInput1.amount());
+                inputSlotFluid2.amount -= (long) (recipeInput2.amount());
                 if (!inputSlotItem1.isEmpty()) {
                     inputSlotItem1.decrement(1);
                 }
