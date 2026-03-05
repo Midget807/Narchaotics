@@ -7,7 +7,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.midget807.narchaotics.recipe.DistillationRecipe;
+import net.midget807.narchaotics.recipe.DissolveRecipe;
 import net.midget807.narchaotics.registry.ModEmiPlugin;
 import net.midget807.narchaotics.util.ModEmiUtils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -17,13 +17,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class DistillationEmiRecipe implements EmiRecipe {
+public class DissolveEmiRecipe implements EmiRecipe {
     private final Identifier id;
     private final List<EmiIngredient> inputs;
     private final List<EmiStack> outputs;
-    private final DistillationRecipe recipe;
+    private final DissolveRecipe recipe;
 
-    public DistillationEmiRecipe(RecipeEntry<DistillationRecipe> recipe) {
+    public DissolveEmiRecipe(RecipeEntry<DissolveRecipe> recipe) {
         this.id = recipe.id();
         this.inputs = List.of(
                 EmiIngredient.of(recipe.value().item1),
@@ -33,17 +33,14 @@ public class DistillationEmiRecipe implements EmiRecipe {
                 EmiIngredient.of(recipe.value().fuelType)
         );
         this.outputs = List.of(
-                EmiStack.of(recipe.value().result1),
-                EmiStack.of(recipe.value().result2),
-                FabricEmiStack.of(recipe.value().product1.variant(), recipe.value().product1.amount() * 81),
-                FabricEmiStack.of(recipe.value().product2.variant(), recipe.value().product2.amount() * 81)
+                FabricEmiStack.of(recipe.value().product.variant(), recipe.value().product.amount() * 81)
         );
         this.recipe = recipe.value();
     }
 
     @Override
     public EmiRecipeCategory getCategory() {
-        return ModEmiPlugin.DISTILLATION_CATEGORY;
+        return ModEmiPlugin.DISSOLVE_CATEGORY;
     }
 
     @Override
@@ -63,7 +60,7 @@ public class DistillationEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayWidth() {
-        return 119;
+        return 97;
     }
 
     @Override
@@ -73,8 +70,8 @@ public class DistillationEmiRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        widgets.addFillingArrow(47, 17, 50 * recipe.getCookingTime()).tooltip((mx, my) -> {
-            return List.of(TooltipComponent.of(ModEmiUtils.ordered(ModEmiUtils.translatable("emi.cooking.time", recipe.getCookingTime() / 20f))));
+        widgets.addFillingArrow(47, 17, 50 * recipe.getDissolveTime()).tooltip((mx, my) -> {
+            return List.of(TooltipComponent.of(ModEmiUtils.ordered(ModEmiUtils.translatable("emi.cooking.time", recipe.getDissolveTime() / 20f))));
         });
         widgets.addTexture(EmiTexture.FULL_FLAME, 52, 35);
 
@@ -84,9 +81,6 @@ public class DistillationEmiRecipe implements EmiRecipe {
         widgets.addTank(inputs.get(3), 1, 31, 18, 18, 250 * 81);
         widgets.addSlot(inputs.get(4), 50, 51);
 
-        widgets.addSlot(outputs.get(0), 78, 1).recipeContext(this);
-        widgets.addSlot(outputs.get(1), 78, 31).recipeContext(this);
-        widgets.addTank(outputs.get(2), 100, 1, 18, 18, 250 * 81).recipeContext(this);
-        widgets.addTank(outputs.get(3), 100, 31, 18, 18, 250 * 81).recipeContext(this);
+        widgets.addTank(outputs.getFirst(), 78, 17, 18, 18, 250 * 81).recipeContext(this);
     }
 }

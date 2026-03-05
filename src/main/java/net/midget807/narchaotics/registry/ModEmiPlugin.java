@@ -7,9 +7,11 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiStack;
 import net.midget807.narchaotics.NarchaoticsMain;
+import net.midget807.narchaotics.emi.DissolveEmiRecipe;
 import net.midget807.narchaotics.emi.DistillationEmiRecipe;
 import net.midget807.narchaotics.emi.EvaporateEmiRecipe;
 import net.midget807.narchaotics.emi.FilterEmiRecipe;
+import net.midget807.narchaotics.emi.SeparateEmiRecipe;
 import net.midget807.narchaotics.recipe.AshRecipe;
 import net.midget807.narchaotics.recipe.DissolveRecipe;
 import net.midget807.narchaotics.recipe.DistillationRecipe;
@@ -81,13 +83,13 @@ public class ModEmiPlugin implements EmiPlugin {
         }
         for (RecipeEntry<EvaporateRecipe> recipe : manager.listAllOfType(ModRecipes.EVAPORATE_TYPE)) {
             registry.addRecipe(new EvaporateEmiRecipe(recipe));
-        }/*
+        }
         for (RecipeEntry<DissolveRecipe> recipe : manager.listAllOfType(ModRecipes.DISSOLVE_TYPE)) {
             registry.addRecipe(new DissolveEmiRecipe(recipe));
         }
         for (RecipeEntry<SeparateRecipe> recipe : manager.listAllOfType(ModRecipes.SEPARATE_TYPE)) {
             registry.addRecipe(new SeparateEmiRecipe(recipe));
-        }
+        }/*
         for (RecipeEntry<PhotoelectricExtractorRecipe> recipe : manager.listAllOfType(ModRecipes.PHOTOELECTRIC_TYPE)) {
             registry.addRecipe(new PhotoelectricEmiRecipe(recipe));
         }
