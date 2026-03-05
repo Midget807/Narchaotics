@@ -231,11 +231,10 @@ public class ChemistryWorkbenchBlockEntity extends BlockEntity implements Extend
     }
 
     private static void transferItemFluidToTank() {
-        //todo
     }
 
     private static boolean hasFluidSourceItemInInputSlot() {
-        return false;//todo
+        return false;
     }
 
     @Override
