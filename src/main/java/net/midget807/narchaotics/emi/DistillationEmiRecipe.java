@@ -70,7 +70,7 @@ public class DistillationEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 84;
+        return 88;
     }
 
     @Override
@@ -78,12 +78,13 @@ public class DistillationEmiRecipe implements EmiRecipe {
         widgets.addFillingArrow(58, 36, 50 * recipe.getCookingTime()).tooltip((mx, my) -> {
             return List.of(TooltipComponent.of(ModEmiUtils.ordered(ModEmiUtils.translatable("emi.cooking.time", recipe.getCookingTime() / 20f))));
         });
+        widgets.addTexture(EmiTexture.FULL_FLAME, 64, 54);
 
         widgets.addSlot(inputs.get(0), 34, 20);
         widgets.addSlot(inputs.get(1), 34, 50);
         widgets.addTank(inputs.get(2), 1, 1, 18, 18, 250 * 81);
         widgets.addTank(inputs.get(3), 1, 60, 18, 18, 250 * 81);
-        widgets.addSlot(inputs.get(4), 62, 60);
+        widgets.addSlot(inputs.get(4), 62, 69);
 
         widgets.addSlot(outputs.get(0), 90, 20).recipeContext(this);
         widgets.addSlot(outputs.get(1), 90, 50).recipeContext(this);

@@ -8,7 +8,15 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiStack;
 import net.midget807.narchaotics.NarchaoticsMain;
 import net.midget807.narchaotics.emi.DistillationEmiRecipe;
+import net.midget807.narchaotics.emi.FilterEmiRecipe;
+import net.midget807.narchaotics.recipe.AshRecipe;
+import net.midget807.narchaotics.recipe.DissolveRecipe;
 import net.midget807.narchaotics.recipe.DistillationRecipe;
+import net.midget807.narchaotics.recipe.EvaporateRecipe;
+import net.midget807.narchaotics.recipe.FermentRecipe;
+import net.midget807.narchaotics.recipe.FilterRecipe;
+import net.midget807.narchaotics.recipe.PhotoelectricExtractorRecipe;
+import net.midget807.narchaotics.recipe.SeparateRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.util.Identifier;
@@ -67,5 +75,26 @@ public class ModEmiPlugin implements EmiPlugin {
         for (RecipeEntry<DistillationRecipe> recipe : manager.listAllOfType(ModRecipes.DISTILLATION_TYPE)) {
             registry.addRecipe(new DistillationEmiRecipe(recipe));
         }
+        for (RecipeEntry<FilterRecipe> recipe : manager.listAllOfType(ModRecipes.FILTER_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }/*
+        for (RecipeEntry<EvaporateRecipe> recipe : manager.listAllOfType(ModRecipes.EVAPORATE_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }
+        for (RecipeEntry<DissolveRecipe> recipe : manager.listAllOfType(ModRecipes.DISSOLVE_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }
+        for (RecipeEntry<SeparateRecipe> recipe : manager.listAllOfType(ModRecipes.SEPARATE_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }
+        for (RecipeEntry<PhotoelectricExtractorRecipe> recipe : manager.listAllOfType(ModRecipes.PHOTOELECTRIC_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }
+        for (RecipeEntry<AshRecipe> recipe : manager.listAllOfType(ModRecipes.ASH_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }
+        for (RecipeEntry<FermentRecipe> recipe : manager.listAllOfType(ModRecipes.FERMENT_TYPE)) {
+            registry.addRecipe(new FilterEmiRecipe(recipe));
+        }*/
     }
 }

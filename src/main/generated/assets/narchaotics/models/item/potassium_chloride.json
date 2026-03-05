@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "narchaotics:item/mixed_salts"
+    "layer0": "narchaotics:item/potassium_chloride"
   }
 }

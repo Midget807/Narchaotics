@@ -54,6 +54,23 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.CLAMP, Models.GENERATED);
         itemModelGenerator.register(ModItems.STAND_AND_CLAMP, Models.GENERATED);
         itemModelGenerator.register(ModItems.CONDENSER, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SEPARATORY_FUNNEL, Models.GENERATED);
+        itemModelGenerator.register(ModItems.MORTAR_AND_PESTLE, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.RESIDUE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.NETHERRACK_RESIDUE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.RED_PHOSPHORUS, Models.GENERATED);
+        itemModelGenerator.register(ModItems.IODINE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.MIXED_SALTS, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SODIUM_CARBONATE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.POTASSIUM_CHLORIDE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.RICH_SOIL_CLUMP, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SOIL_CLUMP, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SCHEELITE_PEBBLE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SCHEELITE_CLUMP, Models.GENERATED);
+        itemModelGenerator.register(ModItems.TUNGSTEN_OXIDE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.FERTILISER, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRYSTAL_METHAMPHETAMINE, Models.GENERATED);
 
         itemModelGenerator.register(ModItems.EPHEDRA, Models.GENERATED);
         itemModelGenerator.register(ModItems.DRIED_EPHEDRA, Models.GENERATED);
@@ -67,7 +84,6 @@ public class ModModelProvider extends FabricModelProvider {
         uploadPowderTexturedDust(ModItems.EPHEDRA_DUST, itemModelGenerator);
 
         uploadCrystalTexturedDust(ModItems.IODINE_DUST, itemModelGenerator);
-        uploadCrystalTexturedDust(ModItems.MIXED_SALTS, itemModelGenerator);
         uploadCrystalTexturedDust(ModItems.POTASSIUM_CHLORIDE_DUST, itemModelGenerator);
         uploadCrystalTexturedDust(ModItems.SULPHURIC_ACID, itemModelGenerator);
         itemModelGenerator.register(ModItems.CALCITE_DUST, Models.GENERATED);

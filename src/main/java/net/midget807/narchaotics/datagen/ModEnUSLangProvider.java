@@ -17,7 +17,30 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+        translationBuilder.add("#narchaotics:unlock_narchaotics_recipes", "Unlocks Narchaotics Recipes");
+        translationBuilder.add("#narchaotics:soul_burner", "Soul Burner Fuels");
+        translationBuilder.add("#narchaotics:fermenter", "Fermentation Providers");
+        translationBuilder.add("#narchaotics:photoelectric_catalysts", "Photoelectric Catalysts");
+        translationBuilder.add("#narchaotics:meth_reducer", "Meth High Effect Reducers");
+        translationBuilder.add("#narchaotics:fluid_input_items", "Fluid Insertable Items");
+        translationBuilder.add("#narchaotics:fluid_buckets", "Narchaotics Buckets");
+        translationBuilder.add("#narchaotics:fluid_bottles", "Narchaotics Bottles");
+        translationBuilder.add("#narchaotics:fluid_remove_items", "Fluid Removable Items");
+        translationBuilder.add("#narchaotics:conical_flask_fluids", "Fluid Conical Flasks");
+        translationBuilder.add("#narchaotics:round_flask_fluids", "Fluid Round Flasks");
+        translationBuilder.add("#narchaotics:beaker_fluids", "Fluid Beakers");
+        translationBuilder.add("#narchaotics:test_tube_fluids", "Fluid Test Tubes");
+        translationBuilder.add("#narchaotics:ammonia_soil", "Ammonia Rich Soils");
+
         translationBuilder.add("emi.cooking.time", "%s Seconds");
+        translationBuilder.add("emi.category.narchaotics.distillation", "Distilling");
+        translationBuilder.add("emi.category.narchaotics.filter", "Filtering");
+        translationBuilder.add("emi.category.narchaotics.evaporate", "Evaporating");
+        translationBuilder.add("emi.category.narchaotics.dissolve", "Dissolving & Mixing");
+        translationBuilder.add("emi.category.narchaotics.separate", "Separating");
+        translationBuilder.add("emi.category.narchaotics.photoelectric", "Photoelectric Extracting");
+        translationBuilder.add("emi.category.narchaotics.ash", "Ashing");
+        translationBuilder.add("emi.category.narchaotics.ferment", "Fermenting");
 
         translationBuilder.add("container.narchaotics.distillation_workbench", "Distilling");
         translationBuilder.add("container.narchaotics.filter_workbench", "Filtering");
@@ -28,7 +51,6 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add("container.narchaotics.fluid_tank.store", "Fluid Tank");
         translationBuilder.add("container.narchaotics.fluid_tank.fermenting", "Fermenting");
         translationBuilder.add("container.narchaotics.fluid_tank.ashing", "Ashing");
-
 
 
         translationBuilder.add("itemGroup.narchaotics.main", "Narchaotics");
