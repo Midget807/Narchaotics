@@ -40,6 +40,7 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add(ModBlocks.DISSOLVE_WORKBENCH, "Dissolving And Mixing Workbench");
         translationBuilder.add(ModBlocks.SEPARATE_WORKBENCH, "Separating Workbench");
         translationBuilder.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR, "Photoelectric Extractor");
+        translationBuilder.add(ModBlocks.TANK, "Fluid Tank");
 
         ModItems.BUCKETS.forEach((item, identifier) -> {
             translationBuilder.add(item, ModUtil.fluidItemDisplayName(identifier) + " Bucket");
@@ -71,6 +72,10 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
             }
         });
 
+        ModItems.DUSTS.forEach((item, identifier) -> {
+            translationBuilder.add(item, ModUtil.dustItemDisplayName(identifier) + " Dust");
+        });
+
 
         translationBuilder.add(ModItems.BURNER, "Burner");
         translationBuilder.add(ModItems.BEAKER, "Beaker");
@@ -85,10 +90,28 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add(ModItems.STAND_AND_CLAMP, "Stand And Clamp");
         translationBuilder.add(ModItems.CONDENSER, "Condenser");
         translationBuilder.add(ModItems.SEPARATORY_FUNNEL, "Separatory Funnel");
+        translationBuilder.add(ModItems.MORTAR_AND_PESTLE, "Mortar And Pestle");
 
+        translationBuilder.add(ModItems.RESIDUE, "Residue");
+        translationBuilder.add(ModItems.NETHERRACK_RESIDUE, "Netherrack Residue");
+        translationBuilder.add(ModItems.RED_PHOSPHORUS, "Red Phosphorus");
+        translationBuilder.add(ModItems.KELP_ASH, "Kelp Ash");
+        translationBuilder.add(ModItems.IODINE, "Iodine");
+        translationBuilder.add(ModItems.MIXED_SALTS, "Mixed Salts");
+        translationBuilder.add(ModItems.SODIUM_CARBONATE, "Sodium Carbonate");
+        translationBuilder.add(ModItems.POTASSIUM_CHLORIDE, "Potassium Chloride");
+        translationBuilder.add(ModItems.RICH_SOIL_CLUMP, "Rich Soil Clump");
+        translationBuilder.add(ModItems.SOIL_CLUMP, "Soil Clump");
+        translationBuilder.add(ModItems.SULPHURIC_ACID, "Sulphuric Acid");
+        translationBuilder.add(ModItems.SCHEELITE_PEBBLE, "Scheelite Pebble");
+        translationBuilder.add(ModItems.SCHEELITE_CLUMP, "Scheelite Clump");
+        translationBuilder.add(ModItems.TUNGSTEN_OXIDE, "Tungsten Oxide");
+        translationBuilder.add(ModItems.FERTILISER, "Fertiliser");
         translationBuilder.add(ModItems.EPHEDRA_SEEDS, "Ephedra Seeds");
         translationBuilder.add(ModItems.EPHEDRA, "Ephedra");
         translationBuilder.add(ModItems.DRIED_EPHEDRA, "Dried Ephedra");
+        translationBuilder.add(ModItems.CRYSTAL_METHAMPHETAMINE, "Crystal Methamphetamine");
+        translationBuilder.add(ModItems.METHAMPHETAMINE, "Methamphetamine");
 
     }
 }

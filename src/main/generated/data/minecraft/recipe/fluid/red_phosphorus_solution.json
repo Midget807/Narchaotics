@@ -1,0 +1,20 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:netherrack_solution"
+    }
+  },
+  "product1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:red_phosphorus_solution"
+    }
+  },
+  "result1": {
+    "count": 1,
+    "id": "narchaotics:nether_residue"
+  }
+}

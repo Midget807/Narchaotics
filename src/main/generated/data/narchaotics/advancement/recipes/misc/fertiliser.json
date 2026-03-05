@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rich_soils": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#narchaotics:ammonia_soil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_test_tube/ammonia": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:test_tube/ammonia"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:fertiliser"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_test_tube/ammonia",
+      "has_rich_soils"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:fertiliser"
+    ]
+  }
+}

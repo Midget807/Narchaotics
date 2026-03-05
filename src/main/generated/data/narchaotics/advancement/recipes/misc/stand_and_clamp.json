@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chemistry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#narchaotics:unlock_narchaotics_recipes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_clamp": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:clamp"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_stand": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:stand"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:stand_and_clamp"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chemistry",
+      "has_clamp",
+      "has_stand"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:stand_and_clamp"
+    ]
+  }
+}

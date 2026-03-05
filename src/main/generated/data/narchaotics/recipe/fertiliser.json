@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "narchaotics:ammonia_soil"
+    },
+    {
+      "item": "narchaotics:test_tube/ammonia"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:fertiliser"
+  }
+}

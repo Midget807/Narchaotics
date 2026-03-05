@@ -6,6 +6,6 @@ import net.minecraft.item.Item;
 
 public class RoundFlaskItem extends AbstractRoundFlaskItem {
     public RoundFlaskItem(Fluid fluid, Settings settings) {
-        super(fluid, ModItems.ROUND_FLASK, settings);
+        super(fluid, ModItems.ROUND_FLASK, settings.recipeRemainder(ModItems.ROUND_FLASK));
     }
 }

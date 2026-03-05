@@ -10,6 +10,7 @@ import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -64,125 +65,6 @@ public class DistillationRecipeJsonBuilder {
         );
     }
 
-    public static DistillationRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, Ingredient fuel, int cookingTime, ItemConvertible output1, ItemConvertible output2, Fluid fluidOutput1, Fluid fluidOutput2, long fluidOutputAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input1,
-                input2,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidInput2Amount),
-                fuel,
-                cookingTime,
-                output1,
-                output2,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutputAmount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidOutputAmount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, Fluid fluidInput2, long fluidInputAmount, Ingredient fuel, int cookingTime, ItemConvertible output1, ItemConvertible output2, Fluid fluidOutput1, long fluidOutput1Amount, Fluid fluidOutput2, long fluidOutput2Amount) {
-        return new DistillationRecipeJsonBuilder(
-                input1,
-                input2,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidInputAmount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidInputAmount),
-                fuel,
-                cookingTime,
-                output1,
-                output2,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidOutput2Amount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, Fluid fluidInput2, long fluidInputAmount, Ingredient fuel, int cookingTime, ItemConvertible output1, ItemConvertible output2, Fluid fluidOutput1, Fluid fluidOutput2, long fluidOutputAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input1,
-                input2,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidInputAmount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidInputAmount),
-                fuel,
-                cookingTime,
-                output1,
-                output2,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutputAmount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidOutputAmount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, Fluid fluidInput2, Ingredient fuel, int cookingTime, ItemConvertible output1, ItemConvertible output2, Fluid fluidOutput1, Fluid fluidOutput2, long fluidAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input1,
-                input2,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidAmount),
-                fuel,
-                cookingTime,
-                output1,
-                output2,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidAmount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input1, Ingredient input2, Fluid fluidInput1, Fluid fluidInput2, Ingredient fuel, int cookingTime, ItemConvertible output, Fluid fluidOutput1, Fluid fluidOutput2, long fluidAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input1,
-                input2,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidAmount),
-                fuel,
-                cookingTime,
-                output,
-                Items.AIR,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidAmount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input, Fluid fluidInput1, Fluid fluidInput2, Ingredient fuel, int cookingTime, ItemConvertible output1, ItemConvertible output2, Fluid fluidOutput1, Fluid fluidOutput2, long fluidAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input,
-                Ingredient.EMPTY,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidAmount),
-                fuel,
-                cookingTime,
-                output1,
-                output2,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidAmount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input, Fluid fluidInput1, Fluid fluidInput2, Ingredient fuel, int cookingTime, ItemConvertible output, Fluid fluidOutput1, Fluid fluidOutput2, long fluidAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input,
-                Ingredient.EMPTY,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidInput2), fluidAmount),
-                fuel,
-                cookingTime,
-                output,
-                Items.AIR,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidAmount),
-                new FluidStack(FluidVariant.of(fluidOutput2), fluidAmount)
-        );
-    }
-
-    public static DistillationRecipeJsonBuilder create(Ingredient input, Fluid fluidInput1, Ingredient fuel, int cookingTime, ItemConvertible output, Fluid fluidOutput1, long fluidAmount) {
-        return new DistillationRecipeJsonBuilder(
-                input,
-                Ingredient.EMPTY,
-                new FluidStack(FluidVariant.of(fluidInput1), fluidAmount),
-                FluidStack.EMPTY,
-                fuel,
-                cookingTime,
-                output,
-                Items.AIR,
-                new FluidStack(FluidVariant.of(fluidOutput1), fluidAmount),
-                FluidStack.EMPTY
-        ).criterion(hasChemistry(), conditionsFromChemistry());
-    }
     public static DistillationRecipeJsonBuilder createConcentrating(Fluid fluidInput1, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long inputAmount, long outputAmount) {
         return new DistillationRecipeJsonBuilder(
                 Ingredient.EMPTY,
@@ -193,8 +75,8 @@ public class DistillationRecipeJsonBuilder {
                 cookingTime,
                 Items.AIR,
                 Items.AIR,
-                new FluidStack(FluidVariant.of(fluidOutput1), inputAmount),
-                FluidStack.EMPTY
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                new FluidStack(FluidVariant.of(Fluids.WATER), inputAmount - outputAmount)
         ).criterion(hasChemistry(), conditionsFromChemistry());
     }
     public static DistillationRecipeJsonBuilder createConcentrating(Fluid fluidInput1, int cookingTime, Fluid fluidOutput1, long inputAmount, long outputAmount) {
@@ -206,6 +88,78 @@ public class DistillationRecipeJsonBuilder {
                 Ingredient.EMPTY,
                 cookingTime,
                 Items.AIR,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                new FluidStack(FluidVariant.of(Fluids.WATER), inputAmount - outputAmount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DistillationRecipeJsonBuilder createConcentrating(Fluid fluidInput1, int cookingTime, Fluid fluidOutput1, Fluid solvent, long inputAmount, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                Ingredient.EMPTY,
+                cookingTime,
+                Items.AIR,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                new FluidStack(FluidVariant.of(solvent), inputAmount - outputAmount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+
+    public static DistillationRecipeJsonBuilder createOneFluid2OneItemOneFluid(Fluid fluidInput1, long inputAmount, Ingredient fuel, int cookingTime, ItemConvertible itemOutput, Fluid fluidOutput1, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                fuel,
+                cookingTime,
+                itemOutput,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                FluidStack.EMPTY
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DistillationRecipeJsonBuilder createOneFluid2OneItemOneFluid(Fluid fluidInput1, long inputAmount, int cookingTime, ItemConvertible itemOutput, Fluid fluidOutput1, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                Ingredient.EMPTY,
+                cookingTime,
+                itemOutput,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                FluidStack.EMPTY
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+
+    public static DistillationRecipeJsonBuilder createOneItemOneFluid2OneItemOneFluid(Ingredient input1, Fluid fluidInput1, long inputAmount, Ingredient fuel, int cookingTime, ItemConvertible itemOutput, Fluid fluidOutput1, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                input1,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                fuel,
+                cookingTime,
+                itemOutput,
+                Items.AIR,
+                new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
+                FluidStack.EMPTY
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DistillationRecipeJsonBuilder createOneItemOneFluid2OneItemOneFluid(Ingredient input1, Fluid fluidInput1, long inputAmount, int cookingTime, ItemConvertible itemOutput, Fluid fluidOutput1, long outputAmount) {
+        return new DistillationRecipeJsonBuilder(
+                input1,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), inputAmount),
+                FluidStack.EMPTY,
+                Ingredient.EMPTY,
+                cookingTime,
+                itemOutput,
                 Items.AIR,
                 new FluidStack(FluidVariant.of(fluidOutput1), outputAmount),
                 FluidStack.EMPTY

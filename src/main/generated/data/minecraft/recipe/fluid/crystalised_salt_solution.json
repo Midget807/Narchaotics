@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:salt_solution"
+    }
+  },
+  "product1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:crystalised_salt_solution"
+    }
+  },
+  "product2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  }
+}

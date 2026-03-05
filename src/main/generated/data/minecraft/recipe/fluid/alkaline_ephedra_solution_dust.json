@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:clean_ephedra_solution"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:dust/sodium_carbonate"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:alkaline_ephedra_solution"
+    }
+  }
+}

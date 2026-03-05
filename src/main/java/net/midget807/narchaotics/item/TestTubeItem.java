@@ -6,6 +6,6 @@ import net.minecraft.item.Item;
 
 public class TestTubeItem extends AbstractTestTubeItem {
     public TestTubeItem(Fluid fluid, Settings settings) {
-        super(fluid, ModItems.TEST_TUBE, settings);
+        super(fluid, ModItems.TEST_TUBE, settings.recipeRemainder(ModItems.TEST_TUBE));
     }
 }

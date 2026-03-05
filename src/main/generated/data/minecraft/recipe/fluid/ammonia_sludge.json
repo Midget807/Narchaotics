@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 80,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:rich_soil_clump"
+  },
+  "item2": {
+    "item": "narchaotics:potassium_chloride"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ammonia_sludge"
+    }
+  }
+}

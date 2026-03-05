@@ -6,6 +6,6 @@ import net.minecraft.item.Item;
 
 public class ConicalFlaskItem extends AbstractConicalFlaskItem {
     public ConicalFlaskItem(Fluid fluid, Settings settings) {
-        super(fluid, ModItems.CONICAL_FLASK, settings);
+        super(fluid, ModItems.CONICAL_FLASK, settings.recipeRemainder(ModItems.CONICAL_FLASK));
     }
 }

@@ -21,7 +21,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SEPARATE_WORKBENCH.asItem());
                         entries.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR.asItem());
                         entries.add(ModBlocks.TANK.asItem());
-                        entries.add(ModItems.EPHEDRA_SEEDS);
+
                         entries.add(ModItems.CONICAL_FLASK);
                         entries.add(ModItems.ROUND_FLASK);
                         entries.add(ModItems.BEAKER);
@@ -34,6 +34,34 @@ public class ModItemGroups {
                         entries.add(ModItems.STAND);
                         entries.add(ModItems.CLAMP);
                         entries.add(ModItems.STAND_AND_CLAMP);
+                        entries.add(ModItems.SEPARATORY_FUNNEL);
+                        entries.add(ModItems.MORTAR_AND_PESTLE);
+
+                        entries.add(ModItems.RESIDUE);
+                        entries.add(ModItems.NETHERRACK_RESIDUE);
+                        entries.add(ModItems.RED_PHOSPHORUS);
+                        entries.add(ModItems.KELP_ASH);
+                        entries.add(ModItems.IODINE);
+                        entries.add(ModItems.MIXED_SALTS);
+                        entries.add(ModItems.SODIUM_CARBONATE);
+                        entries.add(ModItems.POTASSIUM_CHLORIDE);
+                        entries.add(ModItems.RICH_SOIL_CLUMP);
+                        entries.add(ModItems.SOIL_CLUMP);
+                        entries.add(ModItems.SULPHURIC_ACID);
+                        entries.add(ModItems.SCHEELITE_PEBBLE);
+                        entries.add(ModItems.SCHEELITE_CLUMP);
+                        entries.add(ModItems.TUNGSTEN_OXIDE);
+                        entries.add(ModItems.FERTILISER);
+                        entries.add(ModItems.EPHEDRA_SEEDS);
+                        entries.add(ModItems.EPHEDRA);
+                        entries.add(ModItems.DRIED_EPHEDRA);
+                        entries.add(ModItems.CRYSTAL_METHAMPHETAMINE);
+                        entries.add(ModItems.METHAMPHETAMINE);
+
+                        ModItems.DUSTS.forEach((item, identifier) -> {
+                            entries.add(item);
+                        });
+
                         ModItems.BUCKETS.forEach((item, identifier) -> {
                             entries.add(item);
                         });

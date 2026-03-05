@@ -12,5 +12,11 @@
     "fluid_id": {
       "fluid": "narchaotics:concentrated_volcanic_water"
     }
+  },
+  "product2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
   }
 }

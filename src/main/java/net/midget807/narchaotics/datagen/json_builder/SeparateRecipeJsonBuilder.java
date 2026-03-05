@@ -18,6 +18,9 @@ import net.minecraft.util.Identifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.conditionsFromChemistry;
+import static net.midget807.narchaotics.datagen.ModRecipeProvider.hasChemistry;
+
 public class SeparateRecipeJsonBuilder {
     private final FluidStack input;
     private final int cookingTime;
@@ -40,7 +43,7 @@ public class SeparateRecipeJsonBuilder {
                 cookingTime,
                 new FluidStack(FluidVariant.of(output), outputAmount),
                 new FluidStack(FluidVariant.of(remainder), remainderAmount)
-        );
+        ).criterion(hasChemistry(), conditionsFromChemistry());
     }
     public static SeparateRecipeJsonBuilder create(Fluid input, int cookingTime, Fluid output, long outputAmount, Fluid remainder, long remainderAmount) {
         return new SeparateRecipeJsonBuilder(
@@ -48,7 +51,7 @@ public class SeparateRecipeJsonBuilder {
                 cookingTime,
                 new FluidStack(FluidVariant.of(output), outputAmount),
                 new FluidStack(FluidVariant.of(remainder), remainderAmount)
-        );
+        ).criterion(hasChemistry(), conditionsFromChemistry());
     }
     public static SeparateRecipeJsonBuilder create(Fluid input, int cookingTime, Fluid output, long outputAmount, Fluid remainder) {
         return new SeparateRecipeJsonBuilder(
@@ -56,7 +59,7 @@ public class SeparateRecipeJsonBuilder {
                 cookingTime,
                 new FluidStack(FluidVariant.of(output), outputAmount),
                 new FluidStack(FluidVariant.of(remainder), outputAmount)
-        );
+        ).criterion(hasChemistry(), conditionsFromChemistry());
     }
 
     public SeparateRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {

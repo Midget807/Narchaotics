@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "fuel_type": {
+    "tag": "narchaotics:soul_burner"
+  },
+  "item1": {
+    "item": "narchaotics:mixed_salts"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:salt_solution"
+    }
+  }
+}

@@ -48,6 +48,14 @@ public class FilterRecipeJsonBuilder {
                 residue
         ).criterion(hasChemistry(), conditionsFromChemistry());
     }
+    public static FilterRecipeJsonBuilder create(Fluid input, long inputAmount, int cookingTime, Fluid filtrate, long filtrateAmount, ItemConvertible residue) {
+        return new FilterRecipeJsonBuilder(
+                new FluidStack(FluidVariant.of(input), inputAmount),
+                cookingTime,
+                new FluidStack(FluidVariant.of(filtrate), filtrateAmount),
+                residue
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
 
     public FilterRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {
         this.criteria.put(string, advancementCriterion);

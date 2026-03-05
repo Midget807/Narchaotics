@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chemistry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#narchaotics:unlock_narchaotics_recipes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_filter_paper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:filter_paper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_funnel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:funnel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:filter_funnel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chemistry",
+      "has_filter_paper",
+      "has_funnel"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:filter_funnel"
+    ]
+  }
+}

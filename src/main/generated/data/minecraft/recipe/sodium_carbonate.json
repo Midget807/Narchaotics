@@ -1,0 +1,14 @@
+{
+  "type": "narchaotics:evaporate",
+  "evaporateTime": 100,
+  "input": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:sodium_carbonate"
+    }
+  },
+  "output": {
+    "count": 1,
+    "id": "narchaotics:sodium_carbonate"
+  }
+}

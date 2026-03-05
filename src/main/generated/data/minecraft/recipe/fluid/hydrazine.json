@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 60,
+  "fluid1": {
+    "amount": 150,
+    "fluid_id": {
+      "fluid": "narchaotics:hydrazine_solution"
+    }
+  },
+  "product1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:hydrazine"
+    }
+  },
+  "product2": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  }
+}

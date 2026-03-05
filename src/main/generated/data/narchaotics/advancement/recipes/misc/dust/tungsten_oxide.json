@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chemistry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#narchaotics:unlock_narchaotics_recipes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:dust/tungsten_oxide"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_oxide": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:tungsten_oxide"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tungsten_oxide",
+      "has_chemistry"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:dust/tungsten_oxide"
+    ]
+  }
+}

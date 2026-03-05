@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_soil_clump": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:soil_clump"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:dirtfrom_soil_clump"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_soil_clump"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:dirtfrom_soil_clump"
+    ]
+  }
+}

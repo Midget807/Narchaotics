@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ammonia"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:dust/ephedra"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ephedra_sludge"
+    }
+  }
+}

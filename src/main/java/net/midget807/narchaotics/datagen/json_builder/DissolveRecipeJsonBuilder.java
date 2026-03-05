@@ -51,6 +51,100 @@ public class DissolveRecipeJsonBuilder {
         ).criterion(hasChemistry(), conditionsFromChemistry());
     }
 
+    public static DissolveRecipeJsonBuilder createFromOneItemOneFluid(Ingredient input1, Fluid fluidInput1, long fluidInput1Amount, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                input1,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                FluidStack.EMPTY,
+                fuel,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DissolveRecipeJsonBuilder createFromOneItemOneFluid(Ingredient input1, Fluid fluidInput1, long fluidInput1Amount, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                input1,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                FluidStack.EMPTY,
+                Ingredient.EMPTY,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+
+    public static DissolveRecipeJsonBuilder createFromOneItemTwoFluids(Ingredient input1, Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                input1,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                new FluidStack(FluidVariant.of(fluidInput2), fluidInput2Amount),
+                fuel,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DissolveRecipeJsonBuilder createFromOneItemTwoFluids(Ingredient input1, Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                input1,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                new FluidStack(FluidVariant.of(fluidInput2), fluidInput2Amount),
+                Ingredient.EMPTY,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+
+    public static DissolveRecipeJsonBuilder createFromTwoItemOneFluid(Ingredient input1, Ingredient input2, Fluid fluidInput1, long fluidInput1Amount, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                input1,
+                input2,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                FluidStack.EMPTY,
+                fuel,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DissolveRecipeJsonBuilder createFromTwoItemOneFluid(Ingredient input1, Ingredient input2, Fluid fluidInput1, long fluidInput1Amount, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                input1,
+                input2,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                FluidStack.EMPTY,
+                Ingredient.EMPTY,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+
+    public static DissolveRecipeJsonBuilder createFromTwoFluids(Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, Ingredient fuel, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                new FluidStack(FluidVariant.of(fluidInput2), fluidInput2Amount),
+                fuel,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+    public static DissolveRecipeJsonBuilder createFromTwoFluids(Fluid fluidInput1, long fluidInput1Amount, Fluid fluidInput2, long fluidInput2Amount, int cookingTime, Fluid fluidOutput1, long fluidOutput1Amount) {
+        return new DissolveRecipeJsonBuilder(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                new FluidStack(FluidVariant.of(fluidInput1), fluidInput1Amount),
+                new FluidStack(FluidVariant.of(fluidInput2), fluidInput2Amount),
+                Ingredient.EMPTY,
+                cookingTime,
+                new FluidStack(FluidVariant.of(fluidOutput1), fluidOutput1Amount)
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
+
+
+
     public DissolveRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {
         this.criteria.put(string, advancementCriterion);
         return this;

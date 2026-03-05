@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ephedra_sludge"
+    }
+  },
+  "fluid2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ethanol"
+    }
+  },
+  "product": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:dirty_ephedra_solution"
+    }
+  }
+}

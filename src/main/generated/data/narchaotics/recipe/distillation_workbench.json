@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "narchaotics:burner"
+    },
+    "C": {
+      "item": "narchaotics:condenser_column"
+    },
+    "F": {
+      "item": "narchaotics:conical_flask"
+    },
+    "S": {
+      "item": "narchaotics:stand_and_clamp"
+    },
+    "X": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "FC ",
+    "BSF",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:distillation_workbench"
+  }
+}

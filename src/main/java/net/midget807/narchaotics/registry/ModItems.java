@@ -27,6 +27,7 @@ public class ModItems {
     public static final Map<Item, Identifier> BEAKERS = new LinkedHashMap<>();
     public static final Map<Item, Identifier> TEST_TUBES = new LinkedHashMap<>();
     public static final Map<Item, Identifier> DUSTS = new LinkedHashMap<>();
+    public static final Map<Item, Identifier> OTHER = new LinkedHashMap<>();
 
     public static final Identifier ENTITY_INTERACTION_RANGE_MODIFIER_ID = NarchaoticsMain.id("entity_interaction_range");
     public static final Identifier BLOCK_INTERACTION_RANGE_MODIFIER_ID = NarchaoticsMain.id("block_interaction_range");
@@ -46,9 +47,9 @@ public class ModItems {
     public static final Item SEPARATORY_FUNNEL = registerItem("separatory_funnel", new Item(new Item.Settings()));
     public static final Item ROUND_FLASK = registerItem("round_flask", new AbstractRoundFlaskItem(Fluids.EMPTY, null, new Item.Settings()));
     public static final Item TEST_TUBE = registerItem("test_tube", new AbstractTestTubeItem(Fluids.EMPTY, null, new Item.Settings()));
+    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new Item.Settings().maxCount(1)));
 
     public static final Item RESIDUE = registerItem("residue", new Item(new Item.Settings()));
-    public static final Item NETHER_RESIDUE = registerItem("nether_residue", new Item(new Item.Settings()));
 
     public static final Item NETHERRACK_DUST = registerItem("dust/netherrack", new Item(new Item.Settings()));
     public static final Item NETHERRACK_RESIDUE = registerItem("nether_residue", new Item(new Item.Settings()));
@@ -67,6 +68,8 @@ public class ModItems {
 
     public static final Item RICH_SOIL_CLUMP = registerItem("rich_soil_clump", new Item(new Item.Settings()));
     public static final Item SOIL_CLUMP = registerItem("soil_clump", new Item(new Item.Settings()));
+
+    public static final Item SULPHURIC_ACID = registerItem("sulphuric_acid", new Item(new Item.Settings()));
 
     public static final Item CALCITE_DUST = registerItem("dust/calcite", new Item(new Item.Settings()));
     public static final Item SCHEELITE_PEBBLE = registerItem("scheelite_pebble", new Item(new Item.Settings()));
@@ -301,6 +304,8 @@ public class ModItems {
             TEST_TUBES.put(registeredItem, id);
         } else if (id.getPath().startsWith("dust")) {
             DUSTS.put(registeredItem, id);
+        } else {
+            OTHER.put(registeredItem, id);
         }
         return registeredItem;
     }

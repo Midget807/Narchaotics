@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dust/calcite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:dust/calcite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:scheelite_pebble"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dust/calcite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:scheelite_pebble"
+    ]
+  }
+}

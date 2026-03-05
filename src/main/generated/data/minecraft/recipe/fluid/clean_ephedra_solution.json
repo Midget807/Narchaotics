@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:separate",
+  "filterTime": 200,
+  "filtrate": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:clean_ephedra_solution"
+    }
+  },
+  "input": {
+    "amount": 250,
+    "fluid_id": {
+      "fluid": "narchaotics:dirty_ephedra_solution"
+    }
+  },
+  "remainder": {
+    "amount": 200,
+    "fluid_id": {
+      "fluid": "narchaotics:dirty_solution"
+    }
+  }
+}

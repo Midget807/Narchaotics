@@ -66,6 +66,24 @@ public class ModUtil {
         return result.toString().trim();
     }
 
+    public static String dustItemDisplayName(Identifier id) {
+        String path = id.getPath();
+
+        if (path.startsWith("dust/")) {
+            path = path.substring("dust/".length());
+        }
+
+        String[] parts = path.split("_");
+        StringBuilder result = new StringBuilder();
+        for (String part : parts) {
+            result.append(Character.toUpperCase(part.charAt(0)))
+                    .append(part.substring(1))
+                    .append(" ");
+        }
+
+        return result.toString().trim();
+    }
+
     public static String getFluidBlockDisplayName(Identifier id) {
         String path = id.getPath();
 
@@ -78,6 +96,7 @@ public class ModUtil {
         }
         return result.toString().trim();
     }
+
 
     public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack, boolean creativeOverride) {
         boolean bl = player.isInCreativeMode();

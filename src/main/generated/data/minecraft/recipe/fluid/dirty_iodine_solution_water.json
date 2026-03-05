@@ -1,0 +1,25 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 100,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:clean_ash_solution"
+    }
+  },
+  "fluid2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:hydrogen_peroxide"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:sulphuric_acid"
+  },
+  "product": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:dirty_iodine_solution_water"
+    }
+  }
+}

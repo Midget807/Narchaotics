@@ -69,6 +69,7 @@ public class ModModelProvider extends FabricModelProvider {
         uploadCrystalTexturedDust(ModItems.IODINE_DUST, itemModelGenerator);
         uploadCrystalTexturedDust(ModItems.MIXED_SALTS, itemModelGenerator);
         uploadCrystalTexturedDust(ModItems.POTASSIUM_CHLORIDE_DUST, itemModelGenerator);
+        uploadCrystalTexturedDust(ModItems.SULPHURIC_ACID, itemModelGenerator);
         itemModelGenerator.register(ModItems.CALCITE_DUST, Models.GENERATED);
         uploadCrystalTexturedDust(ModItems.TUNGSTEN_OXIDE_DUST, itemModelGenerator);
 

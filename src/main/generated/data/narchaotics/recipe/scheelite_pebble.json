@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    },
+    {
+      "item": "narchaotics:dust/calcite"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:scheelite_pebble"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 100,
+  "fluid1": {
+    "amount": 250,
+    "fluid_id": {
+      "fluid": "narchaotics:clean_ephedra_solution"
+    }
+  },
+  "product1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:concentrated_ephedra_solution"
+    }
+  },
+  "product2": {
+    "amount": 200,
+    "fluid_id": {
+      "fluid": "narchaotics:ethanol"
+    }
+  }
+}

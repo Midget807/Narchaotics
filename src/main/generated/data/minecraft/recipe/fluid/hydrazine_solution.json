@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 60,
+  "fluid1": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:ammonia"
+    }
+  },
+  "fluid2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:hydrogen_peroxide"
+    }
+  },
+  "product": {
+    "amount": 150,
+    "fluid_id": {
+      "fluid": "narchaotics:hydrazine_solution"
+    }
+  }
+}

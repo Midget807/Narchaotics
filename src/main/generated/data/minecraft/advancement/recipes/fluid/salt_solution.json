@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chemistry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#narchaotics:unlock_narchaotics_recipes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:fluid/salt_solution"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chemistry"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:fluid/salt_solution"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 80,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:methamphetamine_acid_solution"
+    }
+  },
+  "fluid2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ethanol"
+    }
+  },
+  "product": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:methamphetamine_solution"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "narchaotics:filter",
+  "filterTime": 200,
+  "filtrate": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ephedrine_solution"
+    }
+  },
+  "input": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:alkaline_ephedra_solution"
+    }
+  },
+  "remainder": {
+    "count": 1,
+    "id": "narchaotics:residue"
+  }
+}

@@ -6,6 +6,6 @@ import net.minecraft.item.Item;
 
 public class BeakerItem extends AbstractBeakerItem {
     public BeakerItem(Fluid fluid, Settings settings) {
-        super(fluid, ModItems.BEAKER, settings);
+        super(fluid, ModItems.BEAKER, settings.recipeRemainder(ModItems.BEAKER));
     }
 }

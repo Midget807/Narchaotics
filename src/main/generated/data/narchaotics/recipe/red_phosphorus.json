@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "narchaotics:dust/red_phosphorus"
+    },
+    {
+      "item": "narchaotics:mortar_and_pestle"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:red_phosphorus"
+  }
+}

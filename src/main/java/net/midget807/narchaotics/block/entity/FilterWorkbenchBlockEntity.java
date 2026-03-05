@@ -481,6 +481,7 @@ public class FilterWorkbenchBlockEntity extends BlockEntity implements ExtendedS
             }
 
             SingleVariantStorage<FluidVariant> inputSlotFluid1 = this.reactantFluidStorage1;
+            FluidStack recipeInput = recipe.value().input;
             FluidStack recipeProduct1 = recipe.value().filtrate;
             SingleVariantStorage<FluidVariant> outputSlotFluid1 = this.productFluidStorage1;
             if (!recipeProduct1.isEmpty()) {
@@ -491,7 +492,7 @@ public class FilterWorkbenchBlockEntity extends BlockEntity implements ExtendedS
                     outputSlotFluid1.amount += recipeProduct1.amount();
                 }
 
-                inputSlotFluid1.amount -= recipeProduct1.amount();
+                inputSlotFluid1.amount -= recipeInput.amount();
             }
 
             markDirty();

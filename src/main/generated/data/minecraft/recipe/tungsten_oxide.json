@@ -1,0 +1,23 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 200,
+  "fluid1": {
+    "amount": 250,
+    "fluid_id": {
+      "fluid": "narchaotics:sodium_carbonate"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:scheelite_clump"
+  },
+  "product1": {
+    "amount": 250,
+    "fluid_id": {
+      "fluid": "narchaotics:sodium_carbonate_solution"
+    }
+  },
+  "result1": {
+    "count": 1,
+    "id": "narchaotics:tungsten_oxide"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "narchaotics:conical_flask"
+    },
+    "S": {
+      "item": "narchaotics:separatory_funnel"
+    },
+    "X": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "Y": {
+      "item": "narchaotics:stand_and_clamp"
+    }
+  },
+  "pattern": [
+    "S ",
+    "FY",
+    "X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:separate_workbench"
+  }
+}

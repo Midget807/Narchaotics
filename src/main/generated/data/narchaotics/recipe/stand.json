@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " N ",
+    " N ",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:stand"
+  }
+}

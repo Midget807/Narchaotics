@@ -48,6 +48,14 @@ public class EvaporateRecipeJsonBuilder {
                 output
         ).criterion(hasChemistry(), conditionsFromChemistry());
     }
+    public static EvaporateRecipeJsonBuilder create(Fluid input, long fluidAmount, int cookingTime, ItemConvertible output) {
+        return new EvaporateRecipeJsonBuilder(
+                new FluidStack(FluidVariant.of(input), fluidAmount),
+                Ingredient.EMPTY,
+                cookingTime,
+                output
+        ).criterion(hasChemistry(), conditionsFromChemistry());
+    }
 
     public EvaporateRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {
         this.criteria.put(string, advancementCriterion);

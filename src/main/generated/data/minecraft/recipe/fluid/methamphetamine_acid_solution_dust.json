@@ -1,0 +1,28 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 80,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:pseudoephedrine"
+    }
+  },
+  "fluid2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:hydroiodic_acid"
+    }
+  },
+  "fuel_type": {
+    "tag": "narchaotics:soul_burner"
+  },
+  "item1": {
+    "item": "narchaotics:dust/red_phosphorus"
+  },
+  "product": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:methamphetamine_acid_solution"
+    }
+  }
+}

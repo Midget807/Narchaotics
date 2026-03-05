@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chemistry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#narchaotics:unlock_narchaotics_recipes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_dried_ephedra": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:dried_ephedra"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:dust/ephedra"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dried_ephedra",
+      "has_chemistry"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:dust/ephedra"
+    ]
+  }
+}

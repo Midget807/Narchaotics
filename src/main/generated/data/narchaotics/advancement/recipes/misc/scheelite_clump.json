@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_scheelite_pebble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "narchaotics:scheelite_pebble"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "narchaotics:scheelite_clump"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_scheelite_pebble"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "narchaotics:scheelite_clump"
+    ]
+  }
+}
