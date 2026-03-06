@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "FluidMixin",
+    "LivingEntityMixin",
     "PlayerEntityMixin",
     "WaterFluidMixin"
   ],
@@ -12,5 +13,8 @@
   },
   "overwrites": {
     "requireAnnotations": true
-	}
+  },
+  "client": [
+    "client.GameRendererMixin"
+  ]
 }

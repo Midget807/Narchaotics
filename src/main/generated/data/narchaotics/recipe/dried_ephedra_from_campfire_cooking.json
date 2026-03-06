@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "narchaotics:ephedra"
+  },
+  "result": {
+    "id": "narchaotics:dried_ephedra"
+  }
+}

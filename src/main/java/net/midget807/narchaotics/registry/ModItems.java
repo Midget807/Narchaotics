@@ -7,6 +7,9 @@ import net.midget807.narchaotics.item.AbstractRoundFlaskItem;
 import net.midget807.narchaotics.item.AbstractTestTubeItem;
 import net.midget807.narchaotics.item.BeakerItem;
 import net.midget807.narchaotics.item.ConicalFlaskItem;
+import net.midget807.narchaotics.item.FertiliserItem;
+import net.midget807.narchaotics.item.MethamphetamineItem;
+import net.midget807.narchaotics.item.MortarAndPestleItem;
 import net.midget807.narchaotics.item.RoundFlaskItem;
 import net.midget807.narchaotics.item.TestTubeItem;
 import net.minecraft.fluid.Fluids;
@@ -47,7 +50,7 @@ public class ModItems {
     public static final Item SEPARATORY_FUNNEL = registerItem("separatory_funnel", new Item(new Item.Settings()));
     public static final Item ROUND_FLASK = registerItem("round_flask", new AbstractRoundFlaskItem(Fluids.EMPTY, null, new Item.Settings()));
     public static final Item TEST_TUBE = registerItem("test_tube", new AbstractTestTubeItem(Fluids.EMPTY, null, new Item.Settings()));
-    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new Item.Settings().maxCount(1)));
+    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new MortarAndPestleItem(new Item.Settings().maxCount(1)));
 
     public static final Item RESIDUE = registerItem("residue", new Item(new Item.Settings()));
 
@@ -77,7 +80,7 @@ public class ModItems {
     public static final Item TUNGSTEN_OXIDE = registerItem("tungsten_oxide", new Item(new Item.Settings()));
     public static final Item TUNGSTEN_OXIDE_DUST = registerItem("dust/tungsten_oxide", new Item(new Item.Settings()));
 
-    public static final Item FERTILISER = registerItem("fertiliser", new Item(new Item.Settings()));
+    public static final Item FERTILISER = registerItem("fertiliser", new FertiliserItem(new Item.Settings()));
 
     public static final Item EPHEDRA_SEEDS = registerItem("ephedra_seeds", new AliasedBlockItem(ModBlocks.EPHEDRA_CROP, new Item.Settings()));
     public static final Item EPHEDRA = registerItem("ephedra", new Item(new Item.Settings()));
@@ -85,7 +88,7 @@ public class ModItems {
     public static final Item EPHEDRA_DUST = registerItem("dust/ephedra", new Item(new Item.Settings()));
 
     public static final Item CRYSTAL_METHAMPHETAMINE = registerItem("crystal_methamphetamine", new Item(new Item.Settings()));
-    public static final Item METHAMPHETAMINE = registerItem("methamphetamine", new Item(new Item.Settings()));
+    public static final Item METHAMPHETAMINE = registerItem("methamphetamine", new MethamphetamineItem(new Item.Settings()));
 
 
 

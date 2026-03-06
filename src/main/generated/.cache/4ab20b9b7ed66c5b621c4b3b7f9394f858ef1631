@@ -1,4 +1,4 @@
-// 1.21.1	2026-03-05T21:08:51.0262598	Narchaotics/Recipes
+// 1.21.1	2026-03-07T02:38:14.2524505	Narchaotics/Recipes
 698dfd2ccf2f8c88f4dcccb4cbf3cf3d0d2d02be data\minecraft\advancement\recipes\fluid\concentrated_volcanic_water.json
 71e2d213434abcd6d7f6d431d68e95c71305e5d8 data\minecraft\recipe\fluid\hydrazine.json
 04d5773f0b7b941fbaa85ecf88d8760f29d794c2 data\minecraft\advancement\recipes\fluid\hydrogen_peroxide_dust.json
@@ -78,6 +78,7 @@ d3a89d5aed2450e8c8a8e455a045e3308757c75c data\narchaotics\advancement\recipes\mi
 3d9e1bb57117c748eba7da2f75d73a77ca6f40de data\minecraft\advancement\recipes\fluid\clean_ephedra_solution.json
 a0e1a62bf3a9644d886d9af69856ab36a7a59acb data\minecraft\recipe\fluid\sodium_carbonate_solution.json
 acfdba2143ef9d51e1f7d458cd0e62e8669f6ae3 data\minecraft\advancement\recipes\fluid\red_phosphorus.json
+89a14e1360229494541266df003d7b8420b8b7cd data\narchaotics\recipe\dried_ephedra_from_campfire_cooking.json
 69adefe8ba77fa005e4ec5900fb43118b37f52f6 data\narchaotics\recipe\dust\netherrack.json
 86662e20ac2d30a7f2c85baf98eee741dd528727 data\narchaotics\recipe\conical_flask.json
 b11c7085ec6380219d8135c4666d41fa6fd03f05 data\minecraft\advancement\recipes\fluid\ammonia_sludge.json
@@ -108,6 +109,7 @@ f3573e4026a31c7644a3588225e44948ef184623 data\minecraft\recipe\fluid\ammonia.jso
 d6878b4020f361b0b7c881ea2f836e46f38ae6da data\minecraft\advancement\recipes\fluid\sulphuric_acid.json
 df270047ede92a1e8961e232300c4e42e35ec47b data\minecraft\advancement\recipes\fluid\clean_iodine_solution.json
 16ce4c76039d375ce8c0d4ad5364686cce927d3c data\narchaotics\advancement\recipes\misc\scheelite_pebble.json
+3c0eb37fcb0efe4299787f7942bba16f9674d20e data\narchaotics\advancement\recipes\food\dried_ephedra_from_campfire_cooking.json
 30107de1c21bc67db0878a39305a242ea9378855 data\minecraft\advancement\recipes\fluid\methamphetamine_solution.json
 7d781db9b9a193d9d29b88d4a41768fa09966dc1 data\narchaotics\advancement\recipes\misc\stand_and_clamp.json
 ca8da1b4688c07120b199e31723b80d2e7ac5aec data\minecraft\recipe\fluid\sodium_carbonate.json

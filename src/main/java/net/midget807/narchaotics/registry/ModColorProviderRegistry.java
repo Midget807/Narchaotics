@@ -67,6 +67,9 @@ public class ModColorProviderRegistry {
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : 0xa5a5a5 - FUCKASS_COLOR_CONSTANT,
                 ModItems.TUNGSTEN_OXIDE_DUST);
 
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : 0x2954ce - FUCKASS_COLOR_CONSTANT,
+                ModItems.WATER_CONICAL_FLASK, ModItems.WATER_ROUND_FLASK, ModItems.WATER_BEAKER, ModItems.WATER_TEST_TUBE);
+
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : 0x332319 - FUCKASS_COLOR_CONSTANT,
                 ModItems.DIRTY_SOLUTION_BUCKET, ModItems.DIRTY_SOLUTION_CONICAL_FLASK, ModItems.DIRTY_SOLUTION_ROUND_FLASK, ModItems.DIRTY_SOLUTION_BEAKER, ModItems.DIRTY_SOLUTION_TEST_TUBE);
 

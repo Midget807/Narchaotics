@@ -21,7 +21,9 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
@@ -252,6 +254,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion("has_rich_soils", conditionsFromTag(ModItemTagProvider.AMMONIA_SOIL))
                 .offerTo(recipeExporter, getRecipeName(ModItems.FERTILISER));
 
+        offerFoodCookingRecipe(recipeExporter, "campfire_cooking", RecipeSerializer.CAMPFIRE_COOKING, CampfireCookingRecipe::new, 600, ModItems.EPHEDRA, ModItems.DRIED_EPHEDRA, 0);
 
         addDistillationRecipes(recipeExporter);
         addFilterRecipes(recipeExporter);

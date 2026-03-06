@@ -67,6 +67,8 @@
   "container.narchaotics.fluid_tank.store": "Fluid Tank",
   "container.narchaotics.photoelectric_extractor": "Photoelectric Extractor",
   "container.narchaotics.separate_workbench": "Separating",
+  "death.attack.overdose": "%s overdosed",
+  "effect.narchaotics.meth_high": "Meth High",
   "emi.category.narchaotics.ash": "Ashing",
   "emi.category.narchaotics.dissolve": "Dissolving & Mixing",
   "emi.category.narchaotics.distillation": "Distilling",

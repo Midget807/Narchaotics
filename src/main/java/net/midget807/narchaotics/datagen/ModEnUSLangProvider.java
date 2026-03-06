@@ -3,6 +3,7 @@ package net.midget807.narchaotics.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.midget807.narchaotics.registry.ModBlocks;
+import net.midget807.narchaotics.registry.ModEffects;
 import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.util.ModUtil;
 import net.minecraft.block.Blocks;
@@ -135,5 +136,7 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add(ModItems.CRYSTAL_METHAMPHETAMINE, "Crystal Methamphetamine");
         translationBuilder.add(ModItems.METHAMPHETAMINE, "Methamphetamine");
 
+        translationBuilder.add("effect.narchaotics.meth_high", "Meth High");
+        translationBuilder.add("death.attack.overdose", "%s overdosed");
     }
 }

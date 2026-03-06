@@ -1,13 +1,16 @@
 package net.midget807.narchaotics.mixin;
 
 import net.midget807.narchaotics.datagen.ModItemTagProvider;
+import net.midget807.narchaotics.registry.ModDamageTypes;
 import net.midget807.narchaotics.registry.ModEffects;
 import net.midget807.narchaotics.registry.ModItems;
+import net.midget807.narchaotics.util.inject.MethHigh;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -15,6 +18,7 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -30,9 +34,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class PlayerEntityMixin extends LivingEntity implements MethHigh {
     @Shadow
     public abstract boolean isSpectator();
+
+    @Shadow
+    public abstract boolean damage(DamageSource source, float amount);
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -127,5 +134,28 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             }
 
         }
+    }
+
+    @Override
+    public ItemStack narchaotics$eatMeth(World world, ItemStack stack, int currentAmplifier) {
+        world.playSound(
+                null,
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                this.getDrinkSound(stack),
+                SoundCategory.NEUTRAL,
+                0.6F,
+                6.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F
+        );
+        if (currentAmplifier < -1) currentAmplifier = -1;
+        currentAmplifier++;
+        if (currentAmplifier >= 10) {
+            this.damage(ModDamageTypes.overdose(this.getWorld()), Integer.MAX_VALUE);
+        }
+        currentAmplifier = Math.min(currentAmplifier, 9);
+        this.addStatusEffect(new StatusEffectInstance(ModEffects.METH_HIGH, 12000, currentAmplifier));
+        stack.decrementUnlessCreative(1, ((PlayerEntity)((Object)this)));
+        return stack;
     }
 }

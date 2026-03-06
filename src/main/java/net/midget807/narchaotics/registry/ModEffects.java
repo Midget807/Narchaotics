@@ -14,6 +14,16 @@ public class ModEffects {
     public static final RegistryEntry<StatusEffect> METH_HIGH = register("meth_high", new PublicStatusEffect(StatusEffectCategory.NEUTRAL, 0x03bde5)
             .addAttributeModifier(
                     EntityAttributes.GENERIC_FLYING_SPEED, NarchaoticsMain.id("effect.meth_high"), 0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            ).addAttributeModifier(
+                    EntityAttributes.GENERIC_MOVEMENT_SPEED, NarchaoticsMain.id("effect.meth_high"), 0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            ).addAttributeModifier(
+                    EntityAttributes.PLAYER_SNEAKING_SPEED, NarchaoticsMain.id("effect.meth_high"), 0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            ).addAttributeModifier(
+                    EntityAttributes.PLAYER_MINING_EFFICIENCY, NarchaoticsMain.id("effect.meth_high"), 0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            ).addAttributeModifier(
+                    EntityAttributes.PLAYER_SUBMERGED_MINING_SPEED, NarchaoticsMain.id("effect.meth_high"), 0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            ).addAttributeModifier(
+                    EntityAttributes.PLAYER_BLOCK_BREAK_SPEED, NarchaoticsMain.id("effect.meth_high"), 0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
             )
     );
 

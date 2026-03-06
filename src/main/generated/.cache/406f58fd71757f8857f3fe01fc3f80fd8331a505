@@ -1,7 +1,7 @@
-// 1.21.1	2026-03-05T21:08:51.0318852	Narchaotics/Block Loot Tables
+// 1.21.1	2026-03-07T02:38:14.2609596	Narchaotics/Block Loot Tables
 b4b68666dd5ded5fc505c96e4e4f5c6dd9738ffd data\narchaotics\loot_table\blocks\evaporate_workbench.json
 b87fe3e06b26638cf7699e876771f955a71cb150 data\narchaotics\loot_table\blocks\distillation_workbench.json
-a5241371a867f995b8750aa0c397bf3ba07a9bd1 data\narchaotics\loot_table\blocks\ephedra.json
+394ca843c706e3aeb28069385486496ad342202d data\narchaotics\loot_table\blocks\ephedra.json
 d16d22db95fa361159cc716d7d6bb9aecb724ba5 data\narchaotics\loot_table\blocks\dissolve_workbench.json
 1cdd9d8262860dff3d79cc1a77b857714f499e8b data\narchaotics\loot_table\blocks\photoelectric_extractor.json
 b8f9244ba2796644a5aa73f6f4a4f2a8acf568aa data\narchaotics\loot_table\blocks\filter_workbench.json
