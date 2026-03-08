@@ -30,6 +30,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeProvider extends FabricRecipeProvider {
@@ -229,7 +230,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .offerTo(recipeExporter, getRecipeName(Items.DIRT) + "from_soil_clump");
 
         createCrushingRecipe(recipeExporter, RecipeCategory.MISC, ModItems.NETHERRACK_DUST, 1, Items.NETHERRACK, 1);
-        createCrushingRecipe(recipeExporter, RecipeCategory.MISC, ModItems.RED_PHOSPHORUS, 1, ModItems.RED_PHOSPHORUS_DUST, 1);
+        createCrushingRecipe(recipeExporter, RecipeCategory.MISC, ModItems.RED_PHOSPHORUS_DUST, 1, ModItems.RED_PHOSPHORUS, 1);
         createCrushingRecipe(recipeExporter, RecipeCategory.MISC, ModItems.SODIUM_CARBONATE_DUST, 1, ModItems.SODIUM_CARBONATE, 1);
         createCrushingRecipe(recipeExporter, RecipeCategory.MISC, ModItems.POTASSIUM_CHLORIDE_DUST, 1, ModItems.POTASSIUM_CHLORIDE, 1);
         createCrushingRecipe(recipeExporter, RecipeCategory.MISC, ModItems.IODINE_DUST, 1, ModItems.IODINE, 1);
@@ -255,6 +256,17 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .offerTo(recipeExporter, getRecipeName(ModItems.FERTILISER));
 
         offerFoodCookingRecipe(recipeExporter, "campfire_cooking", RecipeSerializer.CAMPFIRE_COOKING, CampfireCookingRecipe::new, 600, ModItems.EPHEDRA, ModItems.DRIED_EPHEDRA, 0);
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.MORTAR_AND_PESTLE, 1)
+                .pattern(" S ")
+                .pattern("BSB")
+                .pattern("BBB")
+                .input('B', Items.BRICK)
+                .input('S', Items.STONE)
+                .criterion(hasItem(Items.BRICK),  conditionsFromItem(Items.BRICK))
+                .criterion(hasItem(Items.STONE),  conditionsFromItem(Items.STONE))
+                .offerTo(recipeExporter,  getRecipeName(ModItems.MORTAR_AND_PESTLE));
+
+        offerSmelting(recipeExporter, List.of(ModItems.NETHERRACK_RESIDUE), RecipeCategory.MISC, Items.NETHER_BRICK, 0.1f, 100, "nether_brick_from_residue");
 
         addDistillationRecipes(recipeExporter);
         addFilterRecipes(recipeExporter);
@@ -400,13 +412,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 50L,
                 ModItems.POTASSIUM_CHLORIDE
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SODIUM_CARBONATE_SOLUTION)));
-        FilterRecipeJsonBuilder.create(
-                ModFluids.CRYSTALISED_SALT_SOLUTION,
-                200,
-                ModFluids.SODIUM_CARBONATE_SOLUTION,
-                50L,
-                ModItems.POTASSIUM_CHLORIDE
-        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.POTASSIUM_CHLORIDE)));
 
         FilterRecipeJsonBuilder.create(
                 ModFluids.AMMONIA_SLUDGE,
@@ -452,6 +457,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 100,
                 ModItems.SODIUM_CARBONATE
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.SODIUM_CARBONATE)));
+        EvaporateRecipeJsonBuilder.create(
+                ModFluids.SULPHURIC_ACID,
+                50L,
+                100,
+                ModItems.SULPHURIC_ACID
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.SULPHURIC_ACID)));
 
         EvaporateRecipeJsonBuilder.create(
                 ModFluids.METHAMPHETAMINE,

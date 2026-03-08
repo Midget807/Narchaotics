@@ -1,0 +1,14 @@
+{
+  "type": "narchaotics:evaporate",
+  "evaporateTime": 100,
+  "input": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:sulphuric_acid"
+    }
+  },
+  "output": {
+    "count": 1,
+    "id": "narchaotics:sulphuric_acid"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "group": "nether_brick_from_residue",
+  "ingredient": {
+    "item": "narchaotics:nether_residue"
+  },
+  "result": {
+    "id": "minecraft:nether_brick"
+  }
+}

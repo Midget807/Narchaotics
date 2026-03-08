@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:brick"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "pattern": [
+    " S ",
+    "BSB",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "narchaotics:mortar_and_pestle"
+  }
+}

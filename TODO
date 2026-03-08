@@ -1,2 +1,1 @@
-//todo WrapWithCondition the decrement in the CraftingScreenHandler
-//todo lock fov multiplier
+//todo fix tanks after recipe usage (might be that transaction isnt used)

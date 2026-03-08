@@ -9,7 +9,6 @@ import net.midget807.narchaotics.item.BeakerItem;
 import net.midget807.narchaotics.item.ConicalFlaskItem;
 import net.midget807.narchaotics.item.FertiliserItem;
 import net.midget807.narchaotics.item.MethamphetamineItem;
-import net.midget807.narchaotics.item.MortarAndPestleItem;
 import net.midget807.narchaotics.item.RoundFlaskItem;
 import net.midget807.narchaotics.item.TestTubeItem;
 import net.minecraft.fluid.Fluids;
@@ -50,7 +49,7 @@ public class ModItems {
     public static final Item SEPARATORY_FUNNEL = registerItem("separatory_funnel", new Item(new Item.Settings()));
     public static final Item ROUND_FLASK = registerItem("round_flask", new AbstractRoundFlaskItem(Fluids.EMPTY, null, new Item.Settings()));
     public static final Item TEST_TUBE = registerItem("test_tube", new AbstractTestTubeItem(Fluids.EMPTY, null, new Item.Settings()));
-    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new MortarAndPestleItem(new Item.Settings().maxCount(1)));
+    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new Item.Settings().maxCount(1)));
 
     public static final Item RESIDUE = registerItem("residue", new Item(new Item.Settings()));
 

@@ -11,11 +11,11 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_dust/red_phosphorus": {
+    "has_red_phosphorus": {
       "conditions": {
         "items": [
           {
-            "items": "narchaotics:dust/red_phosphorus"
+            "items": "narchaotics:red_phosphorus"
           }
         ]
       },
@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "narchaotics:red_phosphorus"
+        "recipe": "narchaotics:dust/red_phosphorus"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -31,13 +31,13 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_dust/red_phosphorus",
+      "has_red_phosphorus",
       "has_chemistry"
     ]
   ],
   "rewards": {
     "recipes": [
-      "narchaotics:red_phosphorus"
+      "narchaotics:dust/red_phosphorus"
     ]
   }
 }

@@ -3,6 +3,7 @@
   "package": "net.midget807.narchaotics.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CraftingResultSlotMixin",
     "FluidMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",

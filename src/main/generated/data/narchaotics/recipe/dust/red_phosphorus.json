@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "narchaotics:dust/red_phosphorus"
+      "item": "narchaotics:red_phosphorus"
     },
     {
       "item": "narchaotics:mortar_and_pestle"
@@ -11,6 +11,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "narchaotics:red_phosphorus"
+    "id": "narchaotics:dust/red_phosphorus"
   }
 }
