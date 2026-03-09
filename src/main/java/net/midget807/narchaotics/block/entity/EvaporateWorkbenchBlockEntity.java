@@ -160,8 +160,12 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -406,7 +410,10 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
                 } else if (ItemStack.areItemsAndComponentsEqual(outputSlotItem1, recipeResult1)) {
                     outputSlotItem1.increment(recipeResult1.getCount());
                 }
-                this.reactantFluidStorage1.amount -= recipe.value().input.amount();
+                try (Transaction transaction = Transaction.openOuter()) {
+                    this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipe.value().input.amount(), transaction);
+                    transaction.commit();
+                }
             }
 
             markDirty();

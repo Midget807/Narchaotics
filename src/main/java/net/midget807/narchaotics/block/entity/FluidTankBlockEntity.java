@@ -172,8 +172,12 @@ public class FluidTankBlockEntity extends BlockEntity implements ExtendedScreenH
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -545,8 +549,11 @@ public class FluidTankBlockEntity extends BlockEntity implements ExtendedScreenH
                 } else if (outputSlotFluid.variant.equals(recipeOutput.variant())) {
                     outputSlotFluid.amount += recipeOutput.amount();
                 }
-                if (inputSlotFluid.amount > recipeOutput.amount()) {
-                    inputSlotFluid.amount -= recipeOutput.amount();
+                if (this.reactantFluidStorage1.amount > recipeOutput.amount()) {
+                    try (Transaction transaction = Transaction.openOuter()) {
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipe.value().input.amount(), transaction);
+                        transaction.commit();
+                    }
                 }
             }
 

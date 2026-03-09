@@ -44,8 +44,6 @@ public class NarchaoticsMain implements ModInitializer {
         ModFluids.registerModFluids();
         ModCauldronBehaviors.registerModCauldronBehaviors();
         ModScreenHandlers.registerModScreenHandlers();
-        ModColorProviderRegistry.registerBlockColors();
-        ModColorProviderRegistry.registerItemColors();
         ModRecipes.registerModRecipes();
         ModEffects.registerModEffects();
         ModDamageTypes.registerModDamageTypes();

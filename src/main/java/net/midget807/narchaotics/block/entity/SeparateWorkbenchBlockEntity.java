@@ -159,8 +159,12 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -298,7 +302,10 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                 if (!shouldDecrementInput) shouldDecrementInput = true;
             }
             if (shouldDecrementInput) {
-                inputSlotFluid1.amount -= (long) (recipeInput.amount());
+                try (Transaction transaction = Transaction.openOuter()) {
+                    this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipeInput.amount(), transaction);
+                    transaction.commit();
+                }
             }
 
             markDirty();

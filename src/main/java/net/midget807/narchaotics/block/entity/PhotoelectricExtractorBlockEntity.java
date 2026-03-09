@@ -172,8 +172,12 @@ public class PhotoelectricExtractorBlockEntity extends BlockEntity implements Ex
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -532,7 +536,10 @@ public class PhotoelectricExtractorBlockEntity extends BlockEntity implements Ex
             }
 
             if (shouldDecrementReactant) {
-                inputSlotFluid.amount -= recipeOutput.amount();
+                try (Transaction transaction = Transaction.openOuter()) {
+                    this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipe.value().input.amount(), transaction);
+                    transaction.commit();
+                }
             }
 
             markDirty();

@@ -1,20 +1,17 @@
 {
   "type": "narchaotics:dissolve",
-  "cooking_time": 60,
+  "cooking_time": 120,
   "fluid1": {
     "amount": 50,
     "fluid_id": {
       "fluid": "narchaotics:hydrazine"
     }
   },
-  "fluid2": {
-    "amount": 100,
-    "fluid_id": {
-      "fluid": "narchaotics:iodine"
-    }
+  "item1": {
+    "item": "narchaotics:iodine"
   },
   "product": {
-    "amount": 150,
+    "amount": 50,
     "fluid_id": {
       "fluid": "narchaotics:hydroiodic_acid"
     }

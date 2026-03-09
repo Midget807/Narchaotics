@@ -23,7 +23,6 @@ public abstract class CraftingResultSlotMixin extends Slot {
 
     @ModifyExpressionValue(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z", ordinal = 0))
     private boolean narchaotics$dontDecrementShit(boolean original, @Local(ordinal = 1) ItemStack itemStack) {
-        System.out.println("isEmpty called on" + original + "/" + itemStack);
         return !original && itemStack.isOf(ModItems.MORTAR_AND_PESTLE);
     }
 }

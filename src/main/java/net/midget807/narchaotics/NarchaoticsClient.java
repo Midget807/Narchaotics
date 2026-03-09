@@ -3,6 +3,7 @@ package net.midget807.narchaotics;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.midget807.narchaotics.registry.ModBlocks;
+import net.midget807.narchaotics.registry.ModColorProviderRegistry;
 import net.midget807.narchaotics.registry.ModFluids;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
 import net.midget807.narchaotics.screen.ChemistryWorkbenchScreen;
@@ -84,5 +85,7 @@ public class NarchaoticsClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.PHOTOELECTRIC_EXTRACTOR, PhotoelectricExtractorWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.TANK, FluidTankScreen::new);
 
+        ModColorProviderRegistry.registerBlockColors();
+        ModColorProviderRegistry.registerItemColors();
     }
 }

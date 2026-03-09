@@ -4,7 +4,7 @@
   "fluid1": {
     "amount": 50,
     "fluid_id": {
-      "fluid": "narchaotics:clean_ephedra_solution"
+      "fluid": "narchaotics:concentrated_ephedra_solution"
     }
   },
   "item1": {

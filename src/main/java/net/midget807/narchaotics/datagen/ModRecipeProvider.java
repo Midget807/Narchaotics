@@ -330,6 +330,14 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.AMMONIA)));
 
         DistillationRecipeJsonBuilder.createConcentrating(
+                ModFluids.CLEAN_IODINE_SOLUTION,
+                40,
+                ModFluids.IODINE,
+                100L,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.IODINE)));
+
+        DistillationRecipeJsonBuilder.createConcentrating(
                 ModFluids.VOLCANIC_WATER,
                 40,
                 ModFluids.CONCENTRATED_VOLCANIC_WATER,
@@ -440,7 +448,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 ModItems.RED_PHOSPHORUS
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.RED_PHOSPHORUS)));
         EvaporateRecipeJsonBuilder.create(
-                ModFluids.CLEAN_IODINE_SOLUTION,
+                ModFluids.IODINE,
                 50L,
                 100,
                 ModItems.IODINE
@@ -463,7 +471,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 100,
                 ModItems.SULPHURIC_ACID
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModItems.SULPHURIC_ACID)));
-
         EvaporateRecipeJsonBuilder.create(
                 ModFluids.METHAMPHETAMINE,
                 50L,
@@ -540,15 +547,22 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 ModFluids.HYDRAZINE_SOLUTION,
                 150L
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.HYDRAZINE_SOLUTION)));
-        DissolveRecipeJsonBuilder.createFromTwoFluids(
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.IODINE),
                 ModFluids.HYDRAZINE,
                 50L,
-                ModFluids.IODINE,
-                100L,
-                60,
+                120,
                 ModFluids.HYDROIODIC_ACID,
-                150L
+                50L
         ).offerTo(recipeExporter,  Identifier.of(getRecipeName(ModFluids.HYDROIODIC_ACID)));
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.IODINE_DUST),
+                ModFluids.HYDRAZINE,
+                50L,
+                120,
+                ModFluids.HYDROIODIC_ACID,
+                50L
+        ).offerTo(recipeExporter,  Identifier.of(getRecipeName(ModFluids.HYDROIODIC_ACID) + "dust"));
 
         DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
                 Ingredient.ofItems(ModItems.EPHEDRA_DUST),
@@ -569,7 +583,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.DIRTY_EPHEDRA_SOLUTION)));
         DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
                 Ingredient.ofItems(ModItems.SODIUM_CARBONATE),
-                ModFluids.CLEAN_EPHEDRA_SOLUTION,
+                ModFluids.CONCENTRATED_EPHEDRA_SOLUTION,
                 50L,
                 80,
                 ModFluids.ALKALINE_EPHEDRA_SOLUTION,
@@ -577,7 +591,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.ALKALINE_EPHEDRA_SOLUTION)));
         DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
                 Ingredient.ofItems(ModItems.SODIUM_CARBONATE_DUST),
-                ModFluids.CLEAN_EPHEDRA_SOLUTION,
+                ModFluids.CONCENTRATED_EPHEDRA_SOLUTION,
                 50L,
                 40,
                 ModFluids.ALKALINE_EPHEDRA_SOLUTION,
@@ -606,6 +620,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 ModFluids.METHAMPHETAMINE_ACID_SOLUTION,
                 100L
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.METHAMPHETAMINE_ACID_SOLUTION) + "_dust"));
+
         DissolveRecipeJsonBuilder.createFromTwoFluids(
                 ModFluids.METHAMPHETAMINE_ACID_SOLUTION,
                 50L,
@@ -615,6 +630,94 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 ModFluids.METHAMPHETAMINE_SOLUTION,
                 100L
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.METHAMPHETAMINE_SOLUTION)));
+
+
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.SODIUM_CARBONATE),
+                Fluids.WATER,
+                50L,
+                100,
+                ModFluids.SODIUM_CARBONATE,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SODIUM_CARBONATE) + "from_item"));
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.SODIUM_CARBONATE_DUST),
+                Fluids.WATER,
+                50L,
+                50,
+                ModFluids.SODIUM_CARBONATE,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SODIUM_CARBONATE) + "from_dust_item"));
+
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.RED_PHOSPHORUS),
+                Fluids.WATER,
+                50L,
+                100,
+                ModFluids.RED_PHOSPHORUS,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.RED_PHOSPHORUS) + "from_item"));
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.RED_PHOSPHORUS_DUST),
+                Fluids.WATER,
+                50L,
+                50,
+                ModFluids.RED_PHOSPHORUS,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.RED_PHOSPHORUS) + "from_dust_item"));
+
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.CRYSTAL_METHAMPHETAMINE),
+                ModFluids.ETHANOL,
+                50L,
+                100,
+                ModFluids.METHAMPHETAMINE,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.METHAMPHETAMINE) + "from_item"));
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.METHAMPHETAMINE),
+                ModFluids.ETHANOL,
+                50L,
+                50,
+                ModFluids.METHAMPHETAMINE,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.METHAMPHETAMINE) + "from_dust_item"));
+
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.IODINE),
+                Fluids.WATER,
+                50L,
+                100,
+                ModFluids.IODINE,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.IODINE) + "from_item"));
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.IODINE_DUST),
+                Fluids.WATER,
+                50L,
+                50,
+                ModFluids.IODINE,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.IODINE) + "from_dust_item"));
+
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.MIXED_SALTS),
+                Fluids.WATER,
+                50L,
+                100,
+                ModFluids.SALT_WATER,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SALT_WATER) + "from_item"));
+
+        DissolveRecipeJsonBuilder.createFromOneItemOneFluid(
+                Ingredient.ofItems(ModItems.SULPHURIC_ACID),
+                Fluids.WATER,
+                50L,
+                100,
+                ModFluids.SULPHURIC_ACID,
+                50L
+        ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.SULPHURIC_ACID) + "from_item"));
+
 
 
     }

@@ -171,8 +171,12 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -342,8 +346,11 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                 } else if (outputSlotFluid1.variant.equals(recipeProduct1.variant())) {
                     outputSlotFluid1.amount += recipeProduct1.amount();
                 }
+                try (Transaction transaction = Transaction.openOuter()) {
+                    if (recipeReactant1.amount() > 0) this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipeReactant1.amount(), transaction);
+                    transaction.commit();
+                }
 
-                inputSlotFluid1.amount -= recipeReactant1.amount();
             }
 
             if (!recipeProduct2.isEmpty()) {
@@ -353,8 +360,10 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                 } else if (outputSlotFluid2.variant.equals(recipeProduct2.variant())) {
                     outputSlotFluid2.amount += recipeProduct2.amount();
                 }
-
-                inputSlotFluid2.amount -= recipeReactant2.amount();
+                try (Transaction transaction = Transaction.openOuter()) {
+                    if (recipeReactant2.amount() > 0) this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, recipeReactant2.amount(), transaction);
+                    transaction.commit();
+                }
             }
 
             if (!recipeFuel.isEmpty()) {
@@ -477,6 +486,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
                         stack.decrement(1);
                         this.setStack(slot, stack);
                         this.markDirty();
+                        break;
                     }
                     break;
                 }

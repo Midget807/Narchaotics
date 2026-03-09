@@ -159,8 +159,12 @@ public class FilterWorkbenchBlockEntity extends BlockEntity implements ExtendedS
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -491,8 +495,10 @@ public class FilterWorkbenchBlockEntity extends BlockEntity implements ExtendedS
                 } else if (outputSlotFluid1.variant.equals(recipeProduct1.variant())) {
                     outputSlotFluid1.amount += recipeProduct1.amount();
                 }
-
-                inputSlotFluid1.amount -= recipeInput.amount();
+                try (Transaction transaction = Transaction.openOuter()) {
+                    this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipeInput.amount(), transaction);
+                    transaction.commit();
+                }
             }
 
             markDirty();

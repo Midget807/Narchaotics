@@ -35,7 +35,7 @@ public class ModEmiPlugin implements EmiPlugin {
     public static final Identifier SEPARATE_TEXTURE = NarchaoticsMain.id("textures/gui/container/separate_menu.png");
     public static final Identifier PHOTOELECTRIC_TEXTURE = NarchaoticsMain.id("textures/gui/container/photoelectric_menu.png");
     public static final Identifier TANK_TEXTURE = NarchaoticsMain.id("textures/gui/container/tank_menu.png");
-    public static final Identifier ICON_ATLAS = NarchaoticsMain.id("textures/gui/sprite/icon_atlas.png");
+    public static final Identifier ICON_ATLAS = NarchaoticsMain.id("textures/gui/sprites/icon_atlas.png");
     public static final EmiStack DISTILLATION_WS = EmiStack.of(ModBlocks.DISTILLATION_WORKBENCH.asItem());
     public static final EmiStack FILTER_WS = EmiStack.of(ModBlocks.FILTER_WORKBENCH.asItem());
     public static final EmiStack EVAPORATE_WS = EmiStack.of(ModBlocks.EVAPORATE_WORKBENCH.asItem());

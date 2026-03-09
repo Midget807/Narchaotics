@@ -175,8 +175,12 @@ public class DissolveWorkbenchBlockEntity extends BlockEntity implements Extende
 
     public boolean insertStack(int slot, ItemStack stack) {
         ItemStack stackInSlot = this.inventory.get(slot);
-        if (!stackInSlot.isEmpty() && stack.isOf(stackInSlot.getItem())) {
-            stack.increment(stackInSlot.getCount());
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
         }
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
@@ -308,9 +312,11 @@ public class DissolveWorkbenchBlockEntity extends BlockEntity implements Extende
                 } else if (outputSlotFluid.variant.equals(recipeProduct.variant())) {
                     outputSlotFluid.amount += recipeProduct.amount();
                 }
-
-                inputSlotFluid1.amount -= (long) (recipeInput1.amount());
-                inputSlotFluid2.amount -= (long) (recipeInput2.amount());
+                try (Transaction transaction = Transaction.openOuter()) {
+                    if (recipeInput1.amount() > 0) this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, recipeInput1.amount(), transaction);
+                    if (recipeInput2.amount() > 0) this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, recipeInput2.amount(), transaction);
+                    transaction.commit();
+                }
                 if (!inputSlotItem1.isEmpty()) {
                     inputSlotItem1.decrement(1);
                 }
