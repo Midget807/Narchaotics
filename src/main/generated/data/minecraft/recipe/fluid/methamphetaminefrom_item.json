@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 100,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:ethanol"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:crystal_methamphetamine"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:methamphetamine"
+    }
+  }
+}

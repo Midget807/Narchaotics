@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 100,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:red_phosphorus"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:red_phosphorus"
+    }
+  }
+}

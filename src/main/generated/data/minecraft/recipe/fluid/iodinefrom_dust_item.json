@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 50,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:dust/iodine"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:iodine"
+    }
+  }
+}

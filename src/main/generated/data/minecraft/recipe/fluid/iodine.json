@@ -1,0 +1,22 @@
+{
+  "type": "narchaotics:distillation",
+  "cooking_time": 40,
+  "fluid1": {
+    "amount": 100,
+    "fluid_id": {
+      "fluid": "narchaotics:clean_iodine_solution"
+    }
+  },
+  "product1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:iodine"
+    }
+  },
+  "product2": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  }
+}

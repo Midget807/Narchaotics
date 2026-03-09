@@ -1,0 +1,19 @@
+{
+  "type": "narchaotics:dissolve",
+  "cooking_time": 100,
+  "fluid1": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "item1": {
+    "item": "narchaotics:sodium_carbonate"
+  },
+  "product": {
+    "amount": 50,
+    "fluid_id": {
+      "fluid": "narchaotics:sodium_carbonate"
+    }
+  }
+}
