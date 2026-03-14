@@ -1,4 +1,4 @@
-// 1.21.1	2026-03-09T22:00:19.1454191	Narchaotics/Recipes
+// 1.21.1	2026-03-15T02:19:25.3258423	Narchaotics/Recipes
 698dfd2ccf2f8c88f4dcccb4cbf3cf3d0d2d02be data\minecraft\advancement\recipes\fluid\concentrated_volcanic_water.json
 71e2d213434abcd6d7f6d431d68e95c71305e5d8 data\minecraft\recipe\fluid\hydrazine.json
 04d5773f0b7b941fbaa85ecf88d8760f29d794c2 data\minecraft\advancement\recipes\fluid\hydrogen_peroxide_dust.json
@@ -15,6 +15,7 @@ cf8b158825c368c9280ee82b2385376f8ca18562 data\minecraft\advancement\recipes\flui
 26e2cbdbe5258a36d7e7ddb01e16d6a6fdb7d74e data\narchaotics\advancement\recipes\misc\dust\sodium_carbonate.json
 be25ce14eba4ba9412b6ea600d0fcf2c9cc1e1bc data\minecraft\advancement\recipes\fluid\methamphetaminefrom_dust_item.json
 1f876d602793006842fcfb54cca68635bdb6481f data\minecraft\recipe\fluid\hydroiodic_acid.json
+3af73e731e2079526089aa4ea63ccc64ac9c21c8 data\narchaotics\advancement\recipes\misc\disposal_tank.json
 2970af1aa0321f1f2dac75893f473b5bfd3fcd75 data\narchaotics\advancement\recipes\misc\condenser_column.json
 3faef01d70d9404beef5051823a515e43648b167 data\minecraft\advancement\recipes\fluid\iodine.json
 abdec584464100245e8631ad5aed908625b05db8 data\minecraft\advancement\recipes\fluid\sodium_carbonatefrom_item.json
@@ -68,6 +69,7 @@ cb4c19492c3aee451be319bd845cdac8e8cd8251 data\narchaotics\advancement\recipes\mi
 bf0e3a7b8337b5fa2e885ce742032032f7c89ffb data\narchaotics\advancement\recipes\misc\dust\calcite.json
 f52461f4af3e5e16d63981b264b9fd991ebcee0c data\minecraft\advancement\recipes\fluid\concentrated_ephedra_solution.json
 fa4b3a261358e73a69052e980c5628b71aed0e33 data\minecraft\recipe\fluid\red_phosphorus.json
+a2c5c4565f4f4d7c118db22483842aba754fc981 data\narchaotics\recipe\disposal_tank.json
 e1059318a86005701c14f451c1344b2934251d47 data\minecraft\recipe\fluid\methamphetamine.json
 f0dcdb4edd3beeaad3d729ff83384f14becc1740 data\minecraft\advancement\recipes\fluid\dirty_ash_solution_water.json
 e19c562337432f4a1106701acd21025ae076eef4 data\narchaotics\recipe\filter_workbench.json

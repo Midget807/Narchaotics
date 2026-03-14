@@ -12,6 +12,7 @@ import net.midget807.narchaotics.recipe.EvaporateRecipeInput;
 import net.midget807.narchaotics.recipe.EvaporateRecipe;
 import net.midget807.narchaotics.recipe.FluidStack;
 import net.midget807.narchaotics.registry.ModBlockEntities;
+import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.registry.ModRecipes;
 import net.midget807.narchaotics.screen.EvaporateScreenHandler;
@@ -170,6 +171,24 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
     }
+    public boolean insertStack(int slot, ItemStack stack, SingleVariantStorage<FluidVariant> storage, Fluid input, ItemStack inputStack) {
+        if (!storage.isResourceBlank() && !storage.variant.getFluid().matchesType(input)) return false;
+        if (inputStack.getItem() instanceof BucketItem) {
+            if (storage.amount > 0) return false;
+        } else if (inputStack.getItem() instanceof FlaskItem flaskItem) {
+            if (storage.getCapacity() - storage.amount < flaskItem.capacity) return false;
+        }
+        ItemStack stackInSlot = this.inventory.get(slot);
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
+        }
+        this.setStack(slot, stack);
+        return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
+    }
 
     @Override
     public Text getDisplayName() {
@@ -226,6 +245,7 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
     public void tick(World world, BlockPos pos, BlockState state) {
         fillUpOnFluid();
         removeFluid();
+        deleteFluid();
         boolean shouldMarkDirty = false;
         if (!inputsEmpty()) {
             RecipeEntry<EvaporateRecipe> recipeEntry = this.matchGetter.getFirstMatch(
@@ -257,6 +277,30 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
             markDirty(world, pos, state);
         }
 
+    }
+
+    private void deleteFluid() {
+        for (int slot : FLUID_INPUT_INDICES) {
+            if (inventory.get(slot).isOf(ModBlocks.DISPOSAL_TANK.asItem())) {
+                clearFluid(slot);
+            }
+        }
+    }
+
+    private void clearFluid(int slot) {
+        try (Transaction transaction = Transaction.openOuter()) {
+            switch (slot) {
+                case 0: {
+                    if (!this.reactantFluidStorage1.isResourceBlank()) {
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 50, transaction);
+                        transaction.commit();
+                    }
+                    break;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + slot);
+            }
+        }
     }
 
     private boolean inputsEmpty() {
@@ -346,25 +390,30 @@ public class EvaporateWorkbenchBlockEntity extends BlockEntity implements Extend
             if (fluid == Fluids.EMPTY) return;
             switch (slot) {
                 case 0: {
-                    ItemStack remainderStack = null;
+                    ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[0]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[0]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
-                        if (this.reactantFluidStorage1.amount > 0) return;
-                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = new ItemStack(Items.BUCKET);
+                        if (this.reactantFluidStorage1.amount > 0) return;
+                        if (this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack, reactantFluidStorage1, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.reactantFluidStorage1.amount > 1000 - flaskItem.capacity) return;
-                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = flaskItem.getRemainderStack();
-                    }
-                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack)) {
-                        stack.decrement(1);
-                        this.setStack(slot, stack);
-                        this.markDirty();
+                        if (this.reactantFluidStorage1.amount > 1000 - flaskItem.capacity) return;
+                        if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack, reactantFluidStorage1, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.reactantFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     }
                     break;
                 }

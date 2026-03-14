@@ -7,6 +7,7 @@ import net.midget807.narchaotics.registry.ModColorProviderRegistry;
 import net.midget807.narchaotics.registry.ModFluids;
 import net.midget807.narchaotics.registry.ModScreenHandlers;
 import net.midget807.narchaotics.screen.ChemistryWorkbenchScreen;
+import net.midget807.narchaotics.screen.DisposalTankScreen;
 import net.midget807.narchaotics.screen.DissolveWorkbenchScreen;
 import net.midget807.narchaotics.screen.DistillationWorkbenchScreen;
 import net.midget807.narchaotics.screen.EvaporateWorkbenchScreen;
@@ -84,6 +85,7 @@ public class NarchaoticsClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.SEPARATE_WORKBENCH, SeparateWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.PHOTOELECTRIC_EXTRACTOR, PhotoelectricExtractorWorkbenchScreen::new);
         HandledScreens.register(ModScreenHandlers.TANK, FluidTankScreen::new);
+        HandledScreens.register(ModScreenHandlers.DISPOSAL, DisposalTankScreen::new);
 
         ModColorProviderRegistry.registerBlockColors();
         ModColorProviderRegistry.registerItemColors();

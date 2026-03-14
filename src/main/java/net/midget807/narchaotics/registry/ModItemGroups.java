@@ -21,6 +21,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SEPARATE_WORKBENCH.asItem());
                         entries.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR.asItem());
                         entries.add(ModBlocks.TANK.asItem());
+                        entries.add(ModBlocks.DISPOSAL_TANK.asItem());
 
                         entries.add(ModItems.CONICAL_FLASK);
                         entries.add(ModItems.ROUND_FLASK);

@@ -112,7 +112,8 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         this.getOrCreateTagBuilder(FLUID_INPUT_ITEMS)
                 .add(
-                        Items.WATER_BUCKET
+                        Items.WATER_BUCKET,
+                        ModBlocks.DISPOSAL_TANK.asItem()
                 )
                 .addTag(FLUID_BUCKETS)
                 .addTag(CONICAL_FLASK_FLUIDS)

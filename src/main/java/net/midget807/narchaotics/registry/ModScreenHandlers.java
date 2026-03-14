@@ -41,6 +41,10 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("tank"),
                     new ExtendedScreenHandlerType<>(FluidTankScreenHandler::new, BlockPos.PACKET_CODEC)
             );
+    public static final ScreenHandlerType<DisposalTankScreenHandler> DISPOSAL =
+            Registry.register(Registries.SCREEN_HANDLER, NarchaoticsMain.id("disposal"),
+                    new ExtendedScreenHandlerType<>(DisposalTankScreenHandler::new, BlockPos.PACKET_CODEC)
+            );
 
     public static void registerModScreenHandlers() {
         NarchaoticsMain.LOGGER.info("Registering Mod Screen Handlers");

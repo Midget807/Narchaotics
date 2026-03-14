@@ -52,6 +52,7 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add("container.narchaotics.fluid_tank.store", "Fluid Tank");
         translationBuilder.add("container.narchaotics.fluid_tank.fermenting", "Fermenting");
         translationBuilder.add("container.narchaotics.fluid_tank.ashing", "Ashing");
+        translationBuilder.add("container.narchaotics.disposal_tank", "Disposing");
 
 
         translationBuilder.add("itemGroup.narchaotics.main", "Narchaotics");
@@ -64,6 +65,7 @@ public class ModEnUSLangProvider extends FabricLanguageProvider {
         translationBuilder.add(ModBlocks.SEPARATE_WORKBENCH, "Separating Workbench");
         translationBuilder.add(ModBlocks.PHOTOELECTRIC_EXTRACTOR, "Photoelectric Extractor");
         translationBuilder.add(ModBlocks.TANK, "Fluid Tank");
+        translationBuilder.add(ModBlocks.DISPOSAL_TANK, "Disposal Tank");
 
         ModItems.BUCKETS.forEach((item, identifier) -> {
             translationBuilder.add(item, ModUtil.fluidItemDisplayName(identifier) + " Bucket");

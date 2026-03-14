@@ -11,6 +11,7 @@ import net.midget807.narchaotics.recipe.DistillationRecipe;
 import net.midget807.narchaotics.recipe.DistillationRecipeInput;
 import net.midget807.narchaotics.recipe.FluidStack;
 import net.midget807.narchaotics.registry.ModBlockEntities;
+import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModItems;
 import net.midget807.narchaotics.registry.ModRecipes;
 import net.midget807.narchaotics.screen.DistillationScreenHandler;
@@ -181,6 +182,24 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
         this.setStack(slot, stack);
         return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
     }
+    public boolean insertStack(int slot, ItemStack stack, SingleVariantStorage<FluidVariant> storage, Fluid input, ItemStack inputStack) {
+        if (!storage.isResourceBlank() && !storage.variant.getFluid().matchesType(input)) return false;
+        if (inputStack.getItem() instanceof BucketItem) {
+            if (storage.amount > 0) return false;
+        } else if (inputStack.getItem() instanceof FlaskItem flaskItem) {
+            if (storage.getCapacity() - storage.amount < flaskItem.capacity) return false;
+        }
+        ItemStack stackInSlot = this.inventory.get(slot);
+        if (!stackInSlot.isEmpty()) {
+            if (stack.isOf(stackInSlot.getItem())) {
+                stack.increment(stackInSlot.getCount());
+            } else {
+                return false;
+            }
+        }
+        this.setStack(slot, stack);
+        return stack.isOf(stackInSlot.getItem()) || stackInSlot.isEmpty();
+    }
 
     @Override
     public Text getDisplayName() {
@@ -260,6 +279,7 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
     public void tick(World world, BlockPos pos, BlockState state) {
         fillUpOnFluid();
         removeFluid();
+        deleteFluid();
         boolean shouldMarkDirty = false;
         if (!inputsEmpty()) {
             RecipeEntry<DistillationRecipe> recipeEntry = this.matchGetter.getFirstMatch(
@@ -294,6 +314,51 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             markDirty(world, pos, state);
         }
 
+    }
+
+    private void deleteFluid() {
+        for (int slot : FLUID_INPUT_INDICES) {
+            if (inventory.get(slot).isOf(ModBlocks.DISPOSAL_TANK.asItem())) {
+                clearFluid(slot);
+            }
+        }
+    }
+
+    private void clearFluid(int slot) {
+        try (Transaction transaction = Transaction.openOuter()) {
+            switch (slot) {
+                case 2: {
+                    if (!this.reactantFluidStorage1.isResourceBlank()) {
+                        this.reactantFluidStorage1.extract(this.reactantFluidStorage1.variant, 50, transaction);
+                        transaction.commit();
+                    }
+                    break;
+                }
+                case 3: {
+                    if (!this.reactantFluidStorage2.isResourceBlank()) {
+                        this.reactantFluidStorage2.extract(this.reactantFluidStorage2.variant, 50, transaction);
+                        transaction.commit();
+                    }
+                    break;
+                }
+                case 4: {
+                    if (!this.productFluidStorage1.isResourceBlank()) {
+                        this.productFluidStorage1.extract(this.productFluidStorage1.variant, 50, transaction);
+                        transaction.commit();
+                    }
+                    break;
+                }
+                case 5: {
+                    if (!this.productFluidStorage2.isResourceBlank()) {
+                        this.productFluidStorage2.extract(this.productFluidStorage2.variant, 50, transaction);
+                        transaction.commit();
+                    }
+                    break;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + slot);
+            }
+        }
     }
 
     private boolean craftRecipe(RecipeEntry<DistillationRecipe> recipe, DefaultedList<ItemStack> inventory) {
@@ -655,94 +720,114 @@ public class DistillationWorkbenchBlockEntity extends BlockEntity implements Ext
             if (fluid == Fluids.EMPTY) return;
             switch (slot) {
                 case 2: {
-                    ItemStack remainderStack = null;
+                    ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[0]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[0]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
-                        if (this.reactantFluidStorage1.amount > 0) return;
-                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = new ItemStack(Items.BUCKET);
+                        if (this.reactantFluidStorage1.amount > 0) return;
+                        if (this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack, reactantFluidStorage1, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.reactantFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.reactantFluidStorage1.amount > 1000 - flaskItem.capacity) return;
-                        this.reactantFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = flaskItem.getRemainderStack();
-                    }
-                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack)) {
-                        stack.decrement(1);
-                        this.setStack(slot, stack);
-                        this.markDirty();
+                        if (this.reactantFluidStorage1.amount > 1000 - flaskItem.capacity) return;
+                        if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[0], remainderStack, reactantFluidStorage1, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.reactantFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     }
                     break;
                 }
                 case 3: {
-                    ItemStack remainderStack = null;
+                    ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
-                        if (this.reactantFluidStorage2.amount > 0) return;
-                        this.reactantFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = new ItemStack(Items.BUCKET);
+                        if (this.reactantFluidStorage2.amount > 0) return;
+                        if (this.insertStack(FLUID_OUTPUT_INDICES[1], remainderStack, reactantFluidStorage2, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.reactantFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.reactantFluidStorage2.amount > 1000 - flaskItem.capacity) return;
-                        this.reactantFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = flaskItem.getRemainderStack();
-                    }
-                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[1], remainderStack)) {
-                        stack.decrement(1);
-                        this.setStack(slot, stack);
-                        this.markDirty();
+                        if (this.reactantFluidStorage2.amount > 1000 - flaskItem.capacity) return;
+                        if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[1], remainderStack, reactantFluidStorage2, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.reactantFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     }
                     break;
                 }
                 case 4: {
-                    ItemStack remainderStack = null;
+                    ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[2]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[2]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
-                        if (this.productFluidStorage1.amount > 0) return;
-                        this.productFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = new ItemStack(Items.BUCKET);
+                        if (this.productFluidStorage1.amount > 0) return;
+                        if (this.insertStack(FLUID_OUTPUT_INDICES[2], remainderStack, productFluidStorage1, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.productFluidStorage1.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.productFluidStorage1.amount > 1000 - flaskItem.capacity) return;
-                        this.productFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = flaskItem.getRemainderStack();
-                    }
-                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[2], remainderStack)) {
-                        stack.decrement(1);
-                        this.setStack(slot, stack);
-                        this.markDirty();
+                        if (this.productFluidStorage1.amount > 1000 - flaskItem.capacity) return;
+                        if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[2], remainderStack, productFluidStorage1, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.productFluidStorage1.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     }
                     break;
                 }
                 case 5: {
-                    ItemStack remainderStack = null;
+                    ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[3]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[3]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
-                        if (this.productFluidStorage2.amount > 0) return;
-                        this.productFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = new ItemStack(Items.BUCKET);
+                        if (this.productFluidStorage2.amount > 0) return;
+                        if (this.insertStack(FLUID_OUTPUT_INDICES[3], remainderStack, productFluidStorage2, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.productFluidStorage2.insert(FluidVariant.of(fluid), BUCKET / 81, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     } else if (stack.getItem() instanceof FlaskItem flaskItem) {
-                        if (this.productFluidStorage2.amount > 1000 - flaskItem.capacity) return;
-                        this.productFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
-                        playFluidInsertSound(this.getWorld());
-                        transaction.commit();
                         remainderStack = flaskItem.getRemainderStack();
-                    }
-                    if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[3], remainderStack)) {
-                        stack.decrement(1);
-                        this.setStack(slot, stack);
-                        this.markDirty();
+                        if (this.productFluidStorage2.amount > 1000 - flaskItem.capacity) return;
+                        if (remainderStack != null && this.insertStack(FLUID_OUTPUT_INDICES[3], remainderStack, productFluidStorage2, fluid, stack)) {
+                            stack.decrement(1);
+                            this.setStack(slot, stack);
+                            this.productFluidStorage2.insert(FluidVariant.of(fluid), flaskItem.capacity, transaction);
+                            playFluidInsertSound(this.getWorld());
+                            transaction.commit();
+                            this.markDirty();
+                        }
                     }
                     break;
                 }

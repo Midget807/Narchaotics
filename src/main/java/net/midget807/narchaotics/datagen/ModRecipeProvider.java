@@ -267,6 +267,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .offerTo(recipeExporter,  getRecipeName(ModItems.MORTAR_AND_PESTLE));
 
         offerSmelting(recipeExporter, List.of(ModItems.NETHERRACK_RESIDUE), RecipeCategory.MISC, Items.NETHER_BRICK, 0.1f, 100, "nether_brick_from_residue");
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.DISPOSAL_TANK.asItem())
+                .input(ModBlocks.TANK.asItem(), 1)
+                .input(Items.LAVA_BUCKET, 1)
+                .criterion(hasItem(ModBlocks.TANK.asItem()), conditionsFromItem(ModBlocks.TANK.asItem()))
+                .criterion(hasItem(Items.LAVA_BUCKET), conditionsFromItem(Items.LAVA_BUCKET))
+                .offerTo(recipeExporter, getRecipeName(ModBlocks.DISPOSAL_TANK));
 
         addDistillationRecipes(recipeExporter);
         addFilterRecipes(recipeExporter);
