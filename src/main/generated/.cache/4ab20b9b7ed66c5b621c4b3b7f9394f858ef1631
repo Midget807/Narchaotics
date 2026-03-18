@@ -1,4 +1,4 @@
-// 1.21.1	2026-03-15T02:19:25.3258423	Narchaotics/Recipes
+// 1.21.1	2026-03-18T22:37:33.2818356	Narchaotics/Recipes
 698dfd2ccf2f8c88f4dcccb4cbf3cf3d0d2d02be data\minecraft\advancement\recipes\fluid\concentrated_volcanic_water.json
 71e2d213434abcd6d7f6d431d68e95c71305e5d8 data\minecraft\recipe\fluid\hydrazine.json
 04d5773f0b7b941fbaa85ecf88d8760f29d794c2 data\minecraft\advancement\recipes\fluid\hydrogen_peroxide_dust.json
@@ -55,7 +55,7 @@ cb568187958a1b2e8c46ace45e80db2db4e5cf7d data\minecraft\recipe\sodium_carbonate.
 aa1745c06f35629b003ce6916a2af9a429a37bb5 data\minecraft\advancement\recipes\fluid\red_phosphorusfrom_item.json
 b91be70c2cd95cdcfc3e17eb340a7d7c453617bf data\narchaotics\recipe\dissolve_workbench.json
 e5eef5d77005eb27903858a3b67e4d389c828c9c data\narchaotics\recipe\filter_paper.json
-2fdcb4b6be23d2136499678e02cab50e1bc8e5c3 data\minecraft\recipe\fluid\clean_ephedra_solution.json
+d27ca107e3f8eed305322b348545d21a7fca5953 data\minecraft\recipe\fluid\clean_ephedra_solution.json
 570bc7504753907d7f75f9a96bbf8119051fb9c9 data\minecraft\advancement\recipes\fluid\clean_ash_solution.json
 ff83019c7658fe0b10d3862449da2983c4b705d1 data\narchaotics\advancement\recipes\misc\dust\netherrack.json
 c65c4e6601fe4a1d886858ff3e307c4d10a686a8 data\narchaotics\advancement\recipes\tools\mortar_and_pestle.json

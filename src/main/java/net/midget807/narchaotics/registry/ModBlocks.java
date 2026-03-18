@@ -54,6 +54,7 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class ModBlocks {
     public static final Map<Block, Identifier> FLUIDS = new LinkedHashMap<>();
+    public static final Map<Block, Identifier> CAULDRONS = new LinkedHashMap<>();
 
     public static final Block EMPTY = registerBlock("empty", new Block(AbstractBlock.Settings.copy(Blocks.AIR)));
 
@@ -153,6 +154,9 @@ public class ModBlocks {
         FLUIDS.put(Blocks.WATER, Registries.BLOCK.getId(Blocks.WATER));
         if (block instanceof FluidBlock) {
             FLUIDS.put(registered, id);
+        }
+        if (block instanceof AbstractCauldronBlock) {
+            CAULDRONS.put(registered, id);
         }
         return registered;
     }

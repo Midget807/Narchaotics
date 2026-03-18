@@ -8,13 +8,13 @@
     }
   },
   "input": {
-    "amount": 250,
+    "amount": 150,
     "fluid_id": {
       "fluid": "narchaotics:dirty_ephedra_solution"
     }
   },
   "remainder": {
-    "amount": 200,
+    "amount": 100,
     "fluid_id": {
       "fluid": "narchaotics:dirty_solution"
     }

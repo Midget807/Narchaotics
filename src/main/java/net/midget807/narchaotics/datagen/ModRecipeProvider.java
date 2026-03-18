@@ -741,12 +741,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
         SeparateRecipeJsonBuilder.create(
                 ModFluids.DIRTY_EPHEDRA_SOLUTION,
-                250L,
+                150L,
                 200,
                 ModFluids.CLEAN_EPHEDRA_SOLUTION,
                 50L,
                 ModFluids.DIRTY_SOLUTION,
-                200L
+                100L
         ).offerTo(recipeExporter, Identifier.of(getRecipeName(ModFluids.CLEAN_EPHEDRA_SOLUTION)));
     }
 

@@ -27,5 +27,6 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         ModBlocks.TANK,
                         ModBlocks.DISPOSAL_TANK
                 );
+        ModBlocks.CAULDRONS.forEach((block, identifier) -> this.getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).add(block));
     }
 }

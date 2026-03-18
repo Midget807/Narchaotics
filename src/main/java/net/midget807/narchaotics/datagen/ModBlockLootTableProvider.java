@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.midget807.narchaotics.block.EphedraCropBlock;
 import net.midget807.narchaotics.registry.ModBlocks;
 import net.midget807.narchaotics.registry.ModItems;
+import net.minecraft.block.Blocks;
 import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.registry.RegistryWrapper;
@@ -25,5 +26,8 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.DISSOLVE_WORKBENCH);
         addDrop(ModBlocks.SEPARATE_WORKBENCH);
         addDrop(ModBlocks.PHOTOELECTRIC_EXTRACTOR);
+        addDrop(ModBlocks.TANK);
+        addDrop(ModBlocks.DISPOSAL_TANK);
+        ModBlocks.CAULDRONS.forEach((block, identifier) -> addDrop(block, Blocks.CAULDRON));
     }
 }

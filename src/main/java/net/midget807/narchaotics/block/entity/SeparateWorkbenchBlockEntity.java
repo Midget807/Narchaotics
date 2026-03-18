@@ -613,7 +613,7 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                     }
                     break;
                 }
-                case 2: {
+                case 1: {
                     ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[1]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[1]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
@@ -641,7 +641,7 @@ public class SeparateWorkbenchBlockEntity extends BlockEntity implements Extende
                     }
                     break;
                 }
-                case 1: {
+                case 2: {
                     ItemStack remainderStack;
                     if (this.getStack(FLUID_OUTPUT_INDICES[2]).getCount() >= this.getStack(FLUID_OUTPUT_INDICES[2]).getMaxCount()) return;
                     if (stack.getItem() instanceof BucketItem) {
